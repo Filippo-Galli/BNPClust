@@ -30,16 +30,15 @@ public:
 
 private:
     std::vector<ClusterStats> cluster_stats;
-    const Eigen::VectorXi &allocations;
 
 public:
     const Eigen::VectorXi binary_covariates;
 
     BinaryCache(const Eigen::VectorXi &allocations_ref, const Eigen::VectorXi &binary_covariates)
-        : allocations(allocations_ref), binary_covariates(binary_covariates) {
+        : binary_covariates(binary_covariates) {
 
-        const int K = allocations.maxCoeff() + 1;
-        recompute(K > 0 ? K : 0, allocations);
+        const int K = allocations_ref.maxCoeff() + 1;
+        recompute(K > 0 ? K : 0, allocations_ref);
     }
 
     /**

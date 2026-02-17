@@ -95,12 +95,7 @@ in
     pkgs.rPackages.salso
     pkgs.rPackages.mclust
 
-    # ========== ADD THESE FOR SPATIAL PACKAGES (s2, sf, units) ==========
-    # Spatial packages
-    pkgs.rPackages.s2
-    pkgs.rPackages.sf
-    pkgs.rPackages.units
-    pkgs.rPackages.spdep
+    # ========== ADD THESE FOR SPATIAL PACKAGES (s2, sf, units, spdep, rgeoda) ==========
 
     # System dependencies for spatial packages
     pkgs.openssl # Required by s2
@@ -109,6 +104,15 @@ in
     pkgs.gdal # Required by sf
     pkgs.proj # Required by sf
     pkgs.libxml2 # Often needed by spatial packages
+    pkgs.boost.dev # Required by rgeoda
+
+    # Spatial packages
+    pkgs.rPackages.s2
+    pkgs.rPackages.sf
+    pkgs.rPackages.units
+    pkgs.rPackages.spdep
+    pkgs.rPackages.rgeoda
+
     # ========== END SPATIAL PACKAGES ==========
 
     # C++ development tools

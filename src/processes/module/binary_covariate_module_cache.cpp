@@ -75,42 +75,30 @@ Eigen::VectorXd BinaryCovariatesModuleCache::compute_similarity_obs(int obs_idx)
     const int K = data.get_K();
     const Eigen::VectorXi &allocations = data.get_allocations();
 
-    // Pre-allocate temporary storage for cluster statistics
-    // You could make these member variables (mutable) to avoid re-allocating memory every step
-    std::vector<int> cluster_counts(K, 0);
-    std::vector<int> cluster_sizes(K, 0);
-
-    for (int k = 0; k < K; ++k) {
-        cluster_counts[k] = cache.get_cluster_stats_ref(k).binary_sum;
-        cluster_sizes[k] = cache.get_cluster_stats_ref(k).n;
-    }
-
-    // Adjust for current assignment of obs_idx
-    int current_cluster = allocations(obs_idx);
-    if (current_cluster >= 0 && current_cluster < K) {
-        cluster_sizes[current_cluster]--;
-        cluster_counts[current_cluster] -= cache.binary_covariates(obs_idx);
-    }
-
     Eigen::VectorXd similarities(K);
     bool is_success = (cache.binary_covariates(obs_idx) == 1);
     double alpha = beta_prior_alpha;
     double beta = beta_prior_beta;
+    int obs_cluster = allocations(obs_idx);
 
     // Compute similarities using gathered stats
     for (int k = 0; k < K; ++k) {
-        // If the cluster ended up empty (e.g. only contained obs_idx), handle gracefully
-        // Usually implementation details might vary, but log(0) for empty cluster logic:
-        // Use prior predictive for empty cluster logic if it's considered "active"
-
         double num;
-        if (is_success) {
-            num = alpha + cluster_counts[k];
-        } else {
-            num = beta + cluster_sizes[k] - cluster_counts[k];
+        int cluster_counts = cache.get_cluster_stats_ref(k).binary_sum;
+        int cluster_sizes = cache.get_cluster_stats_ref(k).n;
+
+        if (k == obs_cluster) {
+            cluster_sizes--;
+            cluster_counts -= cache.binary_covariates(obs_idx);
         }
 
-        double den = cluster_sizes[k] + alpha + beta;
+        if (is_success) {
+            num = alpha + cluster_counts;
+        } else {
+            num = beta + cluster_sizes - cluster_counts;
+        }
+
+        double den = cluster_sizes + alpha + beta;
         similarities(k) = std::log(num) - std::log(den);
     }
 
