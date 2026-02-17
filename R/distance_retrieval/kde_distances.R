@@ -30,15 +30,7 @@ distance_jeff_divergences <- matrix(0,
   nrow = length(density_list),
   ncol = length(density_list)
 )
-distance_cm <- matrix(0,
-  nrow = length(density_list),
-  ncol = length(density_list)
-)
 distance_wasserstein <- matrix(0,
-  nrow = length(density_list),
-  ncol = length(density_list)
-)
-distance_mean <- matrix(0,
   nrow = length(density_list),
   ncol = length(density_list)
 )
@@ -57,25 +49,16 @@ for (i in seq_along(density_list)) {
         density_list[[j]],
         type = "Jeff"
       )
-    distance_cm[i, j] <-
-      compute_kde_distances(density_list[[i]],
-        density_list[[j]],
-        type = "CM"
-      )
     distance_wasserstein[i, j] <-
       compute_kde_distances(density_list[[i]],
         density_list[[j]],
         type = "Wasserstein"
       )
 
-    distance_mean[i, j] <- abs(mean(data[[i]]) - mean(data[[j]]))
-
     # Copy to lower triangle for symmetry (skip diagonal)
     if (i != j) {
       distance_jeff_divergences[j, i] <- distance_jeff_divergences[i, j]
-      distance_cm[j, i] <- distance_cm[i, j]
       distance_wasserstein[j, i] <- distance_wasserstein[i, j]
-      distance_mean[j, i] <- distance_mean[i, j]
     }
 
     # Update progress bar
@@ -91,19 +74,11 @@ close(pb)
 # Plot Distance ====
 ##############################################################################
 plot_distance(distance_jeff_divergences,
-  title = "Jeffreys Divergence Distance", save = FALSE,
-  folder = paste0("old_results/distance_plots/", location, "/")
-)
-plot_distance(distance_cm,
-  title = "Cramer-von Mises Distance", save = FALSE,
+  title = "Jeffreys Divergence Distance", save = TRUE,
   folder = paste0("old_results/distance_plots/", location, "/")
 )
 plot_distance(distance_wasserstein,
-  title = "Wasserstein Distance", save = FALSE,
-  folder = paste0("old_results/distance_plots/", location, "/")
-)
-plot_distance(distance_mean,
-  title = "Mean Difference", save = FALSE,
+  title = "Wasserstein Distance", save = TRUE,
   folder = paste0("old_results/distance_plots/", location, "/")
 )
 
@@ -111,24 +86,18 @@ plot_distance(distance_mean,
 # Save Data ====
 ##############################################################################
 
-# # Save distance matrices
-# folder <- paste0("real_data/", location)
-# if (!dir.exists(folder)) {
-#   dir.create(folder, recursive = TRUE)
-# }
+# Save distance matrices
+folder <- paste0("real_data/", location)
+if (!dir.exists(folder)) {
+  dir.create(folder, recursive = TRUE)
+}
 
-# saveRDS(distance_jeff_divergences,
-#   file = paste0(folder, "/distance_jeff_divergences.rds")
-# )
-# saveRDS(distance_cm,
-#   file = paste0(folder, "/distance_cm.rds")
-# )
-# saveRDS(distance_wasserstein,
-#   file = paste0(folder, "/distance_wasserstein.rds")
-# )
-# saveRDS(distance_mean,
-#   file = paste0(folder, "/distance_mean.rds")
-# )
+saveRDS(distance_jeff_divergences,
+  file = paste0(folder, "/distance_jeff_divergences.rds")
+)
+saveRDS(distance_wasserstein,
+  file = paste0(folder, "/distance_wasserstein.rds")
+)
 
-# # Save adjacency matrix
-# saveRDS(W, file = paste0(folder, "/adj_matrix.rds"))
+# Save adjacency matrix
+saveRDS(W, file = paste0(folder, "/adj_matrix.rds"))

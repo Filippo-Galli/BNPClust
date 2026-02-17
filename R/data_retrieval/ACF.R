@@ -102,7 +102,7 @@ parser <- add_argument(parser, "--states",
 )
 
 parser <- add_argument(parser, "--num-datasets",
-    type = "integer", default = 10,
+    type = "integer", default = 1,
     help = "Number of subsampled datasets to generate"
 )
 
