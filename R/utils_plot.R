@@ -693,10 +693,10 @@ plot_map_prior_mean <- function(save = FALSE, folder = "results/plots/",
 
 plot_map_prior_mean_comuni <- function(save = FALSE, folder = "results/plots/",
                                        puma_dir = "input/counties-pumas",
-                                       input_dir = "input/Comuni/",
+                                       input_dir = "input/municipalities/",
                                        id_col = "COD_MUN",
                                        unit_ids = NULL) {
-    cat("Computing map of mean income per comune...\n")
+    cat("Computing map of mean income per municipality...\n")
 
     if (!requireNamespace("sf", quietly = TRUE)) {
         stop("Package 'sf' is required.")
@@ -912,8 +912,8 @@ plot_hist_cls_pumas <- function(results, BI, input_dir = "input/LA/", point_esti
     invisible(point_estimate)
 }
 
-plot_hist_cls_comuni <- function(results, BI, input_dir = "input/Comuni/", point_estimate = NULL, save = FALSE, folder = "results/plots/") {
-    cat("Computing aggregated histograms of cluster assignments for Comuni...\n")
+plot_hist_cls_comuni <- function(results, BI, input_dir = "input/municipalities/", point_estimate = NULL, save = FALSE, folder = "results/plots/") {
+    cat("Computing aggregated histograms of cluster assignments for Municipalities...\n")
 
     # Load full_dataset.csv which contains histogram data (income brackets as columns)
     csv_file <- paste0(input_dir, "full_dataset.csv")

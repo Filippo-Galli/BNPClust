@@ -183,3 +183,93 @@ write.csv(mun_marital_stats,
     row.names = FALSE
 )
 cat(sprintf("  Saved marital status statistics for %d municipalities\n", nrow(mun_marital_stats)))
+
+##############################################################################
+# COVARIATE ANALYSIS BY CLUSTER ====
+##############################################################################
+
+analyze_clusters <- function(results_dir = CONFIG$results_dir,
+                             analysis_output_dir = CONFIG$output_dir) {
+    cat("\n=== Analyzing Covariates by Cluster ===\n")
+
+    # Check if results exist
+    if (!dir.exists(results_dir)) {
+        cat("Results directory not found. Skipping cluster analysis.\n")
+        return(NULL)
+    }
+
+    files <- list.files(results_dir)
+    if (length(files) == 0) {
+        cat("No result files found. Skipping cluster analysis.\n")
+        return(NULL)
+    }
+
+    # Find most recent or specific result file
+    #file_chosen <- tail(files[grepl("NGGPWx", files)], 1)
+    file_chosen <- files[17]
+    if (length(file_chosen) == 0) file_chosen <- files[min(9, length(files))]
+
+    cat(sprintf("Using results from: %s\n", file_chosen))
+
+    # Load point estimates
+    point_estimate_path <- file.path(results_dir, file_chosen, "VI_plots", "point_estimate.rds")
+    if (!file.exists(point_estimate_path)) {
+        cat("Point estimate file not found. Skipping.\n")
+        return(NULL)
+    }
+
+    point_estimate <- readRDS(point_estimate_path)
+
+    # Determine state and ID column
+    parts <- strsplit(file_chosen, "_")[[1]]
+    states <- if (any(parts == "municipalities")) "municipalities" else "LA"
+    id_col <- if (states == "municipalities") "COD_MUN" else "COD_PUMA"
+
+    # Load unit IDs from shapefile
+    shp_path <- file.path(CONFIG$input_dir, "geometry", "municipalities.shp")
+    if (!file.exists(shp_path)) {
+        cat("Shapefile not found. Cannot match clusters to geography.\n")
+        return(NULL)
+    }
+
+    shp <- sf::st_read(shp_path, quiet = TRUE)
+    unit_ids <- shp[[id_col]]
+
+    # Create cluster dataframe
+    names(point_estimate) <- unit_ids
+    unique_clusters <- sort(unique(point_estimate))
+
+    cluster_df <- data.frame(
+        id = unit_ids,
+        cluster = factor(point_estimate, levels = unique_clusters),
+        stringsAsFactors = FALSE
+    )
+
+    # Merge with covariate data
+    if (exists("mun_sex_stats")) {
+        sex_df <- merge(cluster_df, mun_sex_stats, by.x = "id", by.y = "COD_MUN", all.x = TRUE)
+
+        sex_cluster_summary <- sex_df %>%
+            group_by(cluster) %>%
+            summarise(
+                n_municipalities = n(),
+                avg_perc_female = mean(Women_perc, na.rm = TRUE),
+                sd_perc_female = sd(Women_perc, na.rm = TRUE),
+                .groups = "drop"
+            )
+
+        cat("\nSex Distribution by Cluster:\n")
+        print(sex_cluster_summary)
+
+        write.csv(sex_cluster_summary,
+            file = file.path(analysis_output_dir, "cluster_sex_summary.csv"),
+            row.names = FALSE
+        )
+    }
+
+    return(list(
+        sex = if (exists("sex_cluster_summary")) sex_cluster_summary else NULL
+    ))
+}
+
+cluster_analysis_results <- analyze_clusters()

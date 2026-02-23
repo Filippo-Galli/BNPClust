@@ -719,11 +719,7 @@ analyze_clusters <- function(results_dir = CONFIG$results_dir,
 }
 
 # Run cluster analysis only if results exist
-if (dir.exists(CONFIG$results_dir) && length(list.files(CONFIG$results_dir)) > 0) {
-    cluster_results <- analyze_clusters()
-} else {
-    cat("\nSkipping cluster analysis (no results directory)\n")
-}
+cluster_results <- analyze_clusters()
 
 ##############################################################################
 # SUMMARY AND EXPORT ====
