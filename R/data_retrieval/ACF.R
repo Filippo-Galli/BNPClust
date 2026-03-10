@@ -378,6 +378,18 @@ cat(sprintf("✓ (%d PUMAs)\n", nrow(sf_usa)))
 # Load census data
 cat("Loading census data...\n")
 
+# Determine which columns to keep: all PUMS vars minus weights/flags (loaded on demand)
+# Always keep the essential id + income columns; drop weight replicates and allocation flags
+# to save memory during the initial load.
+cols_to_drop_patterns <- c(
+    paste0("WGTP", 1:80),
+    paste0("PWGTP", 1:80),
+    pums_variables_definition$allocation_flags
+)
+cols_to_keep_schema <- setdiff(all_pums_vars, cols_to_drop_patterns)
+# We'll still keep any column that's actually in the file, just skip reading
+# weight replicates and allocation flags upfront.
+
 raw_data_list <- list()
 
 for (i in seq_along(states_to_process)) {
@@ -391,9 +403,15 @@ for (i in seq_along(states_to_process)) {
     }
 
     cat(sprintf(" [%d/%d] %s... ", i, length(states_to_process), state))
-    data <- read.csv(csv_file)
-    cat(sprintf("%d records\n", nrow(data)))
+
+    # Peek at headers to build a colClasses vector: skip weight replicates & flags
+    headers <- colnames(read.csv(csv_file, nrows = 0))
+    col_classes <- ifelse(headers %in% cols_to_drop_patterns, "NULL", NA)
+
+    data <- read.csv(csv_file, colClasses = col_classes)
+    cat(sprintf("%d records, %d cols\n", nrow(data), ncol(data)))
     raw_data_list[[i]] <- data
+    rm(data); gc()
 }
 
 if (length(raw_data_list) == 0) {
@@ -412,6 +430,9 @@ census_data <- bind_rows(raw_data_list) %>%
     filter(PINCP > 0) %>%
     mutate(LPINCP = log(PINCP))
 
+# Free raw list immediately — census_data is the single source of truth now
+rm(raw_data_list); gc()
+
 cat(sprintf("✓ (%d observations)\n", nrow(census_data)))
 
 # ========== ENHANCED: Prepare census data with ALL variables ==========
@@ -422,8 +443,9 @@ cat("\n=== Enriching Census Data with Complete Variable Set ===\n")
 present_vars <- colnames(census_data)
 cat(sprintf("Variables present in raw data: %d\n", length(present_vars)))
 
-# Identify missing variables
-missing_vars <- setdiff(all_pums_vars, present_vars)
+# Identify missing variables (excluding intentionally-skipped weight replicates / flags)
+effective_pums_vars <- setdiff(all_pums_vars, cols_to_drop_patterns)
+missing_vars <- setdiff(effective_pums_vars, present_vars)
 cat(sprintf("Variables missing from raw data: %d\n", length(missing_vars)))
 
 if (length(missing_vars) > 0) {
@@ -433,10 +455,10 @@ if (length(missing_vars) > 0) {
     }
 }
 
-# Reorder columns to have all PUMS variables first, then any extras
+# Reorder columns to have all effective PUMS variables first, then any extras
 col_order <- c(
-    intersect(all_pums_vars, colnames(census_data)),
-    setdiff(colnames(census_data), all_pums_vars)
+    intersect(effective_pums_vars, colnames(census_data)),
+    setdiff(colnames(census_data), effective_pums_vars)
 )
 
 census_data <- census_data[, col_order]
@@ -463,6 +485,7 @@ sf_counties <- sf_usa %>%
     filter(!is.na(ST), State %in% states_to_process) %>%
     select(ST, PUMA, STATE_PUMA, State, Name, geometry)
 
+rm(sf_usa); gc()
 cat(sprintf("✓ (%d PUMAs)\n", nrow(sf_counties)))
 
 # Filter for LA Bay Area if requested
@@ -563,34 +586,42 @@ full_data_long <- do.call(rbind, lapply(names(data_by_puma), function(puma_id) {
 }))
 
 write.csv(full_data_long, file.path(args$output_dir, "full_dataset.csv"), row.names = FALSE)
+rm(full_data_long); gc()
 cat("✓\n")
 
 # ========== CREATE ENHANCED full_dataset_covariates ==========
 
-cat("\nBuilding and saving full_dataset_covariates with ALL PUMS variables...\n")
+cat("\nBuilding and saving full_dataset_covariates with all loaded PUMS variables...\n")
 
-# Create list of dataframes, one per PUMA, with ALL PUMS variables
+# Columns to include: effective PUMS vars present in census_data
+puma_covariate_cols <- intersect(effective_pums_vars, colnames(census_data))
+
+# Build RDS list and stream CSV in a single pass to avoid duplicating census_data
+cov_csv_path <- file.path(args$output_dir, "full_dataset_covariates.csv")
+cov_csv_header_written <- FALSE
+total_cov_rows <- 0L
 full_dataset_covariates <- list()
 
 for (puma_id in names(data_by_puma)) {
-    # Get all observations for this PUMA from census_data
-    puma_subset <- census_data[census_data$STATE_PUMA == puma_id, ]
+    puma_covariates <- data_by_puma[[puma_id]][, puma_covariate_cols, drop = FALSE]
 
-    # Select only PUMS variables (ensures consistency across PUMAs)
-    puma_covariates <- puma_subset[, intersect(all_pums_vars, colnames(puma_subset)), drop = FALSE]
-
-    # Add any missing PUMS variables as NA columns
-    for (var in setdiff(all_pums_vars, colnames(puma_covariates))) {
-        puma_covariates[[var]] <- NA
-    }
-
-    # Reorder to standard order
-    puma_covariates <- puma_covariates[, intersect(all_pums_vars, colnames(puma_covariates)), drop = FALSE]
-
+    # RDS list entry
     full_dataset_covariates[[puma_id]] <- puma_covariates
-}
 
-names(full_dataset_covariates) <- names(data_by_puma)
+    # Stream to CSV row-by-row (append after first chunk)
+    puma_csv <- puma_covariates
+    puma_csv$COD_PUMA <- puma_id
+    puma_csv <- puma_csv[, c("COD_PUMA", puma_covariate_cols), drop = FALSE]
+    write.table(puma_csv,
+        file = cov_csv_path,
+        sep = ",", row.names = FALSE,
+        col.names = !cov_csv_header_written,
+        append = cov_csv_header_written,
+        quote = TRUE
+    )
+    cov_csv_header_written <- TRUE
+    total_cov_rows <- total_cov_rows + nrow(puma_covariates)
+}
 
 # Verify structure
 cat("\nVerification:\n")
@@ -606,21 +637,12 @@ saveRDS(
     full_dataset_covariates,
     file.path(args$output_dir, "full_dataset_covariates.rds")
 )
-
 cat(sprintf("✓ Saved full_dataset_covariates.rds (list format)\n"))
+cat(sprintf("✓ Saved full_dataset_covariates.csv (%d rows, %d columns)\n",
+    total_cov_rows, length(puma_covariate_cols) + 1L))
 
-# Save as CSV (long format with COD_PUMA column)
-cat("Saving full_dataset_covariates as CSV... ")
-full_dataset_covariates_df <- do.call(rbind, lapply(names(full_dataset_covariates), function(puma_id) {
-    df <- full_dataset_covariates[[puma_id]]
-    df$COD_PUMA <- puma_id
-    # Put COD_PUMA first, then all other columns
-    df <- df[, c("COD_PUMA", setdiff(colnames(df), "COD_PUMA"))]
-    return(df)
-}))
-
-write.csv(full_dataset_covariates_df, file.path(args$output_dir, "full_dataset_covariates.csv"), row.names = FALSE)
-cat(sprintf("✓ (%d rows, %d columns)\n", nrow(full_dataset_covariates_df), ncol(full_dataset_covariates_df)))
+# Free large objects no longer needed
+rm(full_dataset_covariates); gc()
 
 # Generate subsampled datasets
 set.seed(230196)
@@ -659,6 +681,8 @@ for (i in 1:args$num_datasets) {
         cat(sprintf(" Progress: %d/%d datasets\n", i, args$num_datasets))
     }
 }
+
+rm(data_by_puma); gc()
 
 # ========== Save spatial data ==========
 

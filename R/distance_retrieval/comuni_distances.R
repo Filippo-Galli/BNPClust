@@ -199,7 +199,7 @@ cat("Distance computation completed\n")
 ##############################################################################
 # Plot Distance (optional) ====
 ##############################################################################
-plot_folder <- paste0("old_results/distance_plots/", input_name, "/")
+plot_folder <- paste0("results/distance_plots/", input_name, "/")
 if(!dir.exists(plot_folder)) {
   dir.create(plot_folder, recursive = TRUE)
 }

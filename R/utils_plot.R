@@ -618,7 +618,7 @@ plot_map_prior_mean <- function(save = FALSE, folder = "results/plots/",
 
     # --- 2. Extract Numeric Data and Compute Means ---
     # Remove NAME_PUMA 
-    data <- data %>% select(-matches("NAME_PUMA", ignore.case = TRUE))
+    data <- data %>% dplyr::select(-dplyr::matches("NAME_PUMA", ignore.case = TRUE))
 
     cat("Calculating means grouped by PUMA...\n")
     # Assuming COD_PUMA is the identifier for PUMAs, group by it and calculate means of log_income
