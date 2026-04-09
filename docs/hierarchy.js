@@ -12,7 +12,12 @@ var hierarchy =
     [ "Data", "classData.html", [
       [ "Datax", "classDatax.html", null ]
     ] ],
-    [ "Likelihood", "classLikelihood.html", null ],
+    [ "Likelihood", "classLikelihood.html", [
+      [ "Gamma_likelihood", "classGamma__likelihood.html", null ],
+      [ "Natarajan_likelihood", "classNatarajan__likelihood.html", null ],
+      [ "Natarajan_likelihood_summaryStats", "classNatarajan__likelihood__summaryStats.html", null ],
+      [ "Null_likelihood", "classNull__likelihood.html", null ]
+    ] ],
     [ "Module", "classModule.html", [
       [ "BinaryCovariatesModule", "classBinaryCovariatesModule.html", null ],
       [ "BinaryCovariatesModuleCache", "classBinaryCovariatesModuleCache.html", null ],

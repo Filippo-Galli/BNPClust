@@ -7,7 +7,7 @@ var searchData=
   ['accepted_5fshuffle_4',['accepted_shuffle',['../classSplitMerge.html#a460c78dd0d4ea04ae3c469938411d6e2',1,'SplitMerge::accepted_shuffle'],['../classSplitMerge__LSS.html#a8697a2a479ff23e3ea6ac59758a26396',1,'SplitMerge_LSS::accepted_shuffle'],['../classSplitMerge__LSS__SDDS.html#ac50b9b7fcb943ede91cf41db39a17ed1',1,'SplitMerge_LSS_SDDS::accepted_shuffle'],['../classSplitMerge__SAMS.html#a6dc7efc5585029e7a37411cf4f17a608',1,'SplitMerge_SAMS::accepted_shuffle']]],
   ['accepted_5fsplit_5',['accepted_split',['../classSplitMerge.html#a35e44c78542697fe09f69b95a1e74e38',1,'SplitMerge::accepted_split'],['../classSplitMerge__LSS.html#a334e39e5d45c07d7ab1206ea42400af5',1,'SplitMerge_LSS::accepted_split'],['../classSplitMerge__LSS__SDDS.html#a5592ec0b6838aa6c33c70a9943df5af7',1,'SplitMerge_LSS_SDDS::accepted_split'],['../classSplitMerge__SAMS.html#af44a46bc10d47c3b9fc341a68cd9968b',1,'SplitMerge_SAMS::accepted_split']]],
   ['accepted_5fu_6',['accepted_U',['../classU__sampler.html#acca05886c1b4138a4f42fa1800a4d31a',1,'U_sampler']]],
-  ['allocations_7',['allocations',['../classData.html#aa3216ace6edfe6d6a3f522db636d4d49',1,'Data::allocations'],['../classBinaryCache.html#a71f2f8de4837b7f01e0e31ed814cbe58',1,'BinaryCache::allocations']]],
+  ['allocations_7',['allocations',['../classData.html#aa3216ace6edfe6d6a3f522db636d4d49',1,'Data']]],
   ['allocations_5fptr_8',['allocations_ptr',['../classSpatialCache.html#aef64707c4d94d6f283f0aa1d1d05f380',1,'SpatialCache']]],
   ['alpha_9',['alpha',['../structParams.html#a881058e4167b8bbb7715e23975b0d893',1,'Params']]],
   ['alpha_5f0_10',['alpha_0',['../classCategoricalCovariatesModule.html#a87f7183a6639723ba0398f46c376a7c2',1,'CategoricalCovariatesModule']]],

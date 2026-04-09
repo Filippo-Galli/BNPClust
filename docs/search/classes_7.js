@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rwmh_0',['RWMH',['../classRWMH.html',1,'']]]
+  ['params_0',['Params',['../structParams.html',1,'']]],
+  ['process_1',['Process',['../classProcess.html',1,'']]]
 ];

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['readme_2emd_0',['README.MD',['../README_8MD.html',1,'']]],
-  ['rwmh_2ecpp_1',['RWMH.cpp',['../RWMH_8cpp.html',1,'']]],
-  ['rwmh_2ehpp_2',['RWMH.hpp',['../RWMH_8hpp.html',1,'']]]
+  ['params_2ehpp_0',['Params.hpp',['../Params_8hpp.html',1,'']]],
+  ['process_2ehpp_1',['Process.hpp',['../Process_8hpp.html',1,'']]]
 ];

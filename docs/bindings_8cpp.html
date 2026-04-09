@@ -106,9 +106,10 @@ $(function(){initNavTree('bindings_8cpp.html','',''); });
 <code>#include &quot;<a class="el" href="Data_8hpp_source.html">utils/Data.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Datax_8hpp_source.html">utils/Datax.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Likelihood_8hpp_source.html">utils/Likelihood.hpp</a>&quot;</code><br />
-<code>#include &quot;likelihoods/Natarajan_likelihood.hpp&quot;</code><br />
-<code>#include &quot;likelihoods/Null_likelihood.hpp&quot;</code><br />
-<code>#include &quot;likelihoods/Gamma_likelihood.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="Natarajan__likelihood_8hpp_source.html">likelihoods/Natarajan_likelihood.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Natarajan__likelihood__summaryStats_8hpp_source.html">likelihoods/Natarajan_likelihood_summaryStats.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Null__likelihood_8hpp_source.html">likelihoods/Null_likelihood.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Gamma__likelihood_8hpp_source.html">likelihoods/Gamma_likelihood.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Process_8hpp_source.html">utils/Process.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="DP_8hpp_source.html">processes/DP.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="DPx_8hpp_source.html">processes/DPx.hpp</a>&quot;</code><br />
@@ -146,9 +147,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a7eb13311621e280c382c755533d6b88f" id="r_a7eb13311621e280c382c755533d6b88f"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classBinaryCache.html">BinaryCache</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7eb13311621e280c382c755533d6b88f">create_Binary_cache</a> (Eigen::VectorXi &amp;initial_allocations, Eigen::VectorXi binary_covariates)</td></tr>
 <tr class="memitem:ab631730601316de73f716294cd85878c" id="r_ab631730601316de73f716294cd85878c"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classSpatialCache.html">SpatialCache</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab631730601316de73f716294cd85878c">create_Spatial_cache</a> (Eigen::VectorXi &amp;initial_allocations, Eigen::MatrixXi W)</td></tr>
 <tr class="memitem:aaedcb424202bddd0b7d1062dd3406435" id="r_aaedcb424202bddd0b7d1062dd3406435"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classDatax.html">Datax</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaedcb424202bddd0b7d1062dd3406435">create_Datax</a> (Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params, Rcpp::List modules_list, Eigen::VectorXi initial_allocations)</td></tr>
-<tr class="memitem:a9213031e65c5de4995d4c81fdc39b8ee" id="r_a9213031e65c5de4995d4c81fdc39b8ee"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; Natarajan_likelihood &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9213031e65c5de4995d4c81fdc39b8ee">create_Natarajan_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
-<tr class="memitem:acdf95bf0318a3242ed8b4eff881ea7ec" id="r_acdf95bf0318a3242ed8b4eff881ea7ec"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; Null_likelihood &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdf95bf0318a3242ed8b4eff881ea7ec">create_Null_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
-<tr class="memitem:a19c536390bca638bf973884d782a8d18" id="r_a19c536390bca638bf973884d782a8d18"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; Gamma_likelihood &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19c536390bca638bf973884d782a8d18">create_Gamma_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
+<tr class="memitem:a9213031e65c5de4995d4c81fdc39b8ee" id="r_a9213031e65c5de4995d4c81fdc39b8ee"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classNatarajan__likelihood.html">Natarajan_likelihood</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9213031e65c5de4995d4c81fdc39b8ee">create_Natarajan_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
+<tr class="memitem:a4da8061e4310e005c61caeba32ba9d87" id="r_a4da8061e4310e005c61caeba32ba9d87"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classNatarajan__likelihood__summaryStats.html">Natarajan_likelihood_summaryStats</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4da8061e4310e005c61caeba32ba9d87">create_Natarajan_likelihood_summaryStats</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
+<tr class="memitem:acdf95bf0318a3242ed8b4eff881ea7ec" id="r_acdf95bf0318a3242ed8b4eff881ea7ec"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classNull__likelihood.html">Null_likelihood</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdf95bf0318a3242ed8b4eff881ea7ec">create_Null_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
+<tr class="memitem:a19c536390bca638bf973884d782a8d18" id="r_a19c536390bca638bf973884d782a8d18"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classGamma__likelihood.html">Gamma_likelihood</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19c536390bca638bf973884d782a8d18">create_Gamma_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
 <tr class="memitem:a111ab9a191c1e9e025ebbddeec1eec38" id="r_a111ab9a191c1e9e025ebbddeec1eec38"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classRWMH.html">RWMH</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a111ab9a191c1e9e025ebbddeec1eec38">create_RWMH</a> (Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params, SEXP data_sexp, bool use_V, double proposal_sd, bool tuning_enabled)</td></tr>
 <tr class="memitem:ab7757a3fc43dd161fbbe4fc332f4d862" id="r_ab7757a3fc43dd161fbbe4fc332f4d862"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classMALA.html">MALA</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7757a3fc43dd161fbbe4fc332f4d862">create_MALA</a> (Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params, SEXP data_sexp, bool use_V, double proposal_sd, bool tuning_enabled)</td></tr>
 <tr class="memitem:a596ab200c34dff954c7d202a8e41544b" id="r_a596ab200c34dff954c7d202a8e41544b"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classDP.html">DP</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a596ab200c34dff954c7d202a8e41544b">create_DP</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
@@ -581,7 +583,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Rcpp::XPtr&lt; Gamma_likelihood &gt; create_Gamma_likelihood </td>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classGamma__likelihood.html">Gamma_likelihood</a> &gt; create_Gamma_likelihood </td>
           <td>(</td>
           <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
         </tr>
@@ -638,7 +640,28 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Rcpp::XPtr&lt; Natarajan_likelihood &gt; create_Natarajan_likelihood </td>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classNatarajan__likelihood.html">Natarajan_likelihood</a> &gt; create_Natarajan_likelihood </td>
+          <td>(</td>
+          <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>params</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4da8061e4310e005c61caeba32ba9d87" name="a4da8061e4310e005c61caeba32ba9d87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4da8061e4310e005c61caeba32ba9d87">&#9670;&#160;</a></span>create_Natarajan_likelihood_summaryStats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classNatarajan__likelihood__summaryStats.html">Natarajan_likelihood_summaryStats</a> &gt; create_Natarajan_likelihood_summaryStats </td>
           <td>(</td>
           <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
         </tr>
@@ -778,7 +801,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Rcpp::XPtr&lt; Null_likelihood &gt; create_Null_likelihood </td>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classNull__likelihood.html">Null_likelihood</a> &gt; create_Null_likelihood </td>
           <td>(</td>
           <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
         </tr>

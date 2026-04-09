@@ -16,6 +16,7 @@ var bindings_8cpp =
     [ "create_Gamma_likelihood", "bindings_8cpp.html#a19c536390bca638bf973884d782a8d18", null ],
     [ "create_MALA", "bindings_8cpp.html#ab7757a3fc43dd161fbbe4fc332f4d862", null ],
     [ "create_Natarajan_likelihood", "bindings_8cpp.html#a9213031e65c5de4995d4c81fdc39b8ee", null ],
+    [ "create_Natarajan_likelihood_summaryStats", "bindings_8cpp.html#a4da8061e4310e005c61caeba32ba9d87", null ],
     [ "create_Neal3", "bindings_8cpp.html#a68330117dc20c6a6d2391a21f3a84b47", null ],
     [ "create_Neal3ZDNAM", "bindings_8cpp.html#a0e2593a57e9556b490690b6e3a6d28b4", null ],
     [ "create_NGGP", "bindings_8cpp.html#a6be22cfc427559d5e610ac93b8f5e403", null ],

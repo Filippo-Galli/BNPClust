@@ -8,7 +8,6 @@ var classBinaryCache =
     [ "recompute", "classBinaryCache.html#a783c0d902dfb7812775a2fe2007c56f0", null ],
     [ "remove_info", "classBinaryCache.html#a9575db31ef99329ebc3f58cece7f3695", null ],
     [ "set_allocation", "classBinaryCache.html#ae95c0ef06dd0799e4c810629c6ee4b5c", null ],
-    [ "allocations", "classBinaryCache.html#a71f2f8de4837b7f01e0e31ed814cbe58", null ],
     [ "binary_covariates", "classBinaryCache.html#a07bf084cf45f87a6d3ec8016df1b3c93", null ],
     [ "cluster_stats", "classBinaryCache.html#adfa8f07d41e8b3c81dcd41606f42ec0f", null ]
 ];

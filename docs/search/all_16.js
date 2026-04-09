@@ -9,7 +9,7 @@ var searchData=
   ['params_5fget_5fsigma_6',['params_get_sigma',['../bindings_8cpp.html#ab20a182586addd0df8bde314315e84d3',1,'bindings.cpp']]],
   ['params_5fget_5ftau_7',['params_get_tau',['../bindings_8cpp.html#a8d8722dc72f83da2753b2c1fead16732',1,'bindings.cpp']]],
   ['philosophy_8',['Design Philosophy',['../md_CONTRIBUTING.html#autotoc_md31',1,'']]],
-  ['point_5floglikelihood_5fcond_9',['point_loglikelihood_cond',['../classLikelihood.html#a0937f6a9a4b48def87b6e644810fb99d',1,'Likelihood']]],
+  ['point_5floglikelihood_5fcond_9',['point_loglikelihood_cond',['../classLikelihood.html#a0937f6a9a4b48def87b6e644810fb99d',1,'Likelihood::point_loglikelihood_cond()'],['../classGamma__likelihood.html#ac96bea4cd8e2615765f5ee21390bc23b',1,'Gamma_likelihood::point_loglikelihood_cond()'],['../classNatarajan__likelihood.html#a5059f4ad0c3d8f9da9cfa7ddb7cce10c',1,'Natarajan_likelihood::point_loglikelihood_cond()'],['../classNatarajan__likelihood__summaryStats.html#a28b41bbd71b01e5f1da9045d270edc0d',1,'Natarajan_likelihood_summaryStats::point_loglikelihood_cond()'],['../classNull__likelihood.html#a9b4a4fcefaaaa63fb9be886060093b18',1,'Null_likelihood::point_loglikelihood_cond()']]],
   ['prerequisites_10',['Prerequisites',['../index.html#autotoc_md12',1,'']]],
   ['principle_11',['KISS Principle',['../md_CONTRIBUTING.html#autotoc_md32',1,'']]],
   ['prior_5falpha_12',['prior_alpha',['../classCategoricalCovariatesModule.html#a07e85811faca4d5478c9c59081e4f90c',1,'CategoricalCovariatesModule']]],
