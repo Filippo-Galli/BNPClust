@@ -19,6 +19,7 @@
 
 #include "utils/Likelihood.hpp"
 #include "likelihoods/Natarajan_likelihood.hpp"
+#include "likelihoods/Natarajan_likelihood_summaryStats.hpp"
 #include "likelihoods/Null_likelihood.hpp"
 #include "likelihoods/Gamma_likelihood.hpp"
 
@@ -150,6 +151,13 @@ Rcpp::XPtr<Datax> create_Datax(Rcpp::XPtr<Params> params, Rcpp::List modules_lis
 Rcpp::XPtr<Natarajan_likelihood> create_Natarajan_likelihood(SEXP data_sexp, Rcpp::XPtr<Params> params) {
     Data *data = get_data_ptr(data_sexp);
     return Rcpp::XPtr<Natarajan_likelihood>(new Natarajan_likelihood(*data, *params), true);
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<Natarajan_likelihood_summaryStats> create_Natarajan_likelihood_summaryStats(SEXP data_sexp,
+                                                                                       Rcpp::XPtr<Params> params) {
+    Data *data = get_data_ptr(data_sexp);
+    return Rcpp::XPtr<Natarajan_likelihood_summaryStats>(new Natarajan_likelihood_summaryStats(*data, *params), true);
 }
 
 // [[Rcpp::export]]

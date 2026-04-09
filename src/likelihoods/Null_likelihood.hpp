@@ -7,6 +7,11 @@
 
 #include "../utils/Likelihood.hpp"
 
+/**
+ * @class Null_likelihood
+ * @brief LogLikelihood equal to 1 to ignore data contribution and focus on prior
+ */
+
 class Null_likelihood : public Likelihood {
 public:
     Null_likelihood(const Data &data, const Params &param) : Likelihood(data, param) {}
