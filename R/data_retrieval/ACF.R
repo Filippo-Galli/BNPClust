@@ -251,17 +251,19 @@ download_with_progress <- function(url, destfile, quiet = FALSE) {
     if (nzchar(Sys.which("aria2c"))) {
         dir_name <- dirname(destfile)
         file_name <- basename(destfile)
-        
+
         # -x 4: max 4 connections
         # -s 4: split to 4 parts
         # --file-allocation=none: faster startup
-        cmd <- sprintf("aria2c -x 4 -s 4 --allow-overwrite=true --file-allocation=none -d '%s' -o '%s' '%s' %s", 
-                       dir_name, file_name, url, if(quiet) "-q" else "")
-        
+        cmd <- sprintf(
+            "aria2c -x 4 -s 4 --allow-overwrite=true --file-allocation=none -d '%s' -o '%s' '%s' %s",
+            dir_name, file_name, url, if (quiet) "-q" else ""
+        )
+
         status <- system(cmd, ignore.stdout = quiet, ignore.stderr = quiet)
         if (status == 0 && file.exists(destfile)) {
-             if (!quiet) cat(sprintf(" ✓ Downloaded (aria2c): %.2f MB\n", file.size(destfile) / 1024^2))
-             return(TRUE)
+            if (!quiet) cat(sprintf(" ✓ Downloaded (aria2c): %.2f MB\n", file.size(destfile) / 1024^2))
+            return(TRUE)
         }
     }
 
@@ -311,7 +313,7 @@ process_state_download <- function(i) {
 
     # For parallel, we suppress individual progress bars and start/end messages to avoid clutter
     is_parallel <- args$cores > 1
-    
+
     if (!is_parallel) {
         cat(sprintf("\n [%d/%d] %s\n", i, length(states_to_process), state))
     }
@@ -327,7 +329,7 @@ process_state_download <- function(i) {
 
 if (args$cores > 1) {
     results <- mclapply(seq_along(states_to_process), process_state_download, mc.cores = args$cores)
-    
+
     for (res in results) {
         if (!is.null(res) && !inherits(res, "try-error")) {
             if (res$success) {
@@ -411,7 +413,8 @@ for (i in seq_along(states_to_process)) {
     data <- read.csv(csv_file, colClasses = col_classes)
     cat(sprintf("%d records, %d cols\n", nrow(data), ncol(data)))
     raw_data_list[[i]] <- data
-    rm(data); gc()
+    rm(data)
+    gc()
 }
 
 if (length(raw_data_list) == 0) {
@@ -431,7 +434,8 @@ census_data <- bind_rows(raw_data_list) %>%
     mutate(LPINCP = log(PINCP))
 
 # Free raw list immediately — census_data is the single source of truth now
-rm(raw_data_list); gc()
+rm(raw_data_list)
+gc()
 
 cat(sprintf("✓ (%d observations)\n", nrow(census_data)))
 
@@ -485,7 +489,8 @@ sf_counties <- sf_usa %>%
     filter(!is.na(ST), State %in% states_to_process) %>%
     select(ST, PUMA, STATE_PUMA, State, Name, geometry)
 
-rm(sf_usa); gc()
+rm(sf_usa)
+gc()
 cat(sprintf("✓ (%d PUMAs)\n", nrow(sf_counties)))
 
 # Filter for LA Bay Area if requested
@@ -557,6 +562,49 @@ if (args$subsample_size != -1 && args$subsample_size > min_size) {
     ))
 }
 
+# ========== Compute adjacency matrix (boundary-length weights) ==========
+
+cat("Computing spatial adjacency matrix (boundary-length weights)... ")
+sf_counties <- st_transform(sf_counties, crs = 5070)
+adj_list <- poly2nb(sf_counties, queen = FALSE, snap = 100)
+isolated <- which(card(adj_list) == 0)
+
+if (length(isolated) > 0) {
+    cat(sprintf("\n Warning: %d isolated PUMAs (no neighbors)\n", length(isolated)))
+}
+
+n <- nrow(sf_counties)
+
+# 1. Extract all neighbor pairs as a two-column matrix (i < j only, no duplicates)
+neighbor_pairs <- do.call(rbind, lapply(seq_len(n), function(i) {
+    js <- adj_list[[i]]
+    js <- js[js > i & js != 0] # upper triangle only
+    if (length(js) == 0) {
+        return(NULL)
+    }
+    cbind(i = i, j = js)
+}))
+
+cat(sprintf("\n  Found %d unique neighbor pairs\n", nrow(neighbor_pairs)))
+
+# 2. Compute all intersections in one vectorized call
+geom_i <- sf_counties$geometry[neighbor_pairs[, "i"]]
+geom_j <- sf_counties$geometry[neighbor_pairs[, "j"]]
+
+shared_geoms <- st_intersection(geom_i, geom_j)
+
+# 3. Measure lengths — non-linear geometries (points) get 0
+shared_lengths <- st_length(shared_geoms)
+shared_lengths[st_dimension(shared_geoms) < 1] <- 0 # drop point touches
+
+# 4. Fill symmetric matrix
+W_cont <- matrix(0, n, n)
+W_cont[cbind(neighbor_pairs[, "i"], neighbor_pairs[, "j"])] <- shared_lengths
+W_cont[cbind(neighbor_pairs[, "j"], neighbor_pairs[, "i"])] <- shared_lengths # symmetry
+
+rownames(W_cont) <- sf_counties$STATE_PUMA
+colnames(W_cont) <- sf_counties$STATE_PUMA
+
 # ========== Generate datasets ==========
 
 if (args$subsample_size == -1) {
@@ -586,7 +634,8 @@ full_data_long <- do.call(rbind, lapply(names(data_by_puma), function(puma_id) {
 }))
 
 write.csv(full_data_long, file.path(args$output_dir, "full_dataset.csv"), row.names = FALSE)
-rm(full_data_long); gc()
+rm(full_data_long)
+gc()
 cat("✓\n")
 
 # ========== CREATE ENHANCED full_dataset_covariates ==========
@@ -638,11 +687,14 @@ saveRDS(
     file.path(args$output_dir, "full_dataset_covariates.rds")
 )
 cat(sprintf("✓ Saved full_dataset_covariates.rds (list format)\n"))
-cat(sprintf("✓ Saved full_dataset_covariates.csv (%d rows, %d columns)\n",
-    total_cov_rows, length(puma_covariate_cols) + 1L))
+cat(sprintf(
+    "✓ Saved full_dataset_covariates.csv (%d rows, %d columns)\n",
+    total_cov_rows, length(puma_covariate_cols) + 1L
+))
 
 # Free large objects no longer needed
-rm(full_dataset_covariates); gc()
+rm(full_dataset_covariates)
+gc()
 
 # Generate subsampled datasets
 set.seed(230196)
@@ -682,7 +734,8 @@ for (i in 1:args$num_datasets) {
     }
 }
 
-rm(data_by_puma); gc()
+rm(data_by_puma)
+gc()
 
 # ========== Save spatial data ==========
 
@@ -709,6 +762,7 @@ cat(" ✓ Shapefile\n")
 saveRDS(geometry_sf, file.path(args$output_dir, "geometry.rds"))
 cat(" ✓ Geometry RDS\n")
 
+saveRDS(W_cont, file.path(args$output_dir, "adj_matrix_cont.rds"))
 saveRDS(W, file.path(args$output_dir, "adj_matrix.rds"))
 cat(" ✓ Adjacency matrix RDS\n")
 

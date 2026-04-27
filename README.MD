@@ -19,6 +19,10 @@ Open `R/mcmc_loop.R` to create your own preferred MCMC scheme and see how to cre
 
 An example of a complete MCMC scheme is provided in `R/launcher.R`, which uses `R/mcmc_loop.R` as the underlying MCMC loop.
 
+### 📊 Data Retrieval
+
+Check the [guide](R/data_retrieval/README.md)
+
 ## 📁 Directory Structure
 
 - `R/`: R interface functions and scripts for MCMC orchestration and analysis

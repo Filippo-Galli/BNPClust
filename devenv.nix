@@ -79,6 +79,8 @@ in
     pkgs.rPackages.renv
     pkgs.rPackages.mvtnorm
     pkgs.rPackages.gtools
+    pkgs.rPackages.argparser
+    pkgs.rPackages.coda
 
     # Data analysis packages
     pkgs.rPackages.ggplot2

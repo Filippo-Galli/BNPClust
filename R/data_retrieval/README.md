@@ -2,16 +2,14 @@
 
 This document explains how to use the two data processing scripts for spatial analysis.
 
-**NOTE: These scripts now use consistent naming conventions across both US and Italian data.**
-
 ---
 
 ## 📊 Script Overview
 
 | Script | Purpose | Data Source | Geography |
 |--------|---------|-------------|-----------|
-| **ACF_modified.R** | US Census income data | American Community Survey 2020 | US States (PUMAs) |
-| **municipalities_modified.R** | Italian income data | ISTAT (Italian Statistics) | Italian Municipalities |
+| **ACF.R** | US Census income data | American Community Survey 2020 | US States (PUMAs) |
+| **municipalities.R** | Italian income data | ISTAT (Italian Statistics) | Italian Municipalities |
 
 ---
 
@@ -342,14 +340,3 @@ plot(it_full["0-10000"], main = "Italian Income (0-10k bracket)")
 **municipalities.R Data Sources:**
 - [ISTAT Geographic Boundaries](https://www.istat.it/it/archivio/222527)
 - [ISTAT Income Data](https://www1.finanze.gov.it/finanze/analisi_stat/)
-
----
-
-## ✨ Summary of Improvements
-
-1. **Consistent CSV format** - Both scripts now use CSV for main data files
-2. **Consistent geometry folder** - Both scripts save shapefiles in a `geometry/` subfolder
-3. **Consistent RDS format** - Both scripts use RDS for geometry and adjacency matrices
-4. **Consistent column naming** - COD_* for codes, NAME_* for names
-5. **Better documentation** - CSV files include summary statistics for easier analysis
-6. **Easier to use** - No need to remember different file formats for different scripts!
