@@ -107,7 +107,10 @@ $(function(){initNavTree('index.html','',''); });
 <div class="line">cd BNPClust</div>
 </div><!-- fragment --><p>Open <span class="tt">R/mcmc_loop.R</span> to create your own preferred MCMC scheme and see how to create and pass data to each component.</p>
 <p>An example of a complete MCMC scheme is provided in <span class="tt">R/launcher.R</span>, which uses <span class="tt">R/mcmc_loop.R</span> as the underlying MCMC loop.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+📊 Data Retrieval</h2>
+<p>Check the guide</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
 📁 Directory Structure</h1>
 <ul>
 <li><span class="tt">R/</span>: R interface functions and scripts for MCMC orchestration and analysis</li>
@@ -115,7 +118,7 @@ $(function(){initNavTree('index.html','',''); });
 <li><span class="tt">docs/</span>: Generated documentation (Doxygen)</li>
 <li><span class="tt">doxygen-theme/</span>: Doxygen theme configuration files</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
 R Scripts</h2>
 <p>Each C++ class in the framework has corresponding R bindings to facilitate interaction with R users. The typical workflow is:</p>
 <ul>
@@ -124,7 +127,7 @@ R Scripts</h2>
 <li><b><span class="tt">R/mcmc_analysis.R</span></b>: Functions to visualize and summarize MCMC output</li>
 <li>Other scripts provide utility functions for data loading, visualization, result plotting, and data fetching/cleaning</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 src: C++ Core Framework</h2>
 <p>The C++ source code is organized into the following subdirectories:</p>
 <ul>
@@ -134,11 +137,11 @@ src: C++ Core Framework</h2>
 <li><b><span class="tt">src/utils/</span></b>: Utility functions, base classes, and shared infrastructure</li>
 <li><b><span class="tt"><a class="el" href="bindings_8cpp.html" title="R language bindings for Bayesian nonparametric clustering models.">src/bindings.cpp</a></span></b>: Rcpp bindings exposing C++ classes and functions to R</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 docs and Documentation</h2>
 <p>The <span class="tt">docs/</span> folder contains documentation generated with Doxygen, including class diagrams and detailed code documentation. To regenerate the documentation, ensure Doxygen is installed and run:</p>
 <div class="fragment"><div class="line">doxygen Doxyfile</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
 🏗️ Architecture</h1>
 <p>The framework is built around five main logical components:</p>
 <ol type="1">
@@ -148,9 +151,9 @@ docs and Documentation</h2>
 <li><b><span class="tt"><a class="el" href="classData.html" title="Manages distance matrices and cluster allocations for points.">Data</a></span></b>: Manages cluster assignments and data handling</li>
 <li><b><span class="tt"><a class="el" href="classSampler.html" title="Abstract base class for MCMC sampler implementations.">Sampler</a></span></b>: Implements the MCMC inference engine</li>
 </ol>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 📦 Implemented Methods</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
 Stochastic Processes</h2>
 <p>Currently implemented processes:</p>
 <ul>
@@ -164,7 +167,7 @@ Stochastic Processes</h2>
 <li><b>Binary Covariate <a class="el" href="classModule.html" title="Abstract base class for modules used in clustering processes. This class defines the interface for mo...">Module</a></b>: Incorporates discrete covariates into the clustering process</li>
 </ul>
 <p>Cached versions of these modules are available for improved computational performance.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Likelihood Models</h2>
 <p>All likelihood components are implemented as log-likelihood functions for numerical stability. Currently available:</p>
 <ul>
@@ -172,7 +175,7 @@ Likelihood Models</h2>
 <li><b>Gamma <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a></b>: Variant of distance-based clustering without the repulsion term</li>
 <li><b>Null <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a></b>: A placeholder that does not contribute to the posterior, useful for prior inspection</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 MCMC Samplers</h2>
 <p>The framework includes several MCMC sampling strategies suited to different problem structures:</p>
 <ul>
@@ -184,16 +187,16 @@ MCMC Samplers</h2>
 <li><b>LSS-SDDS Split-Merge</b>: Split-Merge with Smart-Dumb/Dumb-Smart moves, LSS, and SAMS enhancements</li>
 </ul>
 <p><b>Status Legend</b>: Core methods (Neal's Algorithm 3, standard Split-Merge) are production-ready; samplers marked experimental are under development.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 🛠️ Installation &amp; Usage</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 Prerequisites</h2>
 <ul>
 <li><b>R</b> (version 3.5.0 or later)</li>
 <li><b>C++ Compiler</b> supporting C++11 or later (e.g., g++, clang)</li>
 <li><b>R Packages</b>: <span class="tt">Rcpp</span>, <span class="tt">RcppEigen</span></li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 Setup</h2>
 <ol type="1">
 <li>Clone the repository: <div class="fragment"><div class="line">git clone https://github.com/filippo-galli/BNPClust.git</div>
@@ -203,7 +206,7 @@ Setup</h2>
 <li>Install dependencies: <div class="fragment"><div class="line">install.packages(c(<span class="stringliteral">&quot;Rcpp&quot;</span>, <span class="stringliteral">&quot;RcppEigen&quot;</span>))</div>
 </div><!-- fragment --></li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 Running a Basic Example</h2>
 <p>The Rcpp bindings in <span class="tt"><a class="el" href="bindings_8cpp.html" title="R language bindings for Bayesian nonparametric clustering models.">src/bindings.cpp</a></span> expose all C++ classes and functions to R, allowing you to compose custom MCMC schemes directly from R. Use <span class="tt">R/launcher.R</span> as a template:</p>
 <ol type="1">
@@ -212,7 +215,7 @@ Running a Basic Example</h2>
 <li>Execute <span class="tt">R/launcher.R</span> to run the MCMC chain</li>
 <li>Analyze results using <span class="tt">R/mcmc_analysis.R</span></li>
 </ol>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
 📚 References</h1>
 <ul>
 <li>Natarajan, L., et al. (2023). <em>Cohesion and Repulsion in Bayesian Distance Clustering</em></li>
@@ -222,7 +225,7 @@ Running a Basic Example</h2>
 <li>Dahl, D. B. (2021). <em>Sequentially-allocated merge-split samplers for conjugate Bayesian nonparametric models</em></li>
 <li>Luo, L., et al. (2018). <em>Scaling-up Split-Merge MCMC with Locality Sensitive Sampling (LSS)</em></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
 💡 Usage &amp; Licensing</h1>
 <p>BNPClust is released under the <b>GPL-3.0 license</b>, which means:</p>
 <ul>
@@ -233,7 +236,7 @@ Running a Basic Example</h2>
 </ul>
 <p>For details on GPL-3.0 compliance and your obligations, see the [LICENSE](LICENSE) file.</p>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
 💡 Contributing</h1>
 <p>See <a class="el" href="md_CONTRIBUTING.html">CONTRIBUTING.md</a> for guidelines on how to contribute to BNPClust.</p>
 <p>If you find this project useful, please leave a star! ⭐ </p>

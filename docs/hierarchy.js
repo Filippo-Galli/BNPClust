@@ -25,7 +25,8 @@ var hierarchy =
       [ "ContinuosCovariatesModule", "classContinuosCovariatesModule.html", null ],
       [ "ContinuosCovariatesModuleCache", "classContinuosCovariatesModuleCache.html", null ],
       [ "SpatialModule", "classSpatialModule.html", null ],
-      [ "SpatialModuleCache", "classSpatialModuleCache.html", null ]
+      [ "SpatialModuleCache", "classSpatialModuleCache.html", null ],
+      [ "SpatialModuleContinuous", "classSpatialModuleContinuous.html", null ]
     ] ],
     [ "Params", "structParams.html", null ],
     [ "Process", "classProcess.html", [

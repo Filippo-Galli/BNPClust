@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['📦_20implemented_20methods_0',['📦 Implemented Methods',['../index.html#autotoc_md7',1,'']]]
+  ['📚_20references_0',['📚 References',['../index.html#autotoc_md16',1,'']]]
 ];

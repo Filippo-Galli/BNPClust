@@ -30,6 +30,7 @@ var annotated_dup =
     [ "SpatialCache", "classSpatialCache.html", "classSpatialCache" ],
     [ "SpatialModule", "classSpatialModule.html", "classSpatialModule" ],
     [ "SpatialModuleCache", "classSpatialModuleCache.html", "classSpatialModuleCache" ],
+    [ "SpatialModuleContinuous", "classSpatialModuleContinuous.html", "classSpatialModuleContinuous" ],
     [ "SplitMerge", "classSplitMerge.html", "classSplitMerge" ],
     [ "SplitMerge_LSS", "classSplitMerge__LSS.html", "classSplitMerge__LSS" ],
     [ "SplitMerge_LSS_SDDS", "classSplitMerge__LSS__SDDS.html", "classSplitMerge__LSS__SDDS" ],

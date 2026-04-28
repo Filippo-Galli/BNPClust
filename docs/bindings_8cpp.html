@@ -99,43 +99,44 @@ $(function(){initNavTree('bindings_8cpp.html','',''); });
 
 <p>R language bindings for Bayesian nonparametric clustering models.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;RcppEigen.h&gt;</code><br />
-<code>#include &lt;memory&gt;</code><br />
-<code>#include &quot;Rcpp/XPtr.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="Params_8hpp_source.html">utils/Params.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;Rcpp/XPtr.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="Data_8hpp_source.html">utils/Data.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Datax_8hpp_source.html">utils/Datax.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Likelihood_8hpp_source.html">utils/Likelihood.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Params_8hpp_source.html">utils/Params.hpp</a>&quot;</code><br />
+<code>#include &lt;RcppEigen.h&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &quot;<a class="el" href="Gamma__likelihood_8hpp_source.html">likelihoods/Gamma_likelihood.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Natarajan__likelihood_8hpp_source.html">likelihoods/Natarajan_likelihood.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Natarajan__likelihood__summaryStats_8hpp_source.html">likelihoods/Natarajan_likelihood_summaryStats.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Null__likelihood_8hpp_source.html">likelihoods/Null_likelihood.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Gamma__likelihood_8hpp_source.html">likelihoods/Gamma_likelihood.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Process_8hpp_source.html">utils/Process.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Likelihood_8hpp_source.html">utils/Likelihood.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="DP_8hpp_source.html">processes/DP.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="DPx_8hpp_source.html">processes/DPx.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="NGGP_8hpp_source.html">processes/NGGP.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="NGGPx_8hpp_source.html">processes/NGGPx.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="spatial__module_8hpp_source.html">processes/module/spatial_module.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="spatial__module__cache_8hpp_source.html">processes/module/spatial_module_cache.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="continuos__covariate__module_8hpp_source.html">processes/module/continuos_covariate_module.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="continuos__covariate__module__cache_8hpp_source.html">processes/module/continuos_covariate_module_cache.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Process_8hpp_source.html">utils/Process.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="binary__covariate__module_8hpp_source.html">processes/module/binary_covariate_module.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="binary__covariate__module__cache_8hpp_source.html">processes/module/binary_covariate_module_cache.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="categorical__covariate__module_8hpp_source.html">processes/module/categorical_covariate_module.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="ClusterInfo_8hpp_source.html">utils/ClusterInfo.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="continuos__cache_8hpp_source.html">processes/caches/continuos_cache.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="continuos__covariate__module_8hpp_source.html">processes/module/continuos_covariate_module.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="continuos__covariate__module__cache_8hpp_source.html">processes/module/continuos_covariate_module_cache.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="spatial__module_8hpp_source.html">processes/module/spatial_module.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="spatial__module__cache_8hpp_source.html">processes/module/spatial_module_cache.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="spatial__module__continuous_8hpp_source.html">processes/module/spatial_module_continuous.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="binary__cache_8hpp_source.html">processes/caches/binary_cache.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="continuos__cache_8hpp_source.html">processes/caches/continuos_cache.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="spatial__cache_8hpp_source.html">processes/caches/spatial_cache.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="U__sampler_8hpp_source.html">samplers/U_sampler/U_sampler.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="RWMH_8hpp_source.html">samplers/U_sampler/RWMH.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ClusterInfo_8hpp_source.html">utils/ClusterInfo.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="MALA_8hpp_source.html">samplers/U_sampler/MALA.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Sampler_8hpp_source.html">utils/Sampler.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="RWMH_8hpp_source.html">samplers/U_sampler/RWMH.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="U__sampler_8hpp_source.html">samplers/U_sampler/U_sampler.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="neal_8hpp_source.html">samplers/neal.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="neal__ZDNAM_8hpp_source.html">samplers/neal_ZDNAM.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="splitmerge_8hpp_source.html">samplers/splitmerge.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="splitmerge__SAMS_8hpp_source.html">samplers/splitmerge_SAMS.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="splitmerge__LSS_8hpp_source.html">samplers/splitmerge_LSS.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="splitmerge__LSS__SDDS_8hpp_source.html">samplers/splitmerge_LSS_SDDS.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="splitmerge__SAMS_8hpp_source.html">samplers/splitmerge_SAMS.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Sampler_8hpp_source.html">utils/Sampler.hpp</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -156,6 +157,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a596ab200c34dff954c7d202a8e41544b" id="r_a596ab200c34dff954c7d202a8e41544b"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classDP.html">DP</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a596ab200c34dff954c7d202a8e41544b">create_DP</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params)</td></tr>
 <tr class="memitem:a6be22cfc427559d5e610ac93b8f5e403" id="r_a6be22cfc427559d5e610ac93b8f5e403"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; <a class="el" href="classNGGP.html">NGGP</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6be22cfc427559d5e610ac93b8f5e403">create_NGGP</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structParams.html">Params</a> &gt; params, Rcpp::XPtr&lt; <a class="el" href="classU__sampler.html">U_sampler</a> &gt; u_sampler)</td></tr>
 <tr class="memitem:ad11d394b6cf96120da4ca1f7469a3769" id="r_ad11d394b6cf96120da4ca1f7469a3769"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; std::shared_ptr&lt; <a class="el" href="classModule.html">Module</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad11d394b6cf96120da4ca1f7469a3769">create_SpatialModule</a> (SEXP data_sexp, Eigen::MatrixXi W, double spatial_coefficient)</td></tr>
+<tr class="memitem:a57d74f13fb2764d3f8703f7742c41054" id="r_a57d74f13fb2764d3f8703f7742c41054"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; std::shared_ptr&lt; <a class="el" href="classModule.html">Module</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57d74f13fb2764d3f8703f7742c41054">create_SpatialModuleContinuous</a> (SEXP data_sexp, Eigen::MatrixXd W, double spatial_coefficient)</td></tr>
 <tr class="memitem:a396fabe727bcd78a193ace78a951de4a" id="r_a396fabe727bcd78a193ace78a951de4a"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; std::shared_ptr&lt; <a class="el" href="classModule.html">Module</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a396fabe727bcd78a193ace78a951de4a">create_SpatialModuleCache</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="classSpatialCache.html">SpatialCache</a> &gt; cache, double spatial_coefficient)</td></tr>
 <tr class="memitem:aaddd7672c48e468cc15f221c1a67f8f7" id="r_aaddd7672c48e468cc15f221c1a67f8f7"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; std::shared_ptr&lt; <a class="el" href="classModule.html">Module</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaddd7672c48e468cc15f221c1a67f8f7">create_ContinuosCovariatesModule</a> (SEXP data_sexp, Eigen::VectorXd covariates, bool fixed_v, double m=0, double B=1, double v=1, double nu=1, double S0=1)</td></tr>
 <tr class="memitem:a575e5c1484350bb19d8d3bc8a5c1d3f7" id="r_a575e5c1484350bb19d8d3bc8a5c1d3f7"><td class="memItemLeft" align="right" valign="top">Rcpp::XPtr&lt; std::shared_ptr&lt; <a class="el" href="classModule.html">Module</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a575e5c1484350bb19d8d3bc8a5c1d3f7">create_ContinuosCovariatesModuleCache</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="classContinuosCache.html">ContinuosCache</a> &gt; cache, bool fixed_v, double m=0, double B=1, double v=1, double nu=1, double S0=1)</td></tr>
@@ -984,6 +986,32 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Rcpp::XPtr&lt; <a class="el" href="classSpatialCache.html">SpatialCache</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>cache</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>spatial_coefficient</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a57d74f13fb2764d3f8703f7742c41054" name="a57d74f13fb2764d3f8703f7742c41054"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57d74f13fb2764d3f8703f7742c41054">&#9670;&#160;</a></span>create_SpatialModuleContinuous()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::XPtr&lt; std::shared_ptr&lt; <a class="el" href="classModule.html">Module</a> &gt; &gt; create_SpatialModuleContinuous </td>
+          <td>(</td>
+          <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::MatrixXd</td>          <td class="paramname"><span class="paramname"><em>W</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

@@ -27,31 +27,31 @@ var NAVTREE =
   [ "Docs", "index.html", [
     [ "BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC", "index.html", "index" ],
     [ "Contributing to BNPClust", "md_CONTRIBUTING.html", [
-      [ "Getting Started", "md_CONTRIBUTING.html#autotoc_md20", [
-        [ "1. Fork the Repository", "md_CONTRIBUTING.html#autotoc_md21", null ],
-        [ "2. Clone Your Fork", "md_CONTRIBUTING.html#autotoc_md22", null ],
-        [ "3. Create a New Branch", "md_CONTRIBUTING.html#autotoc_md23", null ],
-        [ "4. Make Your Changes", "md_CONTRIBUTING.html#autotoc_md24", null ],
-        [ "5. Test Your Changes", "md_CONTRIBUTING.html#autotoc_md25", null ],
-        [ "6. Commit Your Changes", "md_CONTRIBUTING.html#autotoc_md26", null ],
-        [ "7. Push to Your Fork", "md_CONTRIBUTING.html#autotoc_md27", null ],
-        [ "8. Create a Pull Request", "md_CONTRIBUTING.html#autotoc_md28", null ],
-        [ "9. Address Feedback", "md_CONTRIBUTING.html#autotoc_md29", null ]
+      [ "Getting Started", "md_CONTRIBUTING.html#autotoc_md21", [
+        [ "1. Fork the Repository", "md_CONTRIBUTING.html#autotoc_md22", null ],
+        [ "2. Clone Your Fork", "md_CONTRIBUTING.html#autotoc_md23", null ],
+        [ "3. Create a New Branch", "md_CONTRIBUTING.html#autotoc_md24", null ],
+        [ "4. Make Your Changes", "md_CONTRIBUTING.html#autotoc_md25", null ],
+        [ "5. Test Your Changes", "md_CONTRIBUTING.html#autotoc_md26", null ],
+        [ "6. Commit Your Changes", "md_CONTRIBUTING.html#autotoc_md27", null ],
+        [ "7. Push to Your Fork", "md_CONTRIBUTING.html#autotoc_md28", null ],
+        [ "8. Create a Pull Request", "md_CONTRIBUTING.html#autotoc_md29", null ],
+        [ "9. Address Feedback", "md_CONTRIBUTING.html#autotoc_md30", null ]
       ] ],
-      [ "Design Philosophy", "md_CONTRIBUTING.html#autotoc_md31", [
-        [ "KISS Principle", "md_CONTRIBUTING.html#autotoc_md32", null ],
-        [ "Modularity", "md_CONTRIBUTING.html#autotoc_md33", null ],
-        [ "Code Organization", "md_CONTRIBUTING.html#autotoc_md34", null ],
-        [ "Documentation", "md_CONTRIBUTING.html#autotoc_md35", null ],
-        [ "R Bindings", "md_CONTRIBUTING.html#autotoc_md36", null ]
+      [ "Design Philosophy", "md_CONTRIBUTING.html#autotoc_md32", [
+        [ "KISS Principle", "md_CONTRIBUTING.html#autotoc_md33", null ],
+        [ "Modularity", "md_CONTRIBUTING.html#autotoc_md34", null ],
+        [ "Code Organization", "md_CONTRIBUTING.html#autotoc_md35", null ],
+        [ "Documentation", "md_CONTRIBUTING.html#autotoc_md36", null ],
+        [ "R Bindings", "md_CONTRIBUTING.html#autotoc_md37", null ]
       ] ],
-      [ "Types of Contributions", "md_CONTRIBUTING.html#autotoc_md38", [
-        [ "🐛 Bug Reports", "md_CONTRIBUTING.html#autotoc_md39", null ],
-        [ "✨ Feature Requests", "md_CONTRIBUTING.html#autotoc_md40", null ],
-        [ "📖 Documentation", "md_CONTRIBUTING.html#autotoc_md41", null ],
-        [ "🔧 Code Improvements", "md_CONTRIBUTING.html#autotoc_md42", null ]
+      [ "Types of Contributions", "md_CONTRIBUTING.html#autotoc_md39", [
+        [ "🐛 Bug Reports", "md_CONTRIBUTING.html#autotoc_md40", null ],
+        [ "✨ Feature Requests", "md_CONTRIBUTING.html#autotoc_md41", null ],
+        [ "📖 Documentation", "md_CONTRIBUTING.html#autotoc_md42", null ],
+        [ "🔧 Code Improvements", "md_CONTRIBUTING.html#autotoc_md43", null ]
       ] ],
-      [ "Questions?", "md_CONTRIBUTING.html#autotoc_md44", null ]
+      [ "Questions?", "md_CONTRIBUTING.html#autotoc_md45", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -77,9 +77,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ClusterInfo_8hpp.html",
-"classData.html#a11ff2cd14f9af453675c46bcb0107d3b",
-"classSplitMerge.html#afefac12e75094f3e256a9c6c2adda20f",
-"spatial__cache_8hpp_source.html"
+"classData.html#a084c9582515b320c586462db84fe9788",
+"classSplitMerge.html#a918acf018b41086f3ce1a1440aced4ad",
+"md_CONTRIBUTING.html#autotoc_md42"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

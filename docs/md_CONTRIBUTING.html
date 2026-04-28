@@ -96,24 +96,24 @@ $(function(){initNavTree('md_CONTRIBUTING.html','',''); });
   <div class="headertitle"><div class="title">Contributing to BNPClust </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md19"></a></p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md20"></a></p>
 <p>I welcome contributions to this project! Whether it's bug fixes, new features, or documentation improvements, your help is appreciated.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
 Getting Started</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
 1. Fork the Repository</h2>
 <p>Click the <b>"Fork"</b> button at the top right of the <a href="https://github.com/Filippo-Galli/BNPClust">BNPClust repository</a> to create your own copy.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
 2. Clone Your Fork</h2>
 <p>Clone your forked repository to your local machine:</p>
 <div class="fragment"><div class="line">git clone https://github.com/yourusername/BNPClust.git</div>
 <div class="line">cd BNPClust</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
 3. Create a New Branch</h2>
 <p>Create a new branch for your feature or bug fix:</p>
 <div class="fragment"><div class="line">git checkout -b feature-or-bugfix-name</div>
 </div><!-- fragment --><p>Use descriptive branch names, e.g., <span class="tt">add-split-merge-sampler</span>, <span class="tt">fix-spatial-module-bug</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
 4. Make Your Changes</h2>
 <p>Implement your changes in the codebase. Ensure that your code follows the existing style and conventions.</p>
 <p><b>Code Style Guidelines:</b></p><ul>
@@ -122,7 +122,7 @@ Getting Started</h1>
 <li>Write clear, descriptive variable and function names</li>
 <li>Comment complex logic, especially in MCMC algorithms</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 5. Test Your Changes</h2>
 <p>Run existing tests and add new tests if necessary:</p>
 <div class="fragment"><div class="line"># Compile and run your changes</div>
@@ -132,7 +132,7 @@ Getting Started</h1>
 <li>Don't break existing functionality</li>
 <li>Pass new and existing tests</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 6. Commit Your Changes</h2>
 <p>Commit with a clear, descriptive message:</p>
 <div class="fragment"><div class="line">git add .</div>
@@ -142,11 +142,11 @@ Getting Started</h1>
 <li>Be specific about what changed: <span class="tt">git commit -m "Add SAMS sampler with caching support"</span></li>
 <li>Reference issues if applicable: <span class="tt">git commit -m "Fix spatial module bug (closes #42)"</span></li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
 7. Push to Your Fork</h2>
 <p>Push your changes to your forked repository:</p>
 <div class="fragment"><div class="line">git push origin feature-or-bugfix-name</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
 8. Create a Pull Request</h2>
 <p>Go to the <a href="https://github.com/Filippo-Galli/BNPClust">original repository</a> and create a pull request from your forked branch. Provide:</p>
 <ul>
@@ -155,14 +155,14 @@ Getting Started</h1>
 <li>Reference to any related issues</li>
 <li>Examples or test cases if applicable</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
 9. Address Feedback</h2>
 <p>Be responsive to feedback and requests for changes from the maintainers. This is a collaborative process, and iteration is normal.</p>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
 Design Philosophy</h1>
 <p>BNPClust is built on a <b>modular architecture</b> to support flexible composition of components. When contributing, keep these principles in mind:</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md33"></a>
 KISS Principle</h2>
 <p>Follow the <b>Keep It Simple, Stupid (KISS)</b> principle:</p><ul>
 <li>Avoid unnecessary complexity</li>
@@ -170,7 +170,7 @@ KISS Principle</h2>
 <li>Solve problems directly without over-engineering</li>
 <li>Write code that others can understand easily</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md33"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md34"></a>
 Modularity</h2>
 <p>The framework is organized around four main logical components:</p>
 <ol type="1">
@@ -184,7 +184,7 @@ Modularity</h2>
 <li><b>New sampler?</b> → Follow the <span class="tt"><a class="el" href="classSampler.html" title="Abstract base class for MCMC sampler implementations.">Sampler</a></span> interface for seamless integration</li>
 <li><b>New process?</b> → Ensure it respects the <span class="tt"><a class="el" href="classProcess.html" title="Abstract base class for Bayesian nonparametric processes.">Process</a></span> abstract interface and supports modular extensions</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md34"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md35"></a>
 Code Organization</h2>
 <ul>
 <li><b><span class="tt">src/processes/</span></b>: Place new stochastic process implementations here</li>
@@ -193,7 +193,7 @@ Code Organization</h2>
 <li><b><span class="tt">src/utils/</span></b>: Add utility functions and base classes for shared infrastructure</li>
 <li><b><span class="tt">R/</span></b>: Add R wrapper functions and examples</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md35"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md36"></a>
 Documentation</h2>
 <p>Code documentation is critical:</p>
 <ul>
@@ -206,7 +206,7 @@ Documentation</h2>
 <div class="fragment"><div class="line"></div>
 <div class="line"><span class="keyword">class </span>SplitMergeSampler : <span class="keyword">public</span> <a class="code hl_class" href="classSampler.html">Sampler</a> { ... };</div>
 <div class="ttc" id="aclassSampler_html"><div class="ttname"><a href="classSampler.html">Sampler</a></div><div class="ttdoc">Abstract base class for MCMC sampler implementations.</div><div class="ttdef"><b>Definition</b> Sampler.hpp:49</div></div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md36"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md37"></a>
 R Bindings</h2>
 <p>BNPClust uses <b>Rcpp external pointers (XPtr)</b> pattern for seamless C++ object management in R. When adding new C++ features, expose them via <span class="tt"><a class="el" href="bindings_8cpp.html" title="R language bindings for Bayesian nonparametric clustering models.">src/bindings.cpp</a></span>:</p>
 <p><b>Factory Functions:</b> Every C++ class needs a factory function to create instances from R:</p>
@@ -216,7 +216,7 @@ R Bindings</h2>
 <div class="line">    <a class="code hl_class" href="classData.html">Data</a> *data = <a class="code hl_function" href="bindings_8cpp.html#a0b90b94c00df80e382f7e4ef384457d9">get_data_ptr</a>(data_sexp);  <span class="comment">// Extract C++ pointer from R</span></div>
 <div class="line">    <span class="keywordflow">return</span> Rcpp::XPtr&lt;MyNewClass&gt;(<span class="keyword">new</span> MyNewClass(*data, *params), <span class="keyword">true</span>);</div>
 <div class="line">}</div>
-<div class="ttc" id="abindings_8cpp_html_a0b90b94c00df80e382f7e4ef384457d9"><div class="ttname"><a href="bindings_8cpp.html#a0b90b94c00df80e382f7e4ef384457d9">get_data_ptr</a></div><div class="ttdeci">Data * get_data_ptr(SEXP sexp)</div><div class="ttdef"><b>Definition</b> bindings.cpp:58</div></div>
+<div class="ttc" id="abindings_8cpp_html_a0b90b94c00df80e382f7e4ef384457d9"><div class="ttname"><a href="bindings_8cpp.html#a0b90b94c00df80e382f7e4ef384457d9">get_data_ptr</a></div><div class="ttdeci">Data * get_data_ptr(SEXP sexp)</div><div class="ttdef"><b>Definition</b> bindings.cpp:60</div></div>
 <div class="ttc" id="aclassData_html"><div class="ttname"><a href="classData.html">Data</a></div><div class="ttdoc">Manages distance matrices and cluster allocations for points.</div><div class="ttdef"><b>Definition</b> Data.hpp:27</div></div>
 </div><!-- fragment --><p><b>Wrapper Functions:</b> Expose methods via simple wrapper functions:</p>
 <div class="fragment"><div class="line"><span class="comment">// [[Rcpp::export]]</span></div>
@@ -237,8 +237,8 @@ R Bindings</h2>
 <div class="line"><span class="comment"># Call methods via wrappers</span></div>
 <div class="line">mynewclass_step(sampler)</div>
 <div class="line">result &lt;- mynewclass_get_result(sampler)</div>
-<div class="ttc" id="abindings_8cpp_html_ac0ddd038caef50f4affae93c691afb3b"><div class="ttname"><a href="bindings_8cpp.html#ac0ddd038caef50f4affae93c691afb3b">create_Data</a></div><div class="ttdeci">Rcpp::XPtr&lt; Data &gt; create_Data(Rcpp::XPtr&lt; Params &gt; params, Eigen::VectorXi initial_allocations)</div><div class="ttdef"><b>Definition</b> bindings.cpp:113</div></div>
-<div class="ttc" id="abindings_8cpp_html_acdf60c21ba9cbd9728015f180e4ad332"><div class="ttname"><a href="bindings_8cpp.html#acdf60c21ba9cbd9728015f180e4ad332">create_Params</a></div><div class="ttdeci">Rcpp::XPtr&lt; Params &gt; create_Params(double delta1, double alpha, double beta, double delta2, double gamma, double zeta, int BI, int NI, double a, double sigma, double tau, Eigen::MatrixXd D)</div><div class="ttdef"><b>Definition</b> bindings.cpp:107</div></div>
+<div class="ttc" id="abindings_8cpp_html_ac0ddd038caef50f4affae93c691afb3b"><div class="ttname"><a href="bindings_8cpp.html#ac0ddd038caef50f4affae93c691afb3b">create_Data</a></div><div class="ttdeci">Rcpp::XPtr&lt; Data &gt; create_Data(Rcpp::XPtr&lt; Params &gt; params, Eigen::VectorXi initial_allocations)</div><div class="ttdef"><b>Definition</b> bindings.cpp:119</div></div>
+<div class="ttc" id="abindings_8cpp_html_acdf60c21ba9cbd9728015f180e4ad332"><div class="ttname"><a href="bindings_8cpp.html#acdf60c21ba9cbd9728015f180e4ad332">create_Params</a></div><div class="ttdeci">Rcpp::XPtr&lt; Params &gt; create_Params(double delta1, double alpha, double beta, double delta2, double gamma, double zeta, int BI, int NI, double a, double sigma, double tau, Eigen::MatrixXd D)</div><div class="ttdef"><b>Definition</b> bindings.cpp:109</div></div>
 </div><!-- fragment --><p><b>Key Points:</b></p><ul>
 <li>Use <span class="tt"><a class="el" href="bindings_8cpp.html#a0b90b94c00df80e382f7e4ef384457d9">get_data_ptr()</a></span> helper to extract <a class="el" href="classData.html" title="Manages distance matrices and cluster allocations for points.">Data</a> pointers (handles both <span class="tt"><a class="el" href="classData.html" title="Manages distance matrices and cluster allocations for points.">Data</a></span> and <span class="tt"><a class="el" href="classDatax.html" title="Data container with integrated cluster information management.">Datax</a></span> types)</li>
 <li>Add <span class="tt">// [[Rcpp::export]]</span> above every function meant to be accessible from R</li>
@@ -246,23 +246,23 @@ R Bindings</h2>
 <li>Add examples in <span class="tt">R/launcher.R</span> or <span class="tt">R/mcmc_loop.R</span> showing usage</li>
 </ul>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md38"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md39"></a>
 Types of Contributions</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md39"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
 🐛 Bug Reports</h2>
 <ul>
 <li>Open an issue with a clear title and description</li>
 <li>Include minimal reproducible example</li>
 <li>Specify your OS, R version, C++ compiler version</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
 ✨ Feature Requests</h2>
 <ul>
 <li>Check if the feature already exists or is planned</li>
 <li>Describe the use case and why it would be valuable</li>
 <li>Discuss implementation approach if possible</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
 📖 Documentation</h2>
 <ul>
 <li>Fix typos, clarify explanations, add examples</li>
@@ -270,7 +270,7 @@ Types of Contributions</h1>
 <li>Update README or contributing guidelines</li>
 <li>Add academic references or method citations</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md43"></a>
 🔧 Code Improvements</h2>
 <ul>
 <li>Refactor for clarity and efficiency</li>
@@ -279,7 +279,7 @@ Types of Contributions</h1>
 <li>Improve test coverage</li>
 </ul>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md44"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
 Questions?</h1>
 <p>If you have questions about contributing, feel free to:</p><ul>
 <li>Open a discussion in the GitHub repository</li>

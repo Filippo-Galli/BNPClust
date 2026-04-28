@@ -8,10 +8,10 @@ var searchData=
   ['params_5fget_5fni_5',['params_get_NI',['../bindings_8cpp.html#a0a99f6845de317b64dc14baacd72de1c',1,'bindings.cpp']]],
   ['params_5fget_5fsigma_6',['params_get_sigma',['../bindings_8cpp.html#ab20a182586addd0df8bde314315e84d3',1,'bindings.cpp']]],
   ['params_5fget_5ftau_7',['params_get_tau',['../bindings_8cpp.html#a8d8722dc72f83da2753b2c1fead16732',1,'bindings.cpp']]],
-  ['philosophy_8',['Design Philosophy',['../md_CONTRIBUTING.html#autotoc_md31',1,'']]],
+  ['philosophy_8',['Design Philosophy',['../md_CONTRIBUTING.html#autotoc_md32',1,'']]],
   ['point_5floglikelihood_5fcond_9',['point_loglikelihood_cond',['../classLikelihood.html#a0937f6a9a4b48def87b6e644810fb99d',1,'Likelihood::point_loglikelihood_cond()'],['../classGamma__likelihood.html#ac96bea4cd8e2615765f5ee21390bc23b',1,'Gamma_likelihood::point_loglikelihood_cond()'],['../classNatarajan__likelihood.html#a5059f4ad0c3d8f9da9cfa7ddb7cce10c',1,'Natarajan_likelihood::point_loglikelihood_cond()'],['../classNatarajan__likelihood__summaryStats.html#a28b41bbd71b01e5f1da9045d270edc0d',1,'Natarajan_likelihood_summaryStats::point_loglikelihood_cond()'],['../classNull__likelihood.html#a9b4a4fcefaaaa63fb9be886060093b18',1,'Null_likelihood::point_loglikelihood_cond()']]],
-  ['prerequisites_10',['Prerequisites',['../index.html#autotoc_md12',1,'']]],
-  ['principle_11',['KISS Principle',['../md_CONTRIBUTING.html#autotoc_md32',1,'']]],
+  ['prerequisites_10',['Prerequisites',['../index.html#autotoc_md13',1,'']]],
+  ['principle_11',['KISS Principle',['../md_CONTRIBUTING.html#autotoc_md33',1,'']]],
   ['prior_5falpha_12',['prior_alpha',['../classCategoricalCovariatesModule.html#a07e85811faca4d5478c9c59081e4f90c',1,'CategoricalCovariatesModule']]],
   ['prior_5fratio_5fmerge_13',['prior_ratio_merge',['../classDP.html#a0e9b5eed61089876ad4fa25440e6fe0a',1,'DP::prior_ratio_merge()'],['../classDPx.html#aebc142195a514ff77e5d2fc1b8b64ad2',1,'DPx::prior_ratio_merge()'],['../classNGGP.html#a79e4070dff59378d106d56545ea66a84',1,'NGGP::prior_ratio_merge()'],['../classNGGPx.html#a0cd5953d61c9e582bc9cd366e3fed1ec',1,'NGGPx::prior_ratio_merge()'],['../classProcess.html#a3f839a738e76fc3ab83d3a7bfc228984',1,'Process::prior_ratio_merge()']]],
   ['prior_5fratio_5fshuffle_14',['prior_ratio_shuffle',['../classDP.html#a124720c8dca0a4ebb401576f3f829624',1,'DP::prior_ratio_shuffle()'],['../classDPx.html#a5373cb4e0fb3db4394a519c1b1ae1c3d',1,'DPx::prior_ratio_shuffle()'],['../classNGGP.html#acd7a5bc6cbe029ec09d9a083c01277ff',1,'NGGP::prior_ratio_shuffle()'],['../classNGGPx.html#a5de2de1f4721b0d65e1ece5bdcf0e133',1,'NGGPx::prior_ratio_shuffle()'],['../classProcess.html#a3bd733b3232c8cf865bc0d6c1a07aea4',1,'Process::prior_ratio_shuffle()']]],
@@ -21,9 +21,9 @@ var searchData=
   ['process_18',['process',['../classSampler.html#a8ec54ff9fe8f22c8514496d6f3b998d0',1,'Sampler']]],
   ['process_2ehpp_19',['Process.hpp',['../Process_8hpp.html',1,'']]],
   ['process_5fupdate_5fparams_20',['process_update_params',['../bindings_8cpp.html#aa87d47c86bd5d0130b38c27f61d60adc',1,'bindings.cpp']]],
-  ['processes_21',['Stochastic Processes',['../index.html#autotoc_md8',1,'']]],
+  ['processes_21',['Stochastic Processes',['../index.html#autotoc_md9',1,'']]],
   ['prod_5flgamma_5fprior_22',['prod_lgamma_prior',['../classCategoricalCovariatesModule.html#a17298d73184fc474e8894530bc8e90b4',1,'CategoricalCovariatesModule']]],
   ['proposal_5fsd_23',['proposal_sd',['../classRWMH.html#ab36d78a51cba6fbd0d0287f03ccf3a09',1,'RWMH']]],
-  ['pull_20request_24',['8. Create a Pull Request',['../md_CONTRIBUTING.html#autotoc_md28',1,'']]],
-  ['push_20to_20your_20fork_25',['7. Push to Your Fork',['../md_CONTRIBUTING.html#autotoc_md27',1,'']]]
+  ['pull_20request_24',['8. Create a Pull Request',['../md_CONTRIBUTING.html#autotoc_md29',1,'']]],
+  ['push_20to_20your_20fork_25',['7. Push to Your Fork',['../md_CONTRIBUTING.html#autotoc_md28',1,'']]]
 ];

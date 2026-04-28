@@ -27,6 +27,7 @@ var bindings_8cpp =
     [ "create_Spatial_cache", "bindings_8cpp.html#ab631730601316de73f716294cd85878c", null ],
     [ "create_SpatialModule", "bindings_8cpp.html#ad11d394b6cf96120da4ca1f7469a3769", null ],
     [ "create_SpatialModuleCache", "bindings_8cpp.html#a396fabe727bcd78a193ace78a951de4a", null ],
+    [ "create_SpatialModuleContinuous", "bindings_8cpp.html#a57d74f13fb2764d3f8703f7742c41054", null ],
     [ "create_SplitMerge", "bindings_8cpp.html#addd30f1fd1b8af77ee71bed5793b8e43", null ],
     [ "create_SplitMerge_LSS", "bindings_8cpp.html#a9be9c22ea7c04d2dd875a1987d6314aa", null ],
     [ "create_SplitMerge_LSS_SDDS", "bindings_8cpp.html#acac92a632a87ad8ff9cf56ad2d7bcf87", null ],

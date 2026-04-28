@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['🔧_20code_20improvements_0',['🔧 Code Improvements',['../md_CONTRIBUTING.html#autotoc_md42',1,'']]]
+  ['📦_20implemented_20methods_0',['📦 Implemented Methods',['../index.html#autotoc_md8',1,'']]]
 ];

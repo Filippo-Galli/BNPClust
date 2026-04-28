@@ -1,7 +1,7 @@
 var searchData=
 [
   ['b_0',['B',['../classContinuosCovariatesModule.html#acd55caed7c76d06345903bc31c895335',1,'ContinuosCovariatesModule::B'],['../classContinuosCovariatesModuleCache.html#a7b1266bcaa8d705a870cee37b51159b2',1,'ContinuosCovariatesModuleCache::B']]],
-  ['basic_20example_1',['Running a Basic Example',['../index.html#autotoc_md14',1,'']]],
+  ['basic_20example_1',['Running a Basic Example',['../index.html#autotoc_md15',1,'']]],
   ['bayesian_20nonparametric_20clustering_20with_20mcmc_2',['BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC',['../index.html',1,'']]],
   ['beta_3',['beta',['../structParams.html#aa60c8904558d5ba4bd15e23b4b49e3bd',1,'Params']]],
   ['beta_5fprior_5falpha_4',['beta_prior_alpha',['../classBinaryCovariatesModule.html#acebc11cd741363be94ba00ea4bc3d66b',1,'BinaryCovariatesModule::beta_prior_alpha'],['../classBinaryCovariatesModuleCache.html#a033e4da1dbf97ce1aa2d3b7587102967',1,'BinaryCovariatesModuleCache::beta_prior_alpha']]],
@@ -20,10 +20,10 @@ var searchData=
   ['binarycache_17',['BinaryCache',['../classBinaryCache.html',1,'BinaryCache'],['../classBinaryCache.html#acdf637fc2344e0e40df276dceabb5554',1,'BinaryCache::BinaryCache()']]],
   ['binarycovariatesmodule_18',['BinaryCovariatesModule',['../classBinaryCovariatesModule.html',1,'BinaryCovariatesModule'],['../classBinaryCovariatesModule.html#a790fda2c23bdff16dae593f63a4c7784',1,'BinaryCovariatesModule::BinaryCovariatesModule()']]],
   ['binarycovariatesmodulecache_19',['BinaryCovariatesModuleCache',['../classBinaryCovariatesModuleCache.html',1,'BinaryCovariatesModuleCache'],['../classBinaryCovariatesModuleCache.html#aa2b4b8634a0395e2955335c85019ab88',1,'BinaryCovariatesModuleCache::BinaryCovariatesModuleCache()']]],
-  ['bindings_20',['R Bindings',['../md_CONTRIBUTING.html#autotoc_md36',1,'']]],
+  ['bindings_20',['R Bindings',['../md_CONTRIBUTING.html#autotoc_md37',1,'']]],
   ['bindings_2ecpp_21',['bindings.cpp',['../bindings_8cpp.html',1,'']]],
   ['bnpclust_22',['Contributing to BNPClust',['../md_CONTRIBUTING.html',1,'']]],
   ['bnpclust_3a_20a_20c_20framework_20for_20bayesian_20nonparametric_20clustering_20with_20mcmc_23',['BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC',['../index.html',1,'']]],
-  ['branch_24',['3. Create a New Branch',['../md_CONTRIBUTING.html#autotoc_md23',1,'']]],
-  ['bug_20reports_25',['🐛 Bug Reports',['../md_CONTRIBUTING.html#autotoc_md39',1,'']]]
+  ['branch_24',['3. Create a New Branch',['../md_CONTRIBUTING.html#autotoc_md24',1,'']]],
+  ['bug_20reports_25',['🐛 Bug Reports',['../md_CONTRIBUTING.html#autotoc_md40',1,'']]]
 ];
