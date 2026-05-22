@@ -1,8 +1,6 @@
 {
   pkgs,
-  lib,
   config,
-  inputs,
   ...
 }:
 
@@ -59,7 +57,7 @@ in
     pkgs.podman
     pkgs.podman-compose
     pkgs.aria2
-    
+
     # R development with C++ support
     RWithOpenBlas
     pkgs.rPackages.Rcpp
@@ -177,14 +175,14 @@ in
 
   scripts.setup-clangd.exec = ''
         echo "Setting up clangd configuration..."
-        
+
         R_INCLUDE=$(R --slave -e "cat(R.home('include'))")
         RCPP_INCLUDE=$(R --slave -e "cat(system.file('include', package='Rcpp'))")
         RCPPEIGEN_INCLUDE=$(R --slave -e "cat(system.file('include', package='RcppEigen'))")
-        
+
         # Get GCC paths for C++ standard library
         LIBCXX_INCLUDE=${pkgs.gcc13.cc}/include/c++/${pkgs.gcc13.cc.version}
-        
+
         cat > .clangd <<EOF
     CompileFlags:
       Add: [
@@ -192,7 +190,7 @@ in
         "-I./include",
         "-I${pkgs.eigen}/include/eigen3",
         "-I$R_INCLUDE",
-        "-I$RCPP_INCLUDE", 
+        "-I$RCPP_INCLUDE",
         "-I$RCPPEIGEN_INCLUDE",
         "-I$LIBCXX_INCLUDE",
         "-I$LIBCXX_INCLUDE/x86_64-unknown-linux-gnu"
@@ -214,7 +212,7 @@ in
 
         # Create containers config directory
         mkdir -p ~/.config/containers
-        
+
         # Create a simple permissive policy.json
         cat > ~/.config/containers/policy.json << 'EOF'
     {
