@@ -95,41 +95,48 @@ generate_mixture_data <- function(N = 100, K = 10, alpha = 10, dim = K, radius =
     }
 }
 
-save_with_name <- function(folder, params, initialization, gt = FALSE) {
+save_with_name <- function(utils_params, process_params, initialization, filename, gt = FALSE) {
     ## Name creation
     folder <- "results/"
+
     # Nomenclature: initialization + BI + NI + a + sigma + tau
-    subfolder <- paste(initialization, "_BI", params_get_BI(params), "_NI", params_get_NI(params),
-        "_a", params_get_a(params), "_sigma", params_get_sigma(params),
-        "_tau", params_get_tau(params), "/",
-        sep = ""
-    )
+    if (params_get_name(process_params) == "DP") {
+        subfolder <- paste0(
+            filename, "_", initialization, "_BI", params_get_BI(utils_params), "_NI", params_get_NI(utils_params),
+            "_a", DP_params_get_a(process_params), "/"
+        )
+    } else {
+        subfolder <- paste0(
+            filename, "_", initialization, "_BI", params_get_BI(utils_params), "_NI", params_get_NI(utils_params),
+            "_a", NGGP_params_get_a(process_params), "_sigma", params_get_sigma(process_params),
+            "_tau", params_get_tau(process_params), "/"
+        )
+    }
     folder <- paste0(folder, subfolder)
 
     if (!dir.exists(folder)) {
         dir.create(folder, recursive = TRUE)
     }
 
-    filename_results <- "simulation_results.rds"
-    if (gt) {
-        filename_results <- "simulation_ground_truth.rds"
-    }
-    filename_dist <- "simulation_distance_matrix.rds"
-    filename_initial_params <- "simulation_initial_params.rds"
+    # Initialize standard filenames
+    filename_results <- paste0(folder, "simulation_results.rds")
+    filename_dist <- paste0(folder, "simulation_distance_matrix.rds")
+    filename_utils_params <- paste0(folder, "simulation_utils_params.rds")
+    filename_process_params <- paste0(folder, "simulation_process_params.rds")
 
-    filename_results <- paste0(folder, filename_results)
-    if (gt) {
-        filename_gt <- paste0(folder, filename_gt)
-    }
-    filename_dist <- paste0(folder, filename_dist)
-    filename_initial_params <- paste0(folder, filename_initial_params)
 
+    # Save baseline files
     saveRDS(mcmc_result, file = filename_results)
+    saveRDS(dist_matrix, file = filename_dist)
+    saveRDS(utils_params, file = filename_utils_params)
+    saveRDS(process_params, file = filename_process_params)
+
+    # Save ground truth if requested
     if (gt) {
+        filename_gt <- paste0(folder, "simulation_ground_truth.rds")
         saveRDS(ground_truth, file = filename_gt)
     }
-    saveRDS(dist_matrix, file = filename_dist)
-    saveRDS(hyperparams, file = filename_initial_params)
+
     # Save time taken
     time_file <- paste0(folder, "time_taken.txt")
     writeLines(as.character(elapsed_time), con = time_file)

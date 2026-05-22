@@ -12,6 +12,10 @@
  */
 
 #include "Rcpp/XPtr.h"
+#include "params/DP-params.hpp"
+#include "params/NGGP-params.hpp"
+#include "params/Natarajan-params.hpp"
+#include "params/utils-params.hpp"
 #include "utils/Data.hpp"
 #include "utils/Datax.hpp"
 #include "utils/Params.hpp"
@@ -115,8 +119,33 @@ Rcpp::XPtr<Params> create_Params(double delta1, double alpha, double beta,
                             true);
 }
 
+// Factory functions for base classes
 // [[Rcpp::export]]
-Rcpp::XPtr<Data> create_Data(Rcpp::XPtr<Params> params,
+Rcpp::XPtr<utils_params> create_utils_params(int BI, int NI,
+                                             Eigen::MatrixXd D) {
+  return Rcpp::XPtr<utils_params>(new utils_params(BI, NI, D), true);
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<NGGP_params> create_NGGP_params(double a, double sigma, double tau) {
+  return Rcpp::XPtr<NGGP_params>(new NGGP_params(a, sigma, tau), true);
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<DP_params> create_DP_params(double a) {
+  return Rcpp::XPtr<DP_params>(new DP_params(a), true);
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<Natarajan_params>
+create_Natarajan_params(double delta1, double alpha, double beta, double delta2,
+                        double gamma, double zeta) {
+  return Rcpp::XPtr<Natarajan_params>(
+      new Natarajan_params(delta1, alpha, beta, delta2, gamma, zeta), true);
+}
+
+// [[Rcpp::export]]
+Rcpp::XPtr<Data> create_Data(Rcpp::XPtr<utils_params> params,
                              Eigen::VectorXi initial_allocations) {
   return Rcpp::XPtr<Data>(new Data(*params, initial_allocations), true);
 }
@@ -145,7 +174,7 @@ create_Spatial_cache(Eigen::VectorXi &initial_allocations, Eigen::MatrixXi W) {
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<Datax> create_Datax(Rcpp::XPtr<Params> params,
+Rcpp::XPtr<Datax> create_Datax(Rcpp::XPtr<utils_params> params,
                                Rcpp::List modules_list,
                                Eigen::VectorXi initial_allocations) {
 
@@ -167,39 +196,41 @@ Rcpp::XPtr<Datax> create_Datax(Rcpp::XPtr<Params> params,
 // Factory functions for likelihoods
 // [[Rcpp::export]]
 Rcpp::XPtr<Natarajan_likelihood>
-create_Natarajan_likelihood(SEXP data_sexp, Rcpp::XPtr<Params> params) {
+create_Natarajan_likelihood(SEXP data_sexp, Rcpp::XPtr<Natarajan_params> params,
+                            Rcpp::XPtr<utils_params> utils) {
   Data *data = get_data_ptr(data_sexp);
   return Rcpp::XPtr<Natarajan_likelihood>(
-      new Natarajan_likelihood(*data, *params), true);
+      new Natarajan_likelihood(*data, *params, *utils), true);
 }
 
 // [[Rcpp::export]]
 Rcpp::XPtr<Natarajan_likelihood_summaryStats>
 create_Natarajan_likelihood_summaryStats(SEXP data_sexp,
-                                         Rcpp::XPtr<Params> params) {
+                                         Rcpp::XPtr<Natarajan_params> params,
+                                         Rcpp::XPtr<utils_params> utils) {
   Data *data = get_data_ptr(data_sexp);
   return Rcpp::XPtr<Natarajan_likelihood_summaryStats>(
-      new Natarajan_likelihood_summaryStats(*data, *params), true);
+      new Natarajan_likelihood_summaryStats(*data, *params, *utils), true);
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<Null_likelihood> create_Null_likelihood(SEXP data_sexp,
-                                                   Rcpp::XPtr<Params> params) {
+Rcpp::XPtr<Null_likelihood> create_Null_likelihood(SEXP data_sexp) {
   Data *data = get_data_ptr(data_sexp);
-  return Rcpp::XPtr<Null_likelihood>(new Null_likelihood(*data, *params), true);
+  return Rcpp::XPtr<Null_likelihood>(new Null_likelihood(*data), true);
 }
 
 // [[Rcpp::export]]
 Rcpp::XPtr<Gamma_likelihood>
-create_Gamma_likelihood(SEXP data_sexp, Rcpp::XPtr<Params> params) {
+create_Gamma_likelihood(SEXP data_sexp, Rcpp::XPtr<Natarajan_params> params,
+                        Rcpp::XPtr<utils_params> utils) {
   Data *data = get_data_ptr(data_sexp);
-  return Rcpp::XPtr<Gamma_likelihood>(new Gamma_likelihood(*data, *params),
-                                      true);
+  return Rcpp::XPtr<Gamma_likelihood>(
+      new Gamma_likelihood(*data, *params, *utils), true);
 }
 
 // Factory functions for U samplers
 // [[Rcpp::export]]
-Rcpp::XPtr<RWMH> create_RWMH(Rcpp::XPtr<Params> params, SEXP data_sexp,
+Rcpp::XPtr<RWMH> create_RWMH(Rcpp::XPtr<NGGP_params> params, SEXP data_sexp,
                              bool use_V, double proposal_sd,
                              bool tuning_enabled) {
   Data *data = get_data_ptr(data_sexp);
@@ -208,7 +239,7 @@ Rcpp::XPtr<RWMH> create_RWMH(Rcpp::XPtr<Params> params, SEXP data_sexp,
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<MALA> create_MALA(Rcpp::XPtr<Params> params, SEXP data_sexp,
+Rcpp::XPtr<MALA> create_MALA(Rcpp::XPtr<NGGP_params> params, SEXP data_sexp,
                              bool use_V, double proposal_sd,
                              bool tuning_enabled) {
   Data *data = get_data_ptr(data_sexp);
@@ -218,13 +249,13 @@ Rcpp::XPtr<MALA> create_MALA(Rcpp::XPtr<Params> params, SEXP data_sexp,
 
 // Factory functions for processes
 // [[Rcpp::export]]
-Rcpp::XPtr<DP> create_DP(SEXP data_sexp, Rcpp::XPtr<Params> params) {
+Rcpp::XPtr<DP> create_DP(SEXP data_sexp, Rcpp::XPtr<DP_params> params) {
   Data *data = get_data_ptr(data_sexp);
   return Rcpp::XPtr<DP>(new DP(*data, *params), true);
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<NGGP> create_NGGP(SEXP data_sexp, Rcpp::XPtr<Params> params,
+Rcpp::XPtr<NGGP> create_NGGP(SEXP data_sexp, Rcpp::XPtr<NGGP_params> params,
                              Rcpp::XPtr<U_sampler> u_sampler) {
   Data *data = get_data_ptr(data_sexp);
   return Rcpp::XPtr<NGGP>(new NGGP(*data, *params, *u_sampler), true);
@@ -319,7 +350,7 @@ create_CategoricalCovariatesModule(SEXP data_sexp,
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<DPx> create_DPx(SEXP data_sexp, Rcpp::XPtr<Params> params,
+Rcpp::XPtr<DPx> create_DPx(SEXP data_sexp, Rcpp::XPtr<DP_params> params,
                            Rcpp::List modules_list) {
 
   Data *data = get_data_ptr(data_sexp);
@@ -338,7 +369,7 @@ Rcpp::XPtr<DPx> create_DPx(SEXP data_sexp, Rcpp::XPtr<Params> params,
 }
 
 // [[Rcpp::export]]
-Rcpp::XPtr<NGGPx> create_NGGPx(SEXP data_sexp, Rcpp::XPtr<Params> params,
+Rcpp::XPtr<NGGPx> create_NGGPx(SEXP data_sexp, Rcpp::XPtr<NGGP_params> params,
                                Rcpp::XPtr<U_sampler> u_sampler,
                                Rcpp::List modules_list) {
   Data *data = get_data_ptr(data_sexp);
@@ -359,49 +390,44 @@ Rcpp::XPtr<NGGPx> create_NGGPx(SEXP data_sexp, Rcpp::XPtr<Params> params,
 
 // Factory functions for samplers
 // [[Rcpp::export]]
-Rcpp::XPtr<Neal3> create_Neal3(SEXP data_sexp, Rcpp::XPtr<Params> params,
+Rcpp::XPtr<Neal3> create_Neal3(SEXP data_sexp,
                                Rcpp::XPtr<Likelihood> likelihood,
                                Rcpp::XPtr<Process> process) {
   Data *data = get_data_ptr(data_sexp);
-  return Rcpp::XPtr<Neal3>(new Neal3(*data, *params, *likelihood, *process),
-                           true);
+  return Rcpp::XPtr<Neal3>(new Neal3(*data, *likelihood, *process), true);
 }
 
 // [[Rcpp::export]]
 Rcpp::XPtr<Neal3ZDNAM> create_Neal3ZDNAM(SEXP data_sexp,
-                                         Rcpp::XPtr<Params> params,
                                          Rcpp::XPtr<Likelihood> likelihood,
                                          Rcpp::XPtr<Process> process) {
   Data *data = get_data_ptr(data_sexp);
-  return Rcpp::XPtr<Neal3ZDNAM>(
-      new Neal3ZDNAM(*data, *params, *likelihood, *process), true);
+  return Rcpp::XPtr<Neal3ZDNAM>(new Neal3ZDNAM(*data, *likelihood, *process),
+                                true);
 }
 
 // [[Rcpp::export]]
 Rcpp::XPtr<SplitMerge> create_SplitMerge(SEXP data_sexp,
-                                         Rcpp::XPtr<Params> params,
                                          Rcpp::XPtr<Likelihood> likelihood,
                                          Rcpp::XPtr<Process> process,
                                          bool shuffle) {
   Data *data = get_data_ptr(data_sexp);
   return Rcpp::XPtr<SplitMerge>(
-      new SplitMerge(*data, *params, *likelihood, *process, shuffle), true);
+      new SplitMerge(*data, *likelihood, *process, shuffle), true);
 }
 
 // [[Rcpp::export]]
 Rcpp::XPtr<SplitMerge_SAMS>
-create_SplitMerge_SAMS(SEXP data_sexp, Rcpp::XPtr<Params> params,
-                       Rcpp::XPtr<Likelihood> likelihood,
+create_SplitMerge_SAMS(SEXP data_sexp, Rcpp::XPtr<Likelihood> likelihood,
                        Rcpp::XPtr<Process> process, bool shuffle) {
   Data *data = get_data_ptr(data_sexp);
   return Rcpp::XPtr<SplitMerge_SAMS>(
-      new SplitMerge_SAMS(*data, *params, *likelihood, *process, shuffle),
-      true);
+      new SplitMerge_SAMS(*data, *likelihood, *process, shuffle), true);
 }
 
 // [[Rcpp::export]]
 Rcpp::XPtr<SplitMerge_LSS>
-create_SplitMerge_LSS(SEXP data_sexp, Rcpp::XPtr<Params> params,
+create_SplitMerge_LSS(SEXP data_sexp, Rcpp::XPtr<utils_params> params,
                       Rcpp::XPtr<Likelihood> likelihood,
                       Rcpp::XPtr<Process> process, bool shuffle) {
   Data *data = get_data_ptr(data_sexp);
@@ -411,7 +437,7 @@ create_SplitMerge_LSS(SEXP data_sexp, Rcpp::XPtr<Params> params,
 
 // [[Rcpp::export]]
 Rcpp::XPtr<SplitMerge_LSS_SDDS>
-create_SplitMerge_LSS_SDDS(SEXP data_sexp, Rcpp::XPtr<Params> params,
+create_SplitMerge_LSS_SDDS(SEXP data_sexp, Rcpp::XPtr<utils_params> params,
                            Rcpp::XPtr<Likelihood> likelihood,
                            Rcpp::XPtr<Process> process, bool shuffle) {
   Data *data = get_data_ptr(data_sexp);
@@ -452,19 +478,29 @@ double u_sampler_get_acceptance_rate(Rcpp::XPtr<U_sampler> u_sampler) {
 }
 
 // [[Rcpp::export]]
-int params_get_BI(Rcpp::XPtr<Params> params) { return params->BI; }
+int params_get_BI(Rcpp::XPtr<utils_params> params) { return params->BI; }
 
 // [[Rcpp::export]]
-int params_get_NI(Rcpp::XPtr<Params> params) { return params->NI; }
+int params_get_NI(Rcpp::XPtr<utils_params> params) { return params->NI; }
 
 // [[Rcpp::export]]
-double params_get_a(Rcpp::XPtr<Params> params) { return params->a; }
+double NGGP_params_get_a(Rcpp::XPtr<NGGP_params> params) { return params->a; }
 
 // [[Rcpp::export]]
-double params_get_sigma(Rcpp::XPtr<Params> params) { return params->sigma; }
+double params_get_sigma(Rcpp::XPtr<NGGP_params> params) {
+  return params->sigma;
+}
 
 // [[Rcpp::export]]
-double params_get_tau(Rcpp::XPtr<Params> params) { return params->tau; }
+double params_get_tau(Rcpp::XPtr<NGGP_params> params) { return params->tau; }
+
+// [[Rcpp::export]]
+std::string params_get_name(Rcpp::XPtr<Process_params> params) {
+  return params->name;
+}
+
+// [[Rcpp::export]]
+double DP_params_get_a(Rcpp::XPtr<DP_params> params) { return params->a; }
 
 // [[Rcpp::export]]
 void cluster_info_set_allocation(Rcpp::XPtr<ClusterInfo> cluster_info,

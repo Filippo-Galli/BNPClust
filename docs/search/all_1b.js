@@ -1,7 +1,7 @@
 var searchData=
 [
   ['u_0',['U',['../classU__sampler.html#a61dcec6f1695e04c541e6ef00022158f',1,'U_sampler']]],
-  ['u_5fsampler_1',['U_sampler',['../classU__sampler.html',1,'U_sampler'],['../classU__sampler.html#a23ec32a62896472e93d554ca9d74669b',1,'U_sampler::U_sampler()']]],
+  ['u_5fsampler_1',['U_sampler',['../classU__sampler.html',1,'U_sampler'],['../classU__sampler.html#a519aa8c435877d2569adf008f4ceb8b4',1,'U_sampler::U_sampler()']]],
   ['u_5fsampler_2ecpp_2',['U_sampler.cpp',['../U__sampler_8cpp.html',1,'']]],
   ['u_5fsampler_2ehpp_3',['U_sampler.hpp',['../U__sampler_8hpp.html',1,'']]],
   ['u_5fsampler_5fget_5facceptance_5frate_4',['u_sampler_get_acceptance_rate',['../bindings_8cpp.html#ab01bf30ad7167309e4627aa43e9b4d5c',1,'bindings.cpp']]],
@@ -11,5 +11,8 @@ var searchData=
   ['update_5fu_8',['update_U',['../classMALA.html#a40d442a7e6e66c3853e4014326ee5934',1,'MALA::update_U()'],['../classRWMH.html#a1349180615746681801b1b6b86fe1c4b',1,'RWMH::update_U()'],['../classU__sampler.html#a68c7b18e6183b1bc9a1645ff36e0c82f',1,'U_sampler::update_U()']]],
   ['usage_9',['🛠️ Installation &amp;amp; Usage',['../index.html#autotoc_md12',1,'']]],
   ['usage_20licensing_10',['💡 Usage &amp;amp; Licensing',['../index.html#autotoc_md17',1,'']]],
-  ['use_5fv_11',['use_V',['../classMALA.html#aa1bd45a50795023b92ea781a495fa599',1,'MALA::use_V'],['../classRWMH.html#a21b4ed6ad1172dfacec56fb3539141a8',1,'RWMH::use_V']]]
+  ['use_5fv_11',['use_V',['../classMALA.html#aa1bd45a50795023b92ea781a495fa599',1,'MALA::use_V'],['../classRWMH.html#a21b4ed6ad1172dfacec56fb3539141a8',1,'RWMH::use_V']]],
+  ['utils_12',['utils',['../classGamma__likelihood.html#a3bf3441730bf0102ff31482e7032d0cc',1,'Gamma_likelihood::utils'],['../classNatarajan__likelihood.html#a61676acb38ea30ef588f3ba59f9fcd2b',1,'Natarajan_likelihood::utils'],['../classNatarajan__likelihood__summaryStats.html#a2ada59449f1227a68bac4d1c0a29f691',1,'Natarajan_likelihood_summaryStats::utils']]],
+  ['utils_2dparams_2ehpp_13',['utils-params.hpp',['../utils-params_8hpp.html',1,'']]],
+  ['utils_5fparams_14',['utils_params',['../structutils__params.html',1,'utils_params'],['../structutils__params.html#ad4d0401705c54716ddb92f5c6d878608',1,'utils_params::utils_params()']]]
 ];

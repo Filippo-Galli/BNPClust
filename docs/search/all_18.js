@@ -17,7 +17,7 @@ var searchData=
   ['retrieval_14',['📊 Data Retrieval',['../index.html#autotoc_md2',1,'']]],
   ['robbins_5fmonro_5ftuning_15',['Robbins_Monro_tuning',['../classMALA.html#a6377f0f9540fdd0b9098bc640b401c4a',1,'MALA::Robbins_Monro_tuning()'],['../classRWMH.html#a81e2b14edfbb27123b3a291ae7057fb4',1,'RWMH::Robbins_Monro_tuning()']]],
   ['running_20a_20basic_20example_16',['Running a Basic Example',['../index.html#autotoc_md15',1,'']]],
-  ['rwmh_17',['RWMH',['../classRWMH.html',1,'RWMH'],['../classRWMH.html#abd3f2472d65d54f0ff47ef63488c91d9',1,'RWMH::RWMH()']]],
+  ['rwmh_17',['RWMH',['../classRWMH.html',1,'RWMH'],['../classRWMH.html#a19f7b104d2efabda7b759d9732108c14',1,'RWMH::RWMH()']]],
   ['rwmh_2ecpp_18',['RWMH.cpp',['../RWMH_8cpp.html',1,'']]],
   ['rwmh_2ehpp_19',['RWMH.hpp',['../RWMH_8hpp.html',1,'']]]
 ];

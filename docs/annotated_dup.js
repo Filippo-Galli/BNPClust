@@ -11,6 +11,7 @@ var annotated_dup =
     [ "Data", "classData.html", "classData" ],
     [ "Datax", "classDatax.html", "classDatax" ],
     [ "DP", "classDP.html", "classDP" ],
+    [ "DP_params", "structDP__params.html", "structDP__params" ],
     [ "DPx", "classDPx.html", "classDPx" ],
     [ "Gamma_likelihood", "classGamma__likelihood.html", "classGamma__likelihood" ],
     [ "Likelihood", "classLikelihood.html", "classLikelihood" ],
@@ -18,13 +19,16 @@ var annotated_dup =
     [ "Module", "classModule.html", "classModule" ],
     [ "Natarajan_likelihood", "classNatarajan__likelihood.html", "classNatarajan__likelihood" ],
     [ "Natarajan_likelihood_summaryStats", "classNatarajan__likelihood__summaryStats.html", "classNatarajan__likelihood__summaryStats" ],
+    [ "Natarajan_params", "structNatarajan__params.html", "structNatarajan__params" ],
     [ "Neal3", "classNeal3.html", "classNeal3" ],
     [ "Neal3ZDNAM", "classNeal3ZDNAM.html", "classNeal3ZDNAM" ],
     [ "NGGP", "classNGGP.html", "classNGGP" ],
+    [ "NGGP_params", "structNGGP__params.html", "structNGGP__params" ],
     [ "NGGPx", "classNGGPx.html", "classNGGPx" ],
     [ "Null_likelihood", "classNull__likelihood.html", "classNull__likelihood" ],
     [ "Params", "structParams.html", "structParams" ],
     [ "Process", "classProcess.html", "classProcess" ],
+    [ "Process_params", "structProcess__params.html", "structProcess__params" ],
     [ "RWMH", "classRWMH.html", "classRWMH" ],
     [ "Sampler", "classSampler.html", "classSampler" ],
     [ "SpatialCache", "classSpatialCache.html", "classSpatialCache" ],
@@ -35,5 +39,6 @@ var annotated_dup =
     [ "SplitMerge_LSS", "classSplitMerge__LSS.html", "classSplitMerge__LSS" ],
     [ "SplitMerge_LSS_SDDS", "classSplitMerge__LSS__SDDS.html", "classSplitMerge__LSS__SDDS" ],
     [ "SplitMerge_SAMS", "classSplitMerge__SAMS.html", "classSplitMerge__SAMS" ],
-    [ "U_sampler", "classU__sampler.html", "classU__sampler" ]
+    [ "U_sampler", "classU__sampler.html", "classU__sampler" ],
+    [ "utils_params", "structutils__params.html", "structutils__params" ]
 ];

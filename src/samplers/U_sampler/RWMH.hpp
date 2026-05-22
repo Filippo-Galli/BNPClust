@@ -83,8 +83,8 @@ private:
    * \alpha = \min\left(1, \frac{f(V')}{f(V)}\right)
    * \f]
    *
-   * @note since the proposal is symmetric. Sampling on the log scale can improve
-   * efficiency and avoids truncation issues.
+   * @note since the proposal is symmetric. Sampling on the log scale can
+   * improve efficiency and avoids truncation issues.
    *
    * @see sampling_U()
    */
@@ -139,7 +139,7 @@ public:
    * @note When tuning = true, proposal_sd will be automatically adjusted during
    * sampling.
    */
-  RWMH(Params &p, Data &d, bool use_V = false, double prop_sd = 1,
+  RWMH(NGGP_params &p, Data &d, bool use_V = false, double prop_sd = 1,
        bool tuning = false)
       : U_sampler(p, d), use_V(use_V), proposal_sd(prop_sd),
         tuning_enabled(tuning) {};

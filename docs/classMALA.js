@@ -1,6 +1,6 @@
 var classMALA =
 [
-    [ "MALA", "classMALA.html#a7721443577ca4639c17e298b2c1d56b2", null ],
+    [ "MALA", "classMALA.html#ada8f2e8db40d4a0324398613c8c99643", null ],
     [ "grad_log_conditional_density_U", "classMALA.html#ac28d5b37d39708a6360d0f248696a7b5", null ],
     [ "grad_log_conditional_density_V", "classMALA.html#a41b2222c2b048e24aa9e24966aa0604d", null ],
     [ "Robbins_Monro_tuning", "classMALA.html#a6377f0f9540fdd0b9098bc640b401c4a", null ],

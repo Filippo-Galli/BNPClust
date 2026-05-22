@@ -1,6 +1,6 @@
 var classNeal3 =
 [
-    [ "Neal3", "classNeal3.html#ad50c5edb8fddcf84043fa2aa1249f9ea", null ],
+    [ "Neal3", "classNeal3.html#a86cfe9e38bd7d60e46340df531a359b6", null ],
     [ "sample_from_log_probs", "classNeal3.html#a4aa77b742d26bc8a5f22100b015eeb8d", null ],
     [ "step", "classNeal3.html#abfabb9dfe80f6fce1c93ac4151279f86", null ],
     [ "step_1_observation", "classNeal3.html#ac20cf03f5de473bdc3cf1c7e59137f53", null ],

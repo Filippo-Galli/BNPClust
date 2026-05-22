@@ -122,14 +122,16 @@ private:
    * @param iterations Number of allocation passes to perform
    * @param only_probabilities If true, only compute proposal probabilities
    * without updating state
-   * @param sequential If true, use sequential allocation; if false, use restricted Gibbs sampling
+   * @param sequential If true, use sequential allocation; if false, use
+   * restricted Gibbs sampling
    *
    * @details Implements the core SAMS algorithm by sequentially allocating
    * observations to clusters. Unlike restricted Gibbs sampling, this approach
    * processes observations one by one in random order, making allocation
    * decisions based on current partial assignments.
    */
-  void sequential_allocation(int iterations, bool only_probabilities = false, bool sequential = true);
+  void sequential_allocation(int iterations, bool only_probabilities = false,
+                             bool sequential = true);
 
   // ========== Split Move Implementation ==========
 
@@ -209,8 +211,8 @@ public:
    * instead of restricted Gibbs sampling for generating proposals. This can
    * provide computational advantages for certain model configurations.
    */
-  SplitMerge_SAMS(Data &d, Params &p, Likelihood &l, Process &pr, bool shuffle)
-      : Sampler(d, p, l, pr), shuffle_bool(shuffle), gen(rd()) {};
+  SplitMerge_SAMS(Data &d, Likelihood &l, Process &pr, bool shuffle)
+      : Sampler(d, l, pr), shuffle_bool(shuffle), gen(rd()) {};
 
   // ========== MCMC Interface ==========
 
@@ -228,7 +230,7 @@ public:
    */
   void step() override;
 
-    // ========== Accessor Methods ==========
+  // ========== Accessor Methods ==========
   /**
    * @brief Get number of accepted split moves for diagnostics
    * @return Count of accepted split moves

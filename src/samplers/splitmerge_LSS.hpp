@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "../params/utils-params.hpp"
 #include "../utils/Sampler.hpp"
 
 /**
@@ -53,6 +54,8 @@
  */
 class SplitMerge_LSS : public Sampler {
 private:
+  const utils_params &params;
+
   // ========== Random Number Generation ==========
 
   /** @brief Mersenne Twister random number generator for sampling operations */
@@ -211,7 +214,7 @@ public:
    * sampler
    *
    * @param d Reference to Data object containing observations
-   * @param p Reference to Params object with hyperparameters
+   * @param p Reference to utils_params object with hyperparameters
    * @param l Reference to Likelihood object for probability computations
    * @param pr Reference to Process object defining the prior
    * @param shuffle Flag to enable shuffle moves in addition to split-merge
@@ -221,8 +224,9 @@ public:
    * generating proposals. This can provide computational advantages for large
    * datasets.
    */
-  SplitMerge_LSS(Data &d, Params &p, Likelihood &l, Process &pr, bool shuffle)
-      : Sampler(d, p, l, pr), shuffle_bool(shuffle), gen(rd()) {};
+  SplitMerge_LSS(Data &d, utils_params &p, Likelihood &l, Process &pr,
+                 bool shuffle)
+      : Sampler(d, l, pr), params(p), shuffle_bool(shuffle), gen(rd()) {};
 
   // ========== MCMC Interface ==========
 

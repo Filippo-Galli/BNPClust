@@ -1,6 +1,6 @@
 var classSplitMerge =
 [
-    [ "SplitMerge", "classSplitMerge.html#a6c697d29cdb44012ebe037e19745ed8e", null ],
+    [ "SplitMerge", "classSplitMerge.html#a614ac995ceb6931b5623a8ac4ff3ec9f", null ],
     [ "choose_clusters_shuffle", "classSplitMerge.html#a3d85471b9580ef6c1ba01d65c0ffd9aa", null ],
     [ "choose_indeces", "classSplitMerge.html#aaed9ff940af303b63963207bc2dfdf1c", null ],
     [ "compute_acceptance_ratio_merge", "classSplitMerge.html#a9a7c47c778c584f3b49f4c77ff30b302", null ],

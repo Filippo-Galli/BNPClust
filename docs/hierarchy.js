@@ -28,6 +28,7 @@ var hierarchy =
       [ "SpatialModuleCache", "classSpatialModuleCache.html", null ],
       [ "SpatialModuleContinuous", "classSpatialModuleContinuous.html", null ]
     ] ],
+    [ "Natarajan_params", "structNatarajan__params.html", null ],
     [ "Params", "structParams.html", null ],
     [ "Process", "classProcess.html", [
       [ "DP", "classDP.html", [
@@ -36,6 +37,10 @@ var hierarchy =
       [ "NGGP", "classNGGP.html", [
         [ "NGGPx", "classNGGPx.html", null ]
       ] ]
+    ] ],
+    [ "Process_params", "structProcess__params.html", [
+      [ "DP_params", "structDP__params.html", null ],
+      [ "NGGP_params", "structNGGP__params.html", null ]
     ] ],
     [ "Sampler", "classSampler.html", [
       [ "Neal3", "classNeal3.html", null ],
@@ -48,5 +53,6 @@ var hierarchy =
     [ "U_sampler", "classU__sampler.html", [
       [ "MALA", "classMALA.html", null ],
       [ "RWMH", "classRWMH.html", null ]
-    ] ]
+    ] ],
+    [ "utils_params", "structutils__params.html", null ]
 ];

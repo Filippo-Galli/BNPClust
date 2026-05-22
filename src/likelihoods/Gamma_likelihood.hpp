@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "../params/Natarajan-params.hpp"
+#include "../params/utils-params.hpp"
 #include "../utils/Likelihood.hpp"
 #include <vector>
 
@@ -13,19 +15,26 @@
  * @brief Computes log-likelihood for clusters based on distance-based cohesion
  *
  * This class handles the computation of log-likelihoods for clustering models
- * that incorporate cohesion (within-cluster similarity) components. It precomputes values for
- * efficiency and provides methods to evaluate both cluster-level and
- * point-level conditional log-likelihoods.
- * reference: Natarajan et al. (2023) "Cohesion and Repulsion in Bayesian Distance Clustering"
+ * that incorporate cohesion (within-cluster similarity) components. It
+ * precomputes values for efficiency and provides methods to evaluate both
+ * cluster-level and point-level conditional log-likelihoods. reference:
+ * Natarajan et al. (2023) "Cohesion and Repulsion in Bayesian Distance
+ * Clustering"
  */
 class Gamma_likelihood : public Likelihood {
 private:
+  const Natarajan_params &params;
+  const utils_params &utils;
+
   // Precomputed values for efficiency
   const double lgamma_delta1; ///< Precomputed lgamma(delta1) for cohesion
-  const double log_beta_alpha; ///< Precomputed log(beta) * alpha - lgamma(alpha)
-  std::vector<double> lgamma_alpha_mh_cache; ///< Cache for lgamma(alpha_mh) values
+  const double
+      log_beta_alpha; ///< Precomputed log(beta) * alpha - lgamma(alpha)
+  std::vector<double>
+      lgamma_alpha_mh_cache; ///< Cache for lgamma(alpha_mh) values
 
-  std::vector<double> log_D_data;   ///< Precomputed log distance matrix (flattened)
+  std::vector<double>
+      log_D_data;   ///< Precomputed log distance matrix (flattened)
   const int D_cols; ///< Number of columns in distance matrix
 
   /**
@@ -51,16 +60,18 @@ public:
    * - Logarithmic combinations of hyperparameters
    * - Logarithm of the entire distance matrix
    */
-  Gamma_likelihood(const Data &data, const Params &param)
-      : Likelihood(data, param), lgamma_delta1(lgamma(params.delta1)),
+  Gamma_likelihood(const Data &data, const Natarajan_params &params,
+                   const utils_params &utils)
+      : Likelihood(data), params(params), utils(utils),
+        lgamma_delta1(lgamma(params.delta1)),
         log_beta_alpha(log(params.beta) * params.alpha - lgamma(params.alpha)),
-        D_cols(params.D.cols()) {
+        D_cols(utils.D.cols()) {
     // Precompute log distances manually
-    const int n = params.D.rows() * params.D.cols();
+    const int n = utils.D.rows() * utils.D.cols();
     log_D_data.resize(n);
 
     // Log distance precomputation
-    const double *D_ptr = params.D.data();
+    const double *D_ptr = utils.D.data();
     for (int i = 0; i < n; ++i) {
       log_D_data[i] = std::log(D_ptr[i]);
     }
@@ -71,7 +82,6 @@ public:
     for (int val = 0; val <= data.get_n(); ++val) {
       lgamma_alpha_mh_cache[val] = lgamma(params.alpha + params.delta1 * val);
     }
-
   }
 
   /**
@@ -96,7 +106,8 @@ public:
    */
   double cluster_loglikelihood(
       int cluster_index,
-      const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const override final __attribute__((hot));
+      const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const override final
+      __attribute__((hot));
 
   /**
    * @brief Computes the conditional log-likelihood of a point given a cluster
@@ -108,5 +119,7 @@ public:
    * considering both its cohesion with points in that cluster and its
    * repulsion from points in other clusters.
    */
-  double point_loglikelihood_cond(int point_index, int cluster_index) const override final __attribute__((hot));
+  double point_loglikelihood_cond(int point_index,
+                                  int cluster_index) const override final
+      __attribute__((hot));
 };

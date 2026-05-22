@@ -2,7 +2,7 @@ var searchData=
 [
   ['m_0',['m',['../classContinuosCovariatesModule.html#a1782afd610c9237a67687caa96be579c',1,'ContinuosCovariatesModule::m'],['../classContinuosCovariatesModuleCache.html#aa8f666c27ef734f500d94cc3e0677530',1,'ContinuosCovariatesModuleCache::m']]],
   ['make_20your_20changes_1',['4. Make Your Changes',['../md_CONTRIBUTING.html#autotoc_md25',1,'']]],
-  ['mala_2',['MALA',['../classMALA.html',1,'MALA'],['../classMALA.html#a7721443577ca4639c17e298b2c1d56b2',1,'MALA::MALA()']]],
+  ['mala_2',['MALA',['../classMALA.html',1,'MALA'],['../classMALA.html#ada8f2e8db40d4a0324398613c8c99643',1,'MALA::MALA()']]],
   ['mala_2ecpp_3',['MALA.cpp',['../MALA_8cpp.html',1,'']]],
   ['mala_2ehpp_4',['MALA.hpp',['../MALA_8hpp.html',1,'']]],
   ['mcmc_5',['BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC',['../index.html',1,'']]],

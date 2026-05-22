@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "../params/utils-params.hpp"
 #include "../utils/Sampler.hpp"
 
 /**
@@ -66,6 +67,8 @@
  */
 class SplitMerge_LSS_SDDS : public Sampler {
 private:
+  const utils_params &params;
+
   // ========== Random Number Generation ==========
 
   /** @brief Mersenne Twister random number generator for sampling operations */
@@ -314,7 +317,7 @@ public:
    * Smart-split, Dumb-merge, Dumb-split, Smart-merge) Split-Merge sampler
    *
    * @param d Reference to Data object containing observations
-   * @param p Reference to Params object with hyperparameters (including
+   * @param p Reference to utils_params object with hyperparameters (including
    * distance matrix D)
    * @param l Reference to Likelihood object for probability computations
    * @param pr Reference to Process object defining the prior
@@ -329,9 +332,9 @@ public:
    * This sampler provides computational advantages for large datasets by
    * intelligently balancing computational cost with proposal quality.
    */
-  SplitMerge_LSS_SDDS(Data &d, Params &p, Likelihood &l, Process &pr,
+  SplitMerge_LSS_SDDS(Data &d, utils_params &p, Likelihood &l, Process &pr,
                       bool shuffle)
-      : Sampler(d, p, l, pr), shuffle_bool(shuffle),
+      : Sampler(d, l, pr), params(p), shuffle_bool(shuffle),
         original_allocations(pr.old_allocations_view()), gen(rd()),
         dis_real(0.0, 1.0), dis_int(0, 1) {};
 

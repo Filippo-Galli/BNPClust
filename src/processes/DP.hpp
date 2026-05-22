@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "../params/DP-params.hpp"
 #include "../utils/Process.hpp"
 
 /**
@@ -17,6 +18,8 @@
  * used in clustering.
  */
 class DP : public Process {
+  const DP_params &params;
+  const double log_a;
 
 public:
   /**
@@ -24,7 +27,8 @@ public:
    * @param d Reference to the data object.
    * @param p Reference to the parameters object.
    */
-  DP(Data &d, Params &p) : Process(d, p) {};
+  DP(Data &d, DP_params &p)
+      : Process(d), params(p), log_a(std::log(params.a)) {};
 
   /**
    * @name Gibbs Sampling Methods

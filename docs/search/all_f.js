@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['gamma_0',['gamma',['../structParams.html#a978c763893030b3acc13857475cc71fa',1,'Params']]],
-  ['gamma_5flikelihood_1',['Gamma_likelihood',['../classGamma__likelihood.html',1,'Gamma_likelihood'],['../classGamma__likelihood.html#ad5b9fc84495b785f706300439c9c83d1',1,'Gamma_likelihood::Gamma_likelihood()']]],
+  ['gamma_0',['gamma',['../structParams.html#a978c763893030b3acc13857475cc71fa',1,'Params::gamma'],['../structNatarajan__params.html#ad20a905b85886db766681206e81a7d89',1,'Natarajan_params::gamma']]],
+  ['gamma_5flikelihood_1',['Gamma_likelihood',['../classGamma__likelihood.html',1,'Gamma_likelihood'],['../classGamma__likelihood.html#af24a9df737813ecff6bfc92c80d82268',1,'Gamma_likelihood::Gamma_likelihood()']]],
   ['gamma_5flikelihood_2ecpp_2',['Gamma_likelihood.cpp',['../Gamma__likelihood_8cpp.html',1,'']]],
   ['gamma_5flikelihood_2ehpp_3',['Gamma_likelihood.hpp',['../Gamma__likelihood_8hpp.html',1,'']]],
   ['gen_4',['gen',['../classNGGP.html#a31ccceab465d9cb529de13d20da69b8f',1,'NGGP::gen'],['../classNeal3.html#a6c1fb83b507ed24597b7dc0fa6529bad',1,'Neal3::gen'],['../classNeal3ZDNAM.html#a2a3912c70da056ae420f00ce277c44b7',1,'Neal3ZDNAM::gen'],['../classSplitMerge.html#ad0927420ab4d0448d0626858a8df573e',1,'SplitMerge::gen'],['../classSplitMerge__LSS.html#a99554021bcc51e39bc61dde55c7961b8',1,'SplitMerge_LSS::gen'],['../classSplitMerge__LSS__SDDS.html#a9f4244224661c3cca30e8c2d4f6f035a',1,'SplitMerge_LSS_SDDS::gen'],['../classSplitMerge__SAMS.html#aa34f55f86d4976501c6916ede6c7661b',1,'SplitMerge_SAMS::gen'],['../classU__sampler.html#a553c7a0f7d16dcfe3060b4a0ae9175cd',1,'U_sampler::gen']]],

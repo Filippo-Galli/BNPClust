@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['gamma_5flikelihood_0',['Gamma_likelihood',['../classGamma__likelihood.html#ad5b9fc84495b785f706300439c9c83d1',1,'Gamma_likelihood']]],
+  ['gamma_5flikelihood_0',['Gamma_likelihood',['../classGamma__likelihood.html#af24a9df737813ecff6bfc92c80d82268',1,'Gamma_likelihood']]],
   ['get_5facceptance_5frate_1',['get_acceptance_rate',['../classU__sampler.html#addfaeffc2f038a144332e96a6bf1dc7d',1,'U_sampler']]],
   ['get_5faccepted_5fmerge_2',['get_accepted_merge',['../classSplitMerge.html#ad259991cb650d3c053adaedb610f31b9',1,'SplitMerge::get_accepted_merge()'],['../classSplitMerge__LSS.html#aa8a4414bb201370286b0dbad7e73ea68',1,'SplitMerge_LSS::get_accepted_merge()'],['../classSplitMerge__LSS__SDDS.html#a6e45dc8626f2be2a0f8f83aec6d59281',1,'SplitMerge_LSS_SDDS::get_accepted_merge()'],['../classSplitMerge__SAMS.html#adc7ce8d882f8a3c08575ae4494580255',1,'SplitMerge_SAMS::get_accepted_merge()']]],
   ['get_5faccepted_5fshuffle_3',['get_accepted_shuffle',['../classSplitMerge.html#af711a9a7ca43c343a28bda7c9cc7ae3e',1,'SplitMerge::get_accepted_shuffle()'],['../classSplitMerge__LSS.html#ac4549dbcb5b175229392e7aab4ed694d',1,'SplitMerge_LSS::get_accepted_shuffle()'],['../classSplitMerge__LSS__SDDS.html#a890279b7dbfd4b286b83308720fb5584',1,'SplitMerge_LSS_SDDS::get_accepted_shuffle()'],['../classSplitMerge__SAMS.html#a6d446d7fd2fbbf4f34fa85c1f4aa2696',1,'SplitMerge_SAMS::get_accepted_shuffle()']]],

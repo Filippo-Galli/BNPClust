@@ -4,64 +4,66 @@ library(RcppEigen)
 # Load the C++ module
 sourceCpp("src/bindings.cpp")
 
-run_mcmc <- function(params, initial_allocations = integer(0), W, continuos_covariates = NULL, binary_covariates = NULL, categorical_covariates = NULL) {
+run_mcmc <- function(likelihood_param, process_param, utils_param, initial_allocations = integer(0), W, continuos_covariates = NULL, binary_covariates = NULL, categorical_covariates = NULL) {
     # Ensure types are correct for C++
     initial_allocations <- as.integer(initial_allocations)
 
-    # continuos_cache <- create_Continuos_cache(initial_allocations, continuos_covariates)
-    # binary_cache <- create_Binary_cache(initial_allocations, binary_covariates)
-    spatial_cache <- create_Spatial_cache(initial_allocations, W)
+    continuos_cache <- create_Continuos_cache(initial_allocations, continuos_covariates)
+    binary_cache <- create_Binary_cache(initial_allocations, binary_covariates)
+    # spatial_cache <- create_Spatial_cache(initial_allocations, W)
 
-    # # Instantiate Data using factory function
-    data <- create_Datax(params, list(spatial_cache), initial_allocations)
+    # Instantiate Data using factory function
+    data <- create_Datax(utils_param, list(binary_cache, continuos_cache), initial_allocations)
     # data <- create_Data(params, initial_allocations)
 
     # Instantiate Likelihood using factory function
-    # likelihood <- create_Natarajan_likelihood(data, params)
-    likelihood <- create_Null_likelihood(data, params) # Placeholder likelihood
+    likelihood <- create_Natarajan_likelihood(data, likelihood_param, utils_param)
+    # likelihood <- create_Natarajan_likelihood_summaryStats(data, params)
+    # likelihood <- create_Null_likelihood(data, params) # Placeholder likelihood
     # likelihood <- create_Gamma_likelihood(data, params)
 
     # Instantiate U_sampler (RWMH) using factory function
     # Constructor: Params&, Data&, bool use_V, double proposal_sd, bool tuning_enabled
-    u_sampler <- create_RWMH(params, data, TRUE, 2.0, TRUE)
+    u_sampler <- create_RWMH(process_param, data, TRUE, 2.0, TRUE)
 
     # Instantiate Process (NGGPx) using modules
     # 1. Spatial module
-    # mod_spatial <- create_SpatialModule(data, W, spatial_coefficient = 1.0)
-    mod_spatial <- create_SpatialModuleCache(data, cache = spatial_cache, spatial_coefficient = 1.0)
+    mod_spatial <- create_SpatialModule(data, W, spatial_coefficient = 1.0)
+    # mod_spatial <- create_SpatialModuleContinuous(data, W, spatial_coefficient = 1.0)
+    # mod_spatial <- create_SpatialModuleCache(data, cache = spatial_cache, spatial_coefficient = 1.0)
 
-    # # 2. Covariate module (cached)
-    # fixed_v <- TRUE
-    # B <- 10 * var(continuos_covariates) # prior variance
-    # m <- 0 # prior mean
-    # v <- 0.5 * var(continuos_covariates) # known variance
-    # nu <- 1
-    # S0 <- 1.0
+    # 2. Covariate module (cached)
+    fixed_v <- TRUE
+    B <- 10 * var(continuos_covariates) # prior variance
+    m <- 0 # prior mean
+    v <- 0.5 * var(continuos_covariates) # known variance
+    nu <- 1
+    S0 <- 1.0
 
-    # mod_cont <- create_ContinuosCovariatesModuleCache(data, continuos_cache, fixed_v, m, B, v, nu, S0)
-    #mod_cont <- create_ContinuosCovariatesModule(data, continuos_covariates, fixed_v = TRUE, m = m, B = B, v = v)
+    mod_cont <- create_ContinuosCovariatesModuleCache(data, continuos_cache, fixed_v, m, B, v, nu, S0)
+    # mod_cont <- create_ContinuosCovariatesModule(data, continuos_covariates, fixed_v = TRUE, m = m, B = B, v = v)
 
     # 3. Binary covariate module
     # mod_binary <- create_BinaryCovariatesModule(data, binary_covariates, 0.1, 0.1)
-    # mod_binary <- create_BinaryCovariatesModuleCache(data, binary_cache, 0.1, 0.1)
+    mod_binary <- create_BinaryCovariatesModuleCache(data, binary_cache, 0.1, 0.1)
 
     # 4. Categorical covariate module
     # alphas <- rep(1.0, length(unique(categorical_covariates)))
     # mod_categorical <- create_CategoricalCovariatesModule(data, categorical_covariates, alphas)
 
     # Combine modules into NGGPx process
-    process <- create_NGGPx(data, params, u_sampler, list(mod_spatial))
+    process <- create_NGGPx(data, process_param, u_sampler, list(mod_spatial, mod_cont, mod_binary))
     # process <- create_NGGP(data, params, u_sampler)
 
     # Instantiate Sampler (SplitMerge_LSS_SDDS) using factory function
     # Constructor: Data&, Params&, Likelihood&, Process&, bool shuffle
-    sampler <- create_SplitMerge_LSS_SDDS(data, params, likelihood, process, TRUE)
+    sampler <- create_SplitMerge_LSS_SDDS(data, utils_param, likelihood, process, TRUE)
 
-    neal3 <- create_Neal3(data, params, likelihood, process)
+    neal3 <- create_Neal3(data, likelihood, process)
 
     # Get parameters for loop using getter functions
-    BI <- params_get_BI(params)
-    NI <- params_get_NI(params)
+    BI <- params_get_BI(utils_param)
+    NI <- params_get_NI(utils_param)
     total_iters <- BI + NI
 
     # Results storage
