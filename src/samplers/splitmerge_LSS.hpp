@@ -46,6 +46,9 @@
  * nonparametric models" reference Martinez, A. F. and Mena, R. H. (2014). "On a
  * Nonparametric Change Point Detection Model in Markovian Regimes"
  *
+ * @note [IMPORTANT] since there is the LSS it only works with distance based
+ * models
+ *
  * @see Sampler, SplitMerge
  */
 class SplitMerge_LSS : public Sampler {
