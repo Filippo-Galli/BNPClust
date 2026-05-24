@@ -14,8 +14,6 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include <Rcpp.h>
-#include <RcppEigen.h>
 
 /**
  * @brief Structure containing all parameters needed for the NGGP (Normalized

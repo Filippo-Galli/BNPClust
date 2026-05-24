@@ -21,7 +21,7 @@ set.seed(44)
 ## Load real data
 files_folder <- "real_data/LA"
 files <- list.files(files_folder)
-file_chosen <- files[3]
+file_chosen <- files[4]
 dist_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
 puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
 puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
@@ -49,10 +49,7 @@ if (!isSymmetric(W)) {
 # C++ Integration ====
 ##############################################################################
 
-## Load C++ implementation of MCMC algorithm
-# sourceCpp("src/bindings.cpp", rebuild = TRUE, cacheDir = "~/my_rcpp_cache") # useful for perf
-sourceCpp("src/bindings.cpp")
-cat("✅ C++ code compiled successfully!\n\n")
+## C++ implementation is compiled in R/mcmc_loop.R
 
 ##############################################################################
 # Hyperparameter Configuration ====

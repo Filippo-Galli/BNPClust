@@ -14,8 +14,6 @@
 #include "neal.hpp"
 #include <numeric>
 
-using namespace Rcpp;
-
 // In neal.cpp, could be a private helper in Neal3 or a free function
 int Neal3::sample_from_log_probs(int num_clusters) {
     // 1. Log-Sum-Exp trick for numerical stability

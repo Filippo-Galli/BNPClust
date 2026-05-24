@@ -9,6 +9,10 @@ latex/
 # direnv
 .direnv
 
+# build directory
+build/
+tmp/
+
 # pre-commit
 .pre-commit-config.yaml
 
@@ -36,7 +40,7 @@ input/
 raw/
 
 
-# Podman 
+# Podman
 .config/
 
 # VSCode

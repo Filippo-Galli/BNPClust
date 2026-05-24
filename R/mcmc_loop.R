@@ -1,8 +1,42 @@
 library(Rcpp)
 library(RcppEigen)
 
-# Load the C++ module
-sourceCpp("src/bindings.cpp")
+# Load the C++ module (linking prebuilt core library if available)
+core_lib_dir <- normalizePath("build", mustWork = FALSE)
+
+if (.Platform$OS.type == "windows") {
+    core_lib_path <- file.path(core_lib_dir, "bnpclust_core.dll")
+} else if (Sys.info()[["sysname"]] == "Darwin") {
+    core_lib_path <- file.path(core_lib_dir, "libbnpclust_core.dylib")
+} else {
+    core_lib_path <- file.path(core_lib_dir, "libbnpclust_core.so")
+}
+
+if (!file.exists(core_lib_path)) {
+    stop("Core library not found. Build it with: cmake -S . -B build && cmake --build build")
+}
+
+if (.Platform$OS.type == "windows") {
+    Sys.setenv(PKG_LIBS = paste0("-L", core_lib_dir, " -lbnpclust_core"))
+    Sys.setenv(PATH = paste(core_lib_dir, Sys.getenv("PATH"), sep = .Platform$path.sep))
+} else {
+    Sys.setenv(PKG_LIBS = paste0("-L", core_lib_dir, " -lbnpclust_core -Wl,-rpath,", core_lib_dir))
+}
+
+rcpp_eigen_include <- system.file("include", package = "RcppEigen")
+if (!nzchar(rcpp_eigen_include)) {
+    stop("RcppEigen include directory not found. Is RcppEigen installed?")
+}
+existing_cppflags <- Sys.getenv("PKG_CPPFLAGS")
+eigen_cppflags <- paste0("-I", rcpp_eigen_include)
+Sys.setenv(PKG_CPPFLAGS = paste(existing_cppflags, eigen_cppflags))
+
+object_files <- list.files("src", pattern = "\\.o$", recursive = TRUE, full.names = TRUE)
+if (length(object_files) > 0) {
+    unlink(object_files)
+}
+
+Rcpp::sourceCpp("src/r_bindings.cpp", cacheDir = "tmp/rcpp_cache")
 
 run_mcmc <- function(likelihood_param, process_param, utils_param, initial_allocations = integer(0), W, continuos_covariates = NULL, binary_covariates = NULL, categorical_covariates = NULL) {
     # Ensure types are correct for C++

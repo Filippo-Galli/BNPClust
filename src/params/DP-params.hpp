@@ -12,8 +12,6 @@
 
 #include "Process-params.hpp"
 #include <Eigen/Dense>
-#include <Rcpp.h>
-#include <RcppEigen.h>
 
 /**
  * @brief Struct for storing parameters of the DP (Dirichlet Process)
@@ -27,12 +25,12 @@
 
 struct DP_params : public Process_params {
 
-  /** @brief Total mass parameter of the DP (controls number of clusters) */
-  double a;
+    /** @brief Total mass parameter of the DP (controls number of clusters) */
+    double a;
 
-  /**
-   * @brief Constructor for DP_params
-   * @param a Total mass parameter
-   */
-  DP_params(double a) : Process_params("DP"), a(a) {}
+    /**
+     * @brief Constructor for DP_params
+     * @param a Total mass parameter
+     */
+    DP_params(double a) : Process_params("DP"), a(a) {}
 };

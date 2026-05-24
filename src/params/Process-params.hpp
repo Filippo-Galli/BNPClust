@@ -10,8 +10,6 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include <Rcpp.h>
-#include <RcppEigen.h>
 
 /**
  * @brief Abstract base class for process parameters
@@ -21,12 +19,12 @@
  */
 
 struct Process_params {
-  const std::string name;
+    const std::string name;
 
-  /**
-   * @brief Constructor for Process_params
-   * @param name Name of the process
-   */
-  Process_params(const std::string &name) : name(name) {}
-  virtual ~Process_params() {}
+    /**
+     * @brief Constructor for Process_params
+     * @param name Name of the process
+     */
+    Process_params(const std::string &name) : name(name) {}
+    virtual ~Process_params() {}
 };

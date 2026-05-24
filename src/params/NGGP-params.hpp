@@ -13,8 +13,6 @@
 
 #include "Process-params.hpp"
 #include <Eigen/Dense>
-#include <Rcpp.h>
-#include <RcppEigen.h>
 
 /**
  * @brief Struct for storing parameters of the NGGP (Normalized Generalized
@@ -29,21 +27,20 @@
 
 struct NGGP_params : public Process_params {
 
-  /** @brief Total mass parameter of the NGGP (controls number of clusters) */
-  double a;
+    /** @brief Total mass parameter of the NGGP (controls number of clusters) */
+    double a;
 
-  /** @brief Second parameter of the NGGP (controls cluster sizes) */
-  double sigma;
+    /** @brief Second parameter of the NGGP (controls cluster sizes) */
+    double sigma;
 
-  /** @brief Third parameter of the NGGP (controls tail behavior) */
-  double tau;
+    /** @brief Third parameter of the NGGP (controls tail behavior) */
+    double tau;
 
-  /**
-   * @brief Constructor for NGGP_params
-   * @param a Total mass parameter
-   * @param sigma Second parameter
-   * @param tau Third parameter
-   */
-  NGGP_params(double a, double sigma, double tau)
-      : Process_params("NGGP"), a(a), sigma(sigma), tau(tau) {}
+    /**
+     * @brief Constructor for NGGP_params
+     * @param a Total mass parameter
+     * @param sigma Second parameter
+     * @param tau Third parameter
+     */
+    NGGP_params(double a, double sigma, double tau) : Process_params("NGGP"), a(a), sigma(sigma), tau(tau) {}
 };
