@@ -6,7 +6,7 @@ var searchData=
   ['sample_5ffrom_5flog_5fprobs_5fzdnam_3',['sample_from_log_probs_zdnam',['../classNeal3ZDNAM.html#ae9d4a02085162f18a969d13d134e0474',1,'Neal3ZDNAM']]],
   ['sampler_4',['Sampler',['../classSampler.html',1,'Sampler'],['../classSampler.html#adb1975ebbaad6fa358711020a99a1188',1,'Sampler::Sampler()']]],
   ['sampler_2ehpp_5',['Sampler.hpp',['../Sampler_8hpp.html',1,'']]],
-  ['sampler_5fstep_6',['sampler_step',['../bindings_8cpp.html#ad75224489af86dcc7dd2b51c30458f1a',1,'bindings.cpp']]],
+  ['sampler_5fstep_6',['sampler_step',['../r__bindings_8cpp.html#ad75224489af86dcc7dd2b51c30458f1a',1,'r_bindings.cpp']]],
   ['samplers_7',['MCMC Samplers',['../index.html#autotoc_md11',1,'']]],
   ['sampling_5fu_8',['sampling_U',['../classMALA.html#a1455a59881092cacc41465bec09cc1c6',1,'MALA::sampling_U()'],['../classRWMH.html#af350f5e44ac4f74c84d41f87f52b1aa5',1,'RWMH::sampling_U()']]],
   ['sampling_5fv_9',['sampling_V',['../classMALA.html#a010edce40e77a91e229e3a138d0dce10',1,'MALA::sampling_V()'],['../classRWMH.html#a0067c5b24f41c79920c43b7f3ae66c76',1,'RWMH::sampling_V()']]],

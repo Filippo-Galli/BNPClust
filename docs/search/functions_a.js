@@ -3,7 +3,7 @@ var searchData=
   ['sample_5ffrom_5flog_5fprobs_0',['sample_from_log_probs',['../classNeal3.html#a4aa77b742d26bc8a5f22100b015eeb8d',1,'Neal3::sample_from_log_probs()'],['../classNeal3ZDNAM.html#aa8c30654dbd75413dc6a41fc9a2d2ef6',1,'Neal3ZDNAM::sample_from_log_probs(const std::vector&lt; double &gt; &amp;log_probs)']]],
   ['sample_5ffrom_5flog_5fprobs_5fzdnam_1',['sample_from_log_probs_zdnam',['../classNeal3ZDNAM.html#ae9d4a02085162f18a969d13d134e0474',1,'Neal3ZDNAM']]],
   ['sampler_2',['Sampler',['../classSampler.html#adb1975ebbaad6fa358711020a99a1188',1,'Sampler']]],
-  ['sampler_5fstep_3',['sampler_step',['../bindings_8cpp.html#ad75224489af86dcc7dd2b51c30458f1a',1,'bindings.cpp']]],
+  ['sampler_5fstep_3',['sampler_step',['../r__bindings_8cpp.html#ad75224489af86dcc7dd2b51c30458f1a',1,'r_bindings.cpp']]],
   ['sampling_5fu_4',['sampling_U',['../classMALA.html#a1455a59881092cacc41465bec09cc1c6',1,'MALA::sampling_U()'],['../classRWMH.html#af350f5e44ac4f74c84d41f87f52b1aa5',1,'RWMH::sampling_U()']]],
   ['sampling_5fv_5',['sampling_V',['../classMALA.html#a010edce40e77a91e229e3a138d0dce10',1,'MALA::sampling_V()'],['../classRWMH.html#a0067c5b24f41c79920c43b7f3ae66c76',1,'RWMH::sampling_V()']]],
   ['sequential_5fallocation_6',['sequential_allocation',['../classSplitMerge__LSS.html#ac5252791b0a9a1a9b174421205a33c7d',1,'SplitMerge_LSS::sequential_allocation()'],['../classSplitMerge__LSS__SDDS.html#a62485d23e3d3c5266fa70b7c055e673c',1,'SplitMerge_LSS_SDDS::sequential_allocation()'],['../classSplitMerge__SAMS.html#a1cf7698ea219623995597a45932db97c',1,'SplitMerge_SAMS::sequential_allocation()']]],

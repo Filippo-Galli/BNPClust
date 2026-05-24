@@ -25,7 +25,7 @@ var searchData=
   ['nggp_2ecpp_22',['NGGP.cpp',['../NGGP_8cpp.html',1,'']]],
   ['nggp_2ehpp_23',['NGGP.hpp',['../NGGP_8hpp.html',1,'']]],
   ['nggp_5fparams_24',['NGGP_params',['../structNGGP__params.html',1,'NGGP_params'],['../structNGGP__params.html#acd6c2c612344e3b1a52e30196666b14b',1,'NGGP_params::NGGP_params()']]],
-  ['nggp_5fparams_5fget_5fa_25',['NGGP_params_get_a',['../bindings_8cpp.html#ab516101684022507d811d09370a4ea0c',1,'bindings.cpp']]],
+  ['nggp_5fparams_5fget_5fa_25',['NGGP_params_get_a',['../r__bindings_8cpp.html#ab516101684022507d811d09370a4ea0c',1,'r_bindings.cpp']]],
   ['nggpx_26',['NGGPx',['../classNGGPx.html',1,'NGGPx'],['../classNGGPx.html#a4a18500e5cf62bce72d90ded68cb10f6',1,'NGGPx::NGGPx()']]],
   ['nggpx_2ecpp_27',['NGGPx.cpp',['../NGGPx_8cpp.html',1,'']]],
   ['nggpx_2ehpp_28',['NGGPx.hpp',['../NGGPx_8hpp.html',1,'']]],
