@@ -21,7 +21,7 @@ set.seed(44)
 ## Load real data
 files_folder <- "real_data/LA"
 files <- list.files(files_folder)
-file_chosen <- files[4]
+file_chosen <- files[3]
 dist_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
 puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
 puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
