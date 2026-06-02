@@ -12,7 +12,7 @@ file_chosen <- files[1]
 folder <- paste0(result_folder, file_chosen, "/")
 filename_results <- "simulation_results.rds"
 filename_gt <- "ground_truth.rds"
-filename_dist <- "simulation_distance_matrix.rds"
+filename_dist <- "simulation_data_matrix.rds"
 # filename_data <- "simulation_data.rds"
 filename_initial_params <- "simulation_initial_params.rds"
 filename_time_elapsed <- "time_taken.txt"
@@ -26,7 +26,7 @@ filename_time_elapsed <- paste0(folder, filename_time_elapsed)
 
 results <- readRDS(file = filename_results)
 # ground_truth <- readRDS(file = filename_gt)
-dist_matrix <- readRDS(file = filename_dist)
+data_matrix <- readRDS(file = filename_dist)
 # all_data <- readRDS(file = filename_data)
 # param <- readRDS(file = filename_initial_params)
 elapsed_time <- as.numeric(readLines(con = filename_time_elapsed))
@@ -63,9 +63,9 @@ point_estimate <- readRDS(file = paste0(folder, "point_estimate.rds"))
 
 plot_post_distr(results, BI = BI, save = TRUE, folder = folder)
 plot_trace_cls(results, BI = BI, save = TRUE, folder = folder)
-plot_trace_U(results, BI = BI, save = TRUE, folder = folder)
-plot_acf_U(results, BI = BI, save = TRUE, folder = folder)
-# plot_post_sim_matrix(results, BI = BI, save = TRUE, folder = folder)
+#plot_trace_U(results, BI = BI, save = TRUE, folder = folder)
+#plot_acf_U(results, BI = BI, save = TRUE, folder = folder)
+plot_post_sim_matrix(results, BI = BI, save = TRUE, folder = folder)
 
 # Extract the pattern after "real_data_" and before the next "_"
 states <- parts[3] # state/regions abbreviation
@@ -73,8 +73,15 @@ states <- parts[3] # state/regions abbreviation
 # Municipalities uses COD_MUN, PUMAs use COD_PUMA as the ID column
 id_col <- if (states == "municipalities") "COD_MUN" else "COD_PUMA"
 subfolder <- if (states == "municipalities") "geometry" else "counties-pumas"
-files_geometry <- if (states == "municipalities") "municipalities.shp" else "counties-pumas.shp"
-puma_ids <- sf::st_read(paste0("input/", states, "/", subfolder, "/", files_geometry), quiet = TRUE)[[id_col]]
+files_geometry <- if (states == "municipalities") {
+    "municipalities.shp"
+} else {
+    "counties-pumas.shp"
+}
+puma_ids <- sf::st_read(
+    paste0("input/", states, "/", subfolder, "/", files_geometry),
+    quiet = TRUE
+)[[id_col]]
 
 plot_map_cls(
     results = results,
@@ -83,7 +90,8 @@ plot_map_cls(
     unit_ids = puma_ids,
     puma_dir = paste0("input/", states, "/", subfolder),
     id_col = id_col,
-    save = TRUE, folder = folder
+    save = TRUE,
+    folder = folder
 )
 
 puma_dir <- paste0("input/", states, "/", subfolder)
@@ -94,7 +102,8 @@ if (states == "municipalities") {
         results = results,
         BI = BI,
         point_estimate = point_estimate,
-        save = TRUE, folder = folder,
+        save = TRUE,
+        folder = folder,
     )
 
     #   plot_map_prior_mean_comuni(

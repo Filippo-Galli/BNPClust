@@ -38,14 +38,34 @@ retrieve_W <- function(distance_matrix, neighbours = 8) {
     return(W)
 }
 
-generate_mixture_data <- function(N = 100, K = 10, alpha = 10, dim = K, radius = 1, sigma = 0.1, ordered = TRUE) {
+generate_mixture_data <- function(
+    N = 100,
+    K = 10,
+    alpha = 10,
+    dim = K,
+    radius = 1,
+    sigma = 0.1,
+    ordered = TRUE
+) {
     # Input validation
-    if (N < 1) stop("N must be greater than 1")
-    if (K < 1 || K > N) stop("K must satisfy 1 ≤ K ≤ N")
-    if (alpha <= 0) stop("alpha must be positive")
-    if (dim < K) stop("dim must be ≥ K")
-    if (radius <= 0) stop("radius must be positive")
-    if (sigma <= 0) stop("sigma must be positive")
+    if (N < 1) {
+        stop("N must be greater than 1")
+    }
+    if (K < 1 || K > N) {
+        stop("K must satisfy 1 ≤ K ≤ N")
+    }
+    if (alpha <= 0) {
+        stop("alpha must be positive")
+    }
+    if (dim < K) {
+        stop("dim must be ≥ K")
+    }
+    if (radius <= 0) {
+        stop("radius must be positive")
+    }
+    if (sigma <= 0) {
+        stop("sigma must be positive")
+    }
 
     # Generate cluster weights from Dirichlet prior
     probs <- as.numeric(rdirichlet(1, rep(alpha, K)))
@@ -67,7 +87,11 @@ generate_mixture_data <- function(N = 100, K = 10, alpha = 10, dim = K, radius =
     points <- matrix(0, N, dim)
     for (i in 1:N) {
         cluster <- clusts[i]
-        points[i, ] <- rmvnorm(1, mean = clust_centres[cluster, ], sigma = Sigma)
+        points[i, ] <- rmvnorm(
+            1,
+            mean = clust_centres[cluster, ],
+            sigma = Sigma
+        )
     }
 
     # Optional: Order data by cluster assignments
@@ -95,21 +119,46 @@ generate_mixture_data <- function(N = 100, K = 10, alpha = 10, dim = K, radius =
     }
 }
 
-save_with_name <- function(utils_params, process_params, initialization, filename, gt = FALSE) {
+save_with_name <- function(
+    utils_params,
+    process_params,
+    initialization,
+    filename,
+    gt = FALSE
+) {
     ## Name creation
     folder <- "results/"
 
     # Nomenclature: initialization + BI + NI + a + sigma + tau
     if (params_get_name(process_params) == "DP") {
         subfolder <- paste0(
-            filename, "_", initialization, "_BI", params_get_BI(utils_params), "_NI", params_get_NI(utils_params),
-            "_a", DP_params_get_a(process_params), "/"
+            filename,
+            "_",
+            initialization,
+            "_BI",
+            params_get_BI(utils_params),
+            "_NI",
+            params_get_NI(utils_params),
+            "_a",
+            DP_params_get_a(process_params),
+            "/"
         )
     } else {
         subfolder <- paste0(
-            filename, "_", initialization, "_BI", params_get_BI(utils_params), "_NI", params_get_NI(utils_params),
-            "_a", NGGP_params_get_a(process_params), "_sigma", params_get_sigma(process_params),
-            "_tau", params_get_tau(process_params), "/"
+            filename,
+            "_",
+            initialization,
+            "_BI",
+            params_get_BI(utils_params),
+            "_NI",
+            params_get_NI(utils_params),
+            "_a",
+            NGGP_params_get_a(process_params),
+            "_sigma",
+            params_get_sigma(process_params),
+            "_tau",
+            params_get_tau(process_params),
+            "/"
         )
     }
     folder <- paste0(folder, subfolder)
@@ -120,14 +169,13 @@ save_with_name <- function(utils_params, process_params, initialization, filenam
 
     # Initialize standard filenames
     filename_results <- paste0(folder, "simulation_results.rds")
-    filename_dist <- paste0(folder, "simulation_distance_matrix.rds")
+    filename_dist <- paste0(folder, "simulation_data_matrix.rds")
     filename_utils_params <- paste0(folder, "simulation_utils_params.rds")
     filename_process_params <- paste0(folder, "simulation_process_params.rds")
 
-
     # Save baseline files
     saveRDS(mcmc_result, file = filename_results)
-    saveRDS(dist_matrix, file = filename_dist)
+    saveRDS(data_matrix, file = filename_dist)
     saveRDS(utils_params, file = filename_utils_params)
     saveRDS(process_params, file = filename_process_params)
 
@@ -142,7 +190,13 @@ save_with_name <- function(utils_params, process_params, initialization, filenam
     writeLines(as.character(elapsed_time), con = time_file)
 }
 
-set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_clustering = FALSE, plot_distribution = TRUE) {
+set_hyperparameters <- function(
+    dist_matrix,
+    k_elbow,
+    ground_truth = NULL,
+    plot_clustering = FALSE,
+    plot_distribution = TRUE
+) {
     # Ensure dist_matrix is in the right format
     if (!inherits(dist_matrix, "dist")) {
         dist_matrix <- as.dist(dist_matrix)
@@ -164,8 +218,10 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
     cluster_j <- matrix(rep(initial_clusters, n), nrow = n, byrow = TRUE)
 
     # Find same cluster pairs (excluding diagonal)
-    same_cluster <- (cluster_i == cluster_j) & (row(dist_matrix) < col(dist_matrix))
-    diff_cluster <- (cluster_i != cluster_j) & (row(dist_matrix) < col(dist_matrix))
+    same_cluster <- (cluster_i == cluster_j) &
+        (row(dist_matrix) < col(dist_matrix))
+    diff_cluster <- (cluster_i != cluster_j) &
+        (row(dist_matrix) < col(dist_matrix))
 
     # Extract distances
     within_cluster_distances <- dist_matrix[same_cluster]
@@ -173,8 +229,16 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
 
     cat("Vectorized processing completed!\n")
 
-    cat("Within-cluster distances (A):", length(within_cluster_distances), "values\n")
-    cat("Inter-cluster distances (B):", length(inter_cluster_distances), "values\n")
+    cat(
+        "Within-cluster distances (A):",
+        length(within_cluster_distances),
+        "values\n"
+    )
+    cat(
+        "Inter-cluster distances (B):",
+        length(inter_cluster_distances),
+        "values\n"
+    )
 
     # Plot the initial clustering from k-means (optional)
     if (plot_clustering) {
@@ -189,7 +253,10 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
             cluster_data$ground_truth <- as.factor(ground_truth)
         }
 
-        cluster_plot <- ggplot(cluster_data, aes(x = x, y = y, color = cluster)) +
+        cluster_plot <- ggplot(
+            cluster_data,
+            aes(x = x, y = y, color = cluster)
+        ) +
             geom_point(size = 3) +
             labs(
                 title = paste("Initial K-means Clustering (K =", k_elbow, ")"),
@@ -202,7 +269,10 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
 
         # Plot ground truth if provided
         if (!is.null(ground_truth)) {
-            gt_plot <- ggplot(cluster_data, aes(x = x, y = y, color = ground_truth)) +
+            gt_plot <- ggplot(
+                cluster_data,
+                aes(x = x, y = y, color = ground_truth)
+            ) +
                 geom_point(size = 3) +
                 labs(
                     title = "Ground Truth Clustering",
@@ -237,7 +307,9 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
                     rate_est <- mean_A / var_A
 
                     # Use these as starting values for MLE
-                    gamma_fit_A <- fitdistr(A_safe, "gamma",
+                    gamma_fit_A <- fitdistr(
+                        A_safe,
+                        "gamma",
                         start = list(shape = shape_est, rate = rate_est),
                         lower = c(0.01, 0.01)
                     )
@@ -246,7 +318,10 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
 
                     # delta_1 should be less than 1 for cohesion
                     if (delta1 > 1) {
-                        print(paste("Warning: Fitted delta1 > 1, adjusting to 0.9 for cohesion. Old value: ", delta1))
+                        print(paste(
+                            "Warning: Fitted delta1 > 1, adjusting to 0.9 for cohesion. Old value: ",
+                            delta1
+                        ))
                         delta1 <- 0.9 # Adjust shape parameter if needed
                     }
 
@@ -261,7 +336,9 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
                     cat("  beta =", beta, "\n")
                 },
                 error = function(e) {
-                    cat("Warning: Could not fit gamma distribution to within-cluster distances\n")
+                    cat(
+                        "Warning: Could not fit gamma distribution to within-cluster distances\n"
+                    )
                     cat("Error:", e$message, "\n")
                     delta1 <<- 0.5
                     alpha <<- 2
@@ -273,14 +350,18 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
             delta1 <- 0.5
             alpha <- 2
             beta <- 2
-            cat("Warning: Not enough within-cluster distances, using default values\n")
+            cat(
+                "Warning: Not enough within-cluster distances, using default values\n"
+            )
         }
     } else {
         # Fallback values
         delta1 <- 0.5
         alpha <- 2
         beta <- 2
-        cat("Warning: No within-cluster distances found, using default values\n")
+        cat(
+            "Warning: No within-cluster distances found, using default values\n"
+        )
     }
 
     # Step 6: Repeat for inter-cluster distances (B)
@@ -303,7 +384,9 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
                     rate_est <- mean_B / var_B
 
                     # Use these as starting values for MLE
-                    gamma_fit_B <- fitdistr(B_safe, "gamma",
+                    gamma_fit_B <- fitdistr(
+                        B_safe,
+                        "gamma",
                         start = list(shape = shape_est, rate = rate_est),
                         lower = c(0.01, 0.01)
                     )
@@ -312,7 +395,10 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
 
                     # delta_2 should be greater than 1 for repulsion
                     if (delta2 < 1) {
-                        print(paste("Warning: Fitted delta2 < 1, adjusting to 1.5 for repulsion. Old value: ", delta2))
+                        print(paste(
+                            "Warning: Fitted delta2 < 1, adjusting to 1.5 for repulsion. Old value: ",
+                            delta2
+                        ))
                         delta2 <- 1.5 # Adjust shape parameter if needed
                     }
 
@@ -327,7 +413,9 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
                     cat("  gamma =", gamma_param, "\n")
                 },
                 error = function(e) {
-                    cat("Warning: Could not fit gamma distribution to inter-cluster distances\n")
+                    cat(
+                        "Warning: Could not fit gamma distribution to inter-cluster distances\n"
+                    )
                     cat("Error:", e$message, "\n")
                     delta2 <<- 2
                     zeta <<- 2
@@ -339,7 +427,9 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
             delta2 <- 2
             zeta <- 2
             gamma_param <- 2
-            cat("Warning: Not enough inter-cluster distances, using default values\n")
+            cat(
+                "Warning: Not enough inter-cluster distances, using default values\n"
+            )
         }
     } else {
         # Fallback values
@@ -370,22 +460,34 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
             algorithm_rate_A <- algorithm_shape_A / empirical_mean_A
 
             p1 <- ggplot(A_df, aes(x = Distance)) +
-                geom_histogram(aes(y = after_stat(density)),
-                    bins = 30, fill = "lightblue",
-                    color = "black", alpha = 0.7
+                geom_histogram(
+                    aes(y = after_stat(density)),
+                    bins = 30,
+                    fill = "lightblue",
+                    color = "black",
+                    alpha = 0.7
                 ) +
                 stat_function(
                     fun = dgamma,
-                    args = list(shape = algorithm_shape_A, rate = algorithm_rate_A),
-                    color = "red", linewidth = 1
+                    args = list(
+                        shape = algorithm_shape_A,
+                        rate = algorithm_rate_A
+                    ),
+                    color = "red",
+                    linewidth = 1
                 ) +
                 labs(
                     title = paste(
                         "Within-Cluster Distances with Algorithm's Gamma\n",
-                        "δ₁ (shape) =", round(algorithm_shape_A, 3),
-                        ", α =", round(alpha, 3), ", β =", round(beta, 3)
+                        "δ₁ (shape) =",
+                        round(algorithm_shape_A, 3),
+                        ", α =",
+                        round(alpha, 3),
+                        ", β =",
+                        round(beta, 3)
                     ),
-                    x = "Distance", y = "Density"
+                    x = "Distance",
+                    y = "Density"
                 ) +
                 theme_minimal()
             print(p1)
@@ -402,22 +504,34 @@ set_hyperparameters <- function(dist_matrix, k_elbow, ground_truth = NULL, plot_
             algorithm_rate_B <- algorithm_shape_B / empirical_mean_B
 
             p2 <- ggplot(B_df, aes(x = Distance)) +
-                geom_histogram(aes(y = after_stat(density)),
-                    bins = 30, fill = "lightgreen",
-                    color = "black", alpha = 0.7
+                geom_histogram(
+                    aes(y = after_stat(density)),
+                    bins = 30,
+                    fill = "lightgreen",
+                    color = "black",
+                    alpha = 0.7
                 ) +
                 stat_function(
                     fun = dgamma,
-                    args = list(shape = algorithm_shape_B, rate = algorithm_rate_B),
-                    color = "blue", linewidth = 1
+                    args = list(
+                        shape = algorithm_shape_B,
+                        rate = algorithm_rate_B
+                    ),
+                    color = "blue",
+                    linewidth = 1
                 ) +
                 labs(
                     title = paste(
                         "Inter-Cluster Distances with Algorithm's Gamma\n",
-                        "δ₂ (shape) =", round(algorithm_shape_B, 3),
-                        ", ζ =", round(zeta, 3), ", γ =", round(gamma_param, 3)
+                        "δ₂ (shape) =",
+                        round(algorithm_shape_B, 3),
+                        ", ζ =",
+                        round(zeta, 3),
+                        ", γ =",
+                        round(gamma_param, 3)
                     ),
-                    x = "Distance", y = "Density"
+                    x = "Distance",
+                    y = "Density"
                 ) +
                 theme_minimal()
             print(p2)
@@ -549,15 +663,20 @@ compute_kde_distances <- function(dens1, dens2, type = "Histogram-Divergence") {
         temp_1 <- y1_interp > 0
         temp_2 <- y2_interp > 0
         temp_3 <- temp_1 & temp_2
-        kl1 <- sum(y1_interp[temp_3] * log(y1_interp[temp_3] / y2_interp[temp_3]) * dx)
-        kl2 <- sum(y2_interp[temp_3] * log(y2_interp[temp_3] / y1_interp[temp_3]) * dx)
+        kl1 <- sum(
+            y1_interp[temp_3] * log(y1_interp[temp_3] / y2_interp[temp_3]) * dx
+        )
+        kl2 <- sum(
+            y2_interp[temp_3] * log(y2_interp[temp_3] / y1_interp[temp_3]) * dx
+        )
 
         jeffrey_divergence <- kl1 + kl2
         return(jeffrey_divergence)
     } else if (type == "chi2") {
         # Compute Chi-squared distance
         temp_2 <- y2_interp > 0
-        chi2_distance <- ((y1_interp[temp_2] - y2_interp[temp_2])^2) / y2_interp[temp_2]
+        chi2_distance <- ((y1_interp[temp_2] - y2_interp[temp_2])^2) /
+            y2_interp[temp_2]
         return(dx * sum(chi2_distance))
     } else if (type == "euclidean") {
         # Compute Euclidean distance

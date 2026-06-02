@@ -21,16 +21,17 @@ set.seed(44)
 ## Load real data
 files_folder <- "real_data/LA"
 files <- list.files(files_folder)
-file_chosen <- files[3]
-dist_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
+file_chosen <- files[8]
+data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
+data_matrix <- matrix(sapply(data_matrix, function(x) x$mean), ncol = 1)
 puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
 puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
 # plot_distance(dist_matrix)
 
-if (min(dist_matrix) < 0) {
-    dist_matrix <- dist_matrix + abs(min(dist_matrix))
-}
-diag(dist_matrix) <- 0
+# if (min(dist_matrix) < 0) {
+#     dist_matrix <- dist_matrix + abs(min(dist_matrix))
+# }
+# diag(dist_matrix) <- 0
 
 ##############################################################################
 # Spatial Adjacency Matrix ====
@@ -63,27 +64,39 @@ if (!isSymmetric(W)) {
 #     k_elbow = 3, plot_clustering = FALSE, plot_distribution = FALSE
 # )
 # saveRDS(hyperparams, file = paste0(files_folder, "/hyperparameters_", sub("\\.rds$", "", file_chosen), ".rds"))
-hyperparams <- readRDS(file = paste0(files_folder, "/hyperparameters_", sub("\\.rds$", "", file_chosen), ".rds"))
+# hyperparams <- readRDS(
+#     file = paste0(
+#         files_folder,
+#         "/hyperparameters_",
+#         sub("\\.rds$", "", file_chosen),
+#         ".rds"
+#     )
+# )
+
+hyperparams <- readRDS(file = paste0(files_folder, "/", files[6]))
 
 ##############################################################################
 # Parameter Object Initialization ====
 ##############################################################################
 
 # Create Params using factory function instead of module constructor
-process_param <- create_NGGP_params(
-    1, # a
-    0.1, # sigma
-    1 # tau
-)
+# process_param <- create_NGGP_params(
+#     1, # a
+#     0.1, # sigma
+#     1 # tau
+# )
 
-utils_param <- create_utils_params(5000, 15000, dist_matrix)
-likelihood_param <- create_Natarajan_params(
-    hyperparams$delta1,
-    hyperparams$alpha,
-    hyperparams$beta,
-    hyperparams$delta2,
-    hyperparams$gamma,
-    hyperparams$zeta
+process_param <- create_DP_params(3)
+s2 <- var(data_matrix)
+alpha0 <- 2
+
+utils_param <- create_utils_params(5000, 15000, data_matrix)
+likelihood_param <- create_GaussianMixtureModel_params(
+    data_matrix,
+    m0 = mean(data_matrix),
+    kappa0 = 1,
+    alpha0 = alpha0,
+    beta0 = s2 * (alpha0 - 1)
 )
 
 
@@ -113,7 +126,15 @@ print(table(hyperparams$initial_clusters))
 # MCMC Execution ====
 ##############################################################################
 
-mcmc_result <- run_mcmc(likelihood_param, process_param, utils_param, hyperparams$initial_clusters, W, continuos_covariates, binary_covariates)
+mcmc_result <- run_mcmc(
+    likelihood_param,
+    process_param,
+    utils_param,
+    hyperparams$initial_clusters,
+    W,
+    continuos_covariates,
+    binary_covariates
+)
 elapsed_time <- mcmc_result$elapsed_time
 
 ##############################################################################
@@ -126,7 +147,17 @@ process <- "NGGPWX" # Process type: "DP", "DPW", "NGGP", "NGGPW", NGGPWx
 method <- "LSS_SDDS25+Gibbs1" # MCMC method used
 initialization <- "kmeans" # Initialization strategy
 options <- ""
-filename <- paste0(data_type, "_", process, "_", method, "_", initialization, "_", options)
+filename <- paste0(
+    data_type,
+    "_",
+    process,
+    "_",
+    method,
+    "_",
+    initialization,
+    "_",
+    options
+)
 save_with_name(utils_param, process_param, initialization, filename)
 
 ##############################################################################
