@@ -31,7 +31,7 @@ Data::Data(const utils_params &p, const Eigen::VectorXi &initial_allocations)
   }
 }
 
-double Data::get_distance(int i, int j) const {
+double Data::get_data(int i, int j) const {
 #if VERBOSITY_LEVEL >= 1
   if (i < 0 || i >= p.n || j < 0 || j >= p.p) {
     throw std::out_of_range("Index out of bounds in get_distance");

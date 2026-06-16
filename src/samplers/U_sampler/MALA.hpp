@@ -14,7 +14,7 @@
  * variable U.
  *
  * @details This class implements the MALA algorithm, a gradient-based MCMC
- * sampler that uses score function to propose more informed
+ * sampler that uses first-order derivative information to propose more informed
  * moves in the parameter space. The algorithm can operate either on U directly
  * or on V = log(U) for improved numerical stability.
  *
