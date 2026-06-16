@@ -198,7 +198,6 @@ public:
    * @brief Constructor for Split-Merge sampler
    *
    * @param d Reference to Data object containing observations
-   * @param p Reference to Params object with hyperparameters
    * @param l Reference to Likelihood object for probability computations
    * @param pr Reference to Process object defining the prior
    * @param shuffle Flag to enable shuffle moves in addition to split-merge
@@ -207,8 +206,8 @@ public:
    * shuffle moves. When shuffle is enabled, the algorithm can propose
    * redistributions between existing clusters in addition to split-merge moves.
    */
-  SplitMerge(Data &d, Params &p, Likelihood &l, Process &pr, bool shuffle)
-      : Sampler(d, p, l, pr), shuffle_bool(shuffle), gen(rd()) {};
+  SplitMerge(Data &d, Likelihood &l, Process &pr, bool shuffle)
+      : Sampler(d, l, pr), shuffle_bool(shuffle), gen(rd()) {};
 
   // ========== MCMC Interface ==========
 

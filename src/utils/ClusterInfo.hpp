@@ -12,6 +12,8 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <unordered_map>
+#include <vector>
 
 /**
  * @class ClusterInfo

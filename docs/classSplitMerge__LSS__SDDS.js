@@ -1,6 +1,6 @@
 var classSplitMerge__LSS__SDDS =
 [
-    [ "SplitMerge_LSS_SDDS", "classSplitMerge__LSS__SDDS.html#a0c36977c3b8be71fbfbfe3056f9630b3", null ],
+    [ "SplitMerge_LSS_SDDS", "classSplitMerge__LSS__SDDS.html#a3401e0a0393dd4b3816fa40ce825b71c", null ],
     [ "choose_clusters_shuffle", "classSplitMerge__LSS__SDDS.html#a96cc367501cc94c64ce76ab2eaf9395f", null ],
     [ "choose_indeces", "classSplitMerge__LSS__SDDS.html#a9887cb056c346c7aed94db4f25b1122a", null ],
     [ "compute_acceptance_ratio_merge", "classSplitMerge__LSS__SDDS.html#aa4348f50180fe57df8d86a497df90acd", null ],
@@ -33,6 +33,7 @@ var classSplitMerge__LSS__SDDS =
     [ "log_split_gibbs_prob", "classSplitMerge__LSS__SDDS.html#ae11d1391d015b667789491845f9a95e1", null ],
     [ "merge_moves", "classSplitMerge__LSS__SDDS.html#a6453c89439e54af96f82a95732e93ba8", null ],
     [ "original_allocations", "classSplitMerge__LSS__SDDS.html#a77fd0be8af2fef90083898469a27599b", null ],
+    [ "params", "classSplitMerge__LSS__SDDS.html#a090b7944c6dd429faddafac93cd7f2ed", null ],
     [ "probs", "classSplitMerge__LSS__SDDS.html#a72368dd573af97e4d3b4ea321805eb1e", null ],
     [ "rand_split_prob", "classSplitMerge__LSS__SDDS.html#a703cfdea33d5b09e8ad73128f9153a87", null ],
     [ "S", "classSplitMerge__LSS__SDDS.html#ab89d3b1669dc604e8eacb2ee938a93a0", null ],

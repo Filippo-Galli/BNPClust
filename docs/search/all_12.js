@@ -10,11 +10,11 @@ var searchData=
   ['lgamma_5fnu_5fn_7',['lgamma_nu_n',['../classContinuosCovariatesModule.html#ae00fb56ba32f5e3a52036391bff110cd',1,'ContinuosCovariatesModule::lgamma_nu_n'],['../classContinuosCovariatesModuleCache.html#aa3730d92d4635f6dde572672e5814e3d',1,'ContinuosCovariatesModuleCache::lgamma_nu_n']]],
   ['lgamma_5fzeta_5fmt_5fcache_8',['lgamma_zeta_mt_cache',['../classNatarajan__likelihood.html#aa04b34c60b0ebc945268536582b97da2',1,'Natarajan_likelihood::lgamma_zeta_mt_cache'],['../classNatarajan__likelihood__summaryStats.html#a8a9e150b2f612defd368a5334680d07e',1,'Natarajan_likelihood_summaryStats::lgamma_zeta_mt_cache']]],
   ['licensing_9',['💡 Usage &amp;amp; Licensing',['../index.html#autotoc_md17',1,'']]],
-  ['likelihood_10',['Likelihood',['../classLikelihood.html',1,'Likelihood'],['../classLikelihood.html#a2072dc2858072ebe158613d36631f5c0',1,'Likelihood::Likelihood()']]],
+  ['likelihood_10',['Likelihood',['../classLikelihood.html',1,'Likelihood'],['../classLikelihood.html#a8cd2ec2827352893b9b0409c7f0ef71d',1,'Likelihood::Likelihood()']]],
   ['likelihood_11',['likelihood',['../classSampler.html#a1572ed0ff1a7ace0f1c6b60954200d8c',1,'Sampler']]],
   ['likelihood_20models_12',['Likelihood Models',['../index.html#autotoc_md10',1,'']]],
   ['likelihood_2ehpp_13',['Likelihood.hpp',['../Likelihood_8hpp.html',1,'']]],
-  ['log_5fa_14',['log_a',['../classProcess.html#a38b41ae4bad9a3a5f4b474f2f5a18561',1,'Process']]],
+  ['log_5fa_14',['log_a',['../classDP.html#ae8a46a96f688a74d4e828937d8bc42c4',1,'DP::log_a'],['../classNGGP.html#abce87a151ca3c3557e52e4334d07a284',1,'NGGP::log_a']]],
   ['log_5fb_15',['log_B',['../classContinuosCovariatesModule.html#a8b2f2cd364843d375a5cbcbcd54768ed',1,'ContinuosCovariatesModule::log_B'],['../classContinuosCovariatesModuleCache.html#ab04aec8326eb891b0ec451a9b7eae4fe',1,'ContinuosCovariatesModuleCache::log_B']]],
   ['log_5fbeta_5falpha_16',['log_beta_alpha',['../classGamma__likelihood.html#a0b2b5c5b2922a8f0bae62f520d6343f8',1,'Gamma_likelihood::log_beta_alpha'],['../classNatarajan__likelihood.html#a89c04338709a26e758b4f3ea4f45738c',1,'Natarajan_likelihood::log_beta_alpha'],['../classNatarajan__likelihood__summaryStats.html#a8dcd511a3358dc2f49bf3ffdbd589f8c',1,'Natarajan_likelihood_summaryStats::log_beta_alpha']]],
   ['log_5fbeta_5fprior_17',['log_beta_prior',['../classBinaryCovariatesModule.html#a11b8c632950b73912efc3e0619b94b30',1,'BinaryCovariatesModule::log_beta_prior'],['../classBinaryCovariatesModuleCache.html#aecbbe69c9e7cf4f109322595bec99a47',1,'BinaryCovariatesModuleCache::log_beta_prior']]],
@@ -28,5 +28,5 @@ var searchData=
   ['log_5fsplit_5fgibbs_5fprob_25',['log_split_gibbs_prob',['../classSplitMerge.html#afefac12e75094f3e256a9c6c2adda20f',1,'SplitMerge::log_split_gibbs_prob'],['../classSplitMerge__LSS.html#ace64a91822dea799445ec13c33d54e3c',1,'SplitMerge_LSS::log_split_gibbs_prob'],['../classSplitMerge__LSS__SDDS.html#ae11d1391d015b667789491845f9a95e1',1,'SplitMerge_LSS_SDDS::log_split_gibbs_prob'],['../classSplitMerge__SAMS.html#a5e4e5d49b7be84ec2b6aa6fce0a629a9',1,'SplitMerge_SAMS::log_split_gibbs_prob']]],
   ['log_5fv_26',['log_v',['../classContinuosCovariatesModule.html#adcc85d41e38ef7946c47cf3ed18504ea',1,'ContinuosCovariatesModule::log_v'],['../classContinuosCovariatesModuleCache.html#a19013ebbb011fdbdb1c5f0f8b8855f8a',1,'ContinuosCovariatesModuleCache::log_v']]],
   ['log_5fv_5fplus_5fnb_27',['log_v_plus_nB',['../classContinuosCovariatesModule.html#a4df8c5409a61c52ef1d7a738dbae9f2c',1,'ContinuosCovariatesModule::log_v_plus_nB'],['../classContinuosCovariatesModuleCache.html#a4e257234bdb28ed33d6c4802a69a697c',1,'ContinuosCovariatesModuleCache::log_v_plus_nB']]],
-  ['lss_5fsdds_5faccepted_5fmoves_28',['lss_sdds_accepted_moves',['../bindings_8cpp.html#ad5784fe008fd13e302198282c09d496e',1,'bindings.cpp']]]
+  ['lss_5fsdds_5faccepted_5fmoves_28',['lss_sdds_accepted_moves',['../r__bindings_8cpp.html#ad5784fe008fd13e302198282c09d496e',1,'r_bindings.cpp']]]
 ];

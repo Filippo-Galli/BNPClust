@@ -1,6 +1,6 @@
 var classProcess =
 [
-    [ "Process", "classProcess.html#a8bd31d2434ca052d9a7e2b803e346b8e", null ],
+    [ "Process", "classProcess.html#a177d7c13ea02199486c4a7d0823a2374", null ],
     [ "~Process", "classProcess.html#a7ff358c1d3b155bc09e1271266cdce7d", null ],
     [ "gibbs_prior_existing_cluster", "classProcess.html#a17d00dd1cdddc0c2c8b3d4155afcb54c", null ],
     [ "gibbs_prior_existing_clusters", "classProcess.html#aa217cf47b5d0293b0f7d4875f130cef6", null ],
@@ -21,9 +21,7 @@ var classProcess =
     [ "data", "classProcess.html#af8d15d280b7b72defee3438abf1f9c8f", null ],
     [ "idx_i", "classProcess.html#a86e6ee0bfe7bcbfc5da6e8e54dc827a9", null ],
     [ "idx_j", "classProcess.html#a6268d4e1236ecc0a2a5a7af400c7868b", null ],
-    [ "log_a", "classProcess.html#a38b41ae4bad9a3a5f4b474f2f5a18561", null ],
     [ "old_allocations", "classProcess.html#a837d783fac7c9f12243cd93b4534e3e4", null ],
     [ "old_cluster_members", "classProcess.html#a4155440e49ade154fd118db2cfdb36c9", null ],
-    [ "old_K", "classProcess.html#a25b31fde5e8cd40db71ea6a6fd12252b", null ],
-    [ "params", "classProcess.html#a2793ccf3c3fe37432a7e19ba2de0e885", null ]
+    [ "old_K", "classProcess.html#a25b31fde5e8cd40db71ea6a6fd12252b", null ]
 ];

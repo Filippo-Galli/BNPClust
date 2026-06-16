@@ -9,6 +9,10 @@ latex/
 # direnv
 .direnv
 
+# build directory
+build/
+tmp/
+
 # pre-commit
 .pre-commit-config.yaml
 
@@ -27,6 +31,7 @@ old_results/
 
 # mcmc log files
 *.txt
+!CMakeLists.txt
 *.png
 
 # Simulation data folder
@@ -36,7 +41,7 @@ input/
 raw/
 
 
-# Podman 
+# Podman
 .config/
 
 # VSCode

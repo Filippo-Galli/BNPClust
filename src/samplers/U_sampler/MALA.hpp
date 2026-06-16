@@ -1,6 +1,7 @@
 /**
  * @file MALA.hpp
- * @brief Metropolis-Adjusted Langevin Algorithm (MALA) sampler for the latent variable U.
+ * @brief Metropolis-Adjusted Langevin Algorithm (MALA) sampler for the latent
+ * variable U.
  */
 
 #pragma once
@@ -136,10 +137,10 @@ public:
    * @param tuning If true, enable Robbins-Monro adaptive tuning (default:
    * false)
    */
-  MALA(Params &p, Data &d, bool use_V = false, double eps = 1,
+  MALA(NGGP_params &p, Data &d, bool use_V = false, double eps = 1,
        bool tuning = false)
       : U_sampler(p, d), epsilon(eps), old_epsilon(epsilon),
-        tuning_enabled(tuning) {};
+        tuning_enabled(tuning), use_V(use_V) {};
 
   /**
    * @brief Performs one MALA update step for the latent variable U.

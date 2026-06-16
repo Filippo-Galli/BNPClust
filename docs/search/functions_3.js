@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['gamma_5flikelihood_0',['Gamma_likelihood',['../classGamma__likelihood.html#ad5b9fc84495b785f706300439c9c83d1',1,'Gamma_likelihood']]],
+  ['gamma_5flikelihood_0',['Gamma_likelihood',['../classGamma__likelihood.html#af24a9df737813ecff6bfc92c80d82268',1,'Gamma_likelihood']]],
   ['get_5facceptance_5frate_1',['get_acceptance_rate',['../classU__sampler.html#addfaeffc2f038a144332e96a6bf1dc7d',1,'U_sampler']]],
   ['get_5faccepted_5fmerge_2',['get_accepted_merge',['../classSplitMerge.html#ad259991cb650d3c053adaedb610f31b9',1,'SplitMerge::get_accepted_merge()'],['../classSplitMerge__LSS.html#aa8a4414bb201370286b0dbad7e73ea68',1,'SplitMerge_LSS::get_accepted_merge()'],['../classSplitMerge__LSS__SDDS.html#a6e45dc8626f2be2a0f8f83aec6d59281',1,'SplitMerge_LSS_SDDS::get_accepted_merge()'],['../classSplitMerge__SAMS.html#adc7ce8d882f8a3c08575ae4494580255',1,'SplitMerge_SAMS::get_accepted_merge()']]],
   ['get_5faccepted_5fshuffle_3',['get_accepted_shuffle',['../classSplitMerge.html#af711a9a7ca43c343a28bda7c9cc7ae3e',1,'SplitMerge::get_accepted_shuffle()'],['../classSplitMerge__LSS.html#ac4549dbcb5b175229392e7aab4ed694d',1,'SplitMerge_LSS::get_accepted_shuffle()'],['../classSplitMerge__LSS__SDDS.html#a890279b7dbfd4b286b83308720fb5584',1,'SplitMerge_LSS_SDDS::get_accepted_shuffle()'],['../classSplitMerge__SAMS.html#a6d446d7fd2fbbf4f34fa85c1f4aa2696',1,'SplitMerge_SAMS::get_accepted_shuffle()']]],
@@ -9,13 +9,13 @@ var searchData=
   ['get_5fcluster_5fassignment_6',['get_cluster_assignment',['../classData.html#a01186813be50f1785aff75c43835ae12',1,'Data']]],
   ['get_5fcluster_5fassignments_7',['get_cluster_assignments',['../classData.html#aed93ea1d6166151c8ff89a3c11f4be35',1,'Data']]],
   ['get_5fcluster_5fassignments_5fref_8',['get_cluster_assignments_ref',['../classData.html#ac7f783945481fdf95a9f0d56b7de116f',1,'Data']]],
-  ['get_5fcluster_5finfo_5fptr_9',['get_cluster_info_ptr',['../bindings_8cpp.html#af6420f6878380ebad2290d874c42b0a3',1,'bindings.cpp']]],
+  ['get_5fcluster_5finfo_5fptr_9',['get_cluster_info_ptr',['../r__bindings_8cpp.html#af6420f6878380ebad2290d874c42b0a3',1,'r_bindings.cpp']]],
   ['get_5fcluster_5fmap_10',['get_cluster_map',['../classData.html#a0227e3d4ce6e235b9ad0381ace11ab70',1,'Data']]],
   ['get_5fcluster_5fmap_5fcopy_11',['get_cluster_map_copy',['../classData.html#a2cc3000cdcf05d51791934abf53cca14',1,'Data']]],
   ['get_5fcluster_5fsize_12',['get_cluster_size',['../classData.html#a2b7114221a3a42f608e4a814e74030e2',1,'Data']]],
   ['get_5fcluster_5fstats_13',['get_cluster_stats',['../classBinaryCache.html#a9956fc3cbb7e3cf2a494e65379694190',1,'BinaryCache::get_cluster_stats()'],['../classContinuosCache.html#afeaa353171c0b519e8402c618b39848f',1,'ContinuosCache::get_cluster_stats()'],['../classSpatialCache.html#a381a484d8a722b715e9305448872d7d6',1,'SpatialCache::get_cluster_stats()']]],
   ['get_5fcluster_5fstats_5fref_14',['get_cluster_stats_ref',['../classBinaryCache.html#a89cb7b23527998ec3583e07f8b65c261',1,'BinaryCache::get_cluster_stats_ref()'],['../classContinuosCache.html#abd88173774997a1314dadaeafd22c291',1,'ContinuosCache::get_cluster_stats_ref()'],['../classSpatialCache.html#a3c6522fd60a06aedf10841fad474a198',1,'SpatialCache::get_cluster_stats_ref()']]],
-  ['get_5fdata_5fptr_15',['get_data_ptr',['../bindings_8cpp.html#a0b90b94c00df80e382f7e4ef384457d9',1,'bindings.cpp']]],
+  ['get_5fdata_5fptr_15',['get_data_ptr',['../r__bindings_8cpp.html#a0b90b94c00df80e382f7e4ef384457d9',1,'r_bindings.cpp']]],
   ['get_5fdistance_16',['get_distance',['../classData.html#ad7e997f17eb2f794c0dfc9b6b73260b0',1,'Data']]],
   ['get_5fk_17',['get_K',['../classData.html#adf1f6a52cebebeb2afe3a3bdb49fc2fe',1,'Data']]],
   ['get_5fn_18',['get_n',['../classData.html#a11ff2cd14f9af453675c46bcb0107d3b',1,'Data']]],

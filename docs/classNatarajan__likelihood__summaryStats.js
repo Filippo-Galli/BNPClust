@@ -1,6 +1,6 @@
 var classNatarajan__likelihood__summaryStats =
 [
-    [ "Natarajan_likelihood_summaryStats", "classNatarajan__likelihood__summaryStats.html#aa273891c04a7d1aed3f7c8df14497f5d", null ],
+    [ "Natarajan_likelihood_summaryStats", "classNatarajan__likelihood__summaryStats.html#a5afe31582d8638ced0e275932cb8cad8", null ],
     [ "cluster_loglikelihood", "classNatarajan__likelihood__summaryStats.html#af351e03255023e89c201acaa90a728ad", null ],
     [ "cluster_loglikelihood", "classNatarajan__likelihood__summaryStats.html#a41e09286f1c4fb6893fa3947fa7c52a7", null ],
     [ "compute_cohesion", "classNatarajan__likelihood__summaryStats.html#a0062b35d8a6164520e259d95399b9e53", null ],
@@ -13,5 +13,7 @@ var classNatarajan__likelihood__summaryStats =
     [ "lgamma_zeta_mt_cache", "classNatarajan__likelihood__summaryStats.html#a8a9e150b2f612defd368a5334680d07e", null ],
     [ "log_beta_alpha", "classNatarajan__likelihood__summaryStats.html#a8dcd511a3358dc2f49bf3ffdbd589f8c", null ],
     [ "log_D_data", "classNatarajan__likelihood__summaryStats.html#a1babec9d22c12920efeefd707b8fba08", null ],
-    [ "log_gamma_zeta", "classNatarajan__likelihood__summaryStats.html#ae8b05dce0f74e0b4065f392b519a0809", null ]
+    [ "log_gamma_zeta", "classNatarajan__likelihood__summaryStats.html#ae8b05dce0f74e0b4065f392b519a0809", null ],
+    [ "params", "classNatarajan__likelihood__summaryStats.html#ac655b24a872ffa01c52510a09ddd3d2a", null ],
+    [ "utils", "classNatarajan__likelihood__summaryStats.html#a2ada59449f1227a68bac4d1c0a29f691", null ]
 ];

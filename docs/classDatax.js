@@ -1,6 +1,6 @@
 var classDatax =
 [
-    [ "Datax", "classDatax.html#ac1a24ac730ac20058f1104ebb3968cee", null ],
+    [ "Datax", "classDatax.html#a6d9ac6d69f2d3e88ae4fe170ead2bb9f", null ],
     [ "~Datax", "classDatax.html#ac404a7ec2f1494a8a3a03d08654e378e", null ],
     [ "compact_cluster", "classDatax.html#a95fd033c4009e7ed7dc28b72ac3f8460", null ],
     [ "restore_state", "classDatax.html#a238b5834c0a86b25ebdbb72eab1432cd", null ],

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "../params/NGGP-params.hpp"
 #include "../samplers/U_sampler/U_sampler.hpp"
 #include "../utils/Process.hpp"
 
@@ -26,6 +27,8 @@ protected:
    * @name Private Member Variables
    * @{
    */
+
+  const NGGP_params &params;
 
   /**
    * @brief Reference to the U_sampler instance for updating the latent variable
@@ -51,6 +54,9 @@ protected:
 
   /** @} */
 
+  /** @brief Precomputed logarithm of total mass parameter for efficiency */
+  const double log_a = log(params.a);
+
 public:
   /**
    * @brief Constructor for the Normalized Generalized Gamma Process.
@@ -61,8 +67,8 @@ public:
    * @param mh Reference to a U_sampler instance (e.g., RWMH or MALA) for
    * updating the latent variable U via MCMC.
    */
-  NGGP(Data &d, Params &p, U_sampler &mh)
-      : Process(d, p), gen(rd()), U_sampler_method(mh) {};
+  NGGP(Data &d, NGGP_params &p, U_sampler &mh)
+      : Process(d), params(p), gen(rd()), U_sampler_method(mh) {};
 
   /**
    * @name Gibbs Sampling Methods

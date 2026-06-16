@@ -1,6 +1,6 @@
 var classNGGPx =
 [
-    [ "NGGPx", "classNGGPx.html#a42871b9d1544f5a6382b0d0a01256e9f", null ],
+    [ "NGGPx", "classNGGPx.html#a4a18500e5cf62bce72d90ded68cb10f6", null ],
     [ "gibbs_prior_existing_cluster", "classNGGPx.html#a1530bb67cdc79ef83009016cdb912ead", null ],
     [ "gibbs_prior_existing_clusters", "classNGGPx.html#af3ceb8c061b7a549e5c739cad1279b1a", null ],
     [ "gibbs_prior_new_cluster", "classNGGPx.html#ae06f714e1810d931edbe88585730bd36", null ],

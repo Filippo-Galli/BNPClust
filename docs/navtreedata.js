@@ -77,9 +77,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ClusterInfo_8hpp.html",
-"classData.html#a084c9582515b320c586462db84fe9788",
-"classSplitMerge.html#a918acf018b41086f3ce1a1440aced4ad",
-"md_CONTRIBUTING.html#autotoc_md42"
+"classLikelihood.html",
+"classSplitMerge__LSS.html#ac4549dbcb5b175229392e7aab4ed694d",
+"r__bindings_8cpp.html#a83f6cfdeab82a77c1df10a7b22c2aada"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

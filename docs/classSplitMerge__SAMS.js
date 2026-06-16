@@ -1,6 +1,6 @@
 var classSplitMerge__SAMS =
 [
-    [ "SplitMerge_SAMS", "classSplitMerge__SAMS.html#af812bf4c32fef71ddae082bfa26d1465", null ],
+    [ "SplitMerge_SAMS", "classSplitMerge__SAMS.html#a09487a754a09e24b4c7b5f8df34c1bf0", null ],
     [ "choose_clusters_shuffle", "classSplitMerge__SAMS.html#a0f209904a93d4ba19a9e0b599fa1e8ea", null ],
     [ "choose_indeces", "classSplitMerge__SAMS.html#a7c24fa1ba190b6cf4adc2ac011ae5c33", null ],
     [ "compute_acceptance_ratio_merge", "classSplitMerge__SAMS.html#ab8cae3bc20e68ad01b70c12c5418fc75", null ],

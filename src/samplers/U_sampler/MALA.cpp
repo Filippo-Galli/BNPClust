@@ -1,7 +1,8 @@
 /**
  * @file MALA.cpp
- * @brief Implementation of the Metropolis-Adjusted Langevin Algorithm (MALA) for sampling the latent variable U.
-*/
+ * @brief Implementation of the Metropolis-Adjusted Langevin Algorithm (MALA)
+ * for sampling the latent variable U.
+ */
 
 #include "MALA.hpp"
 
@@ -69,7 +70,7 @@ void MALA::sampling_V() {
 
   // Metropolis-Hastings accept/reject step
   std::uniform_real_distribution<double> unif(0.0, 1.0);
-  bool accept = std::log(unif(gen)) < log_acceptance_ratio;
+  accept = std::log(unif(gen)) < log_acceptance_ratio;
   if (accept) {
     U = U_proposed;
     accepted_U++;

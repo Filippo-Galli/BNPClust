@@ -196,8 +196,8 @@ public:
    * @note The ZDNAM modification is automatically applied during sampling; no
    * additional configuration is needed.
    */
-  Neal3ZDNAM(Data &d, Params &p, Likelihood &l, Process &pr)
-      : Sampler(d, p, l, pr), gen(rd()) {};
+  Neal3ZDNAM(Data &d, Likelihood &l, Process &pr)
+      : Sampler(d, l, pr), gen(rd()) {};
 
   // ========== MCMC Interface ==========
 

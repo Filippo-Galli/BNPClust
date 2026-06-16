@@ -6,6 +6,8 @@
  */
 
 #include <Eigen/Dense>
+#include <unordered_map>
+#include <vector>
 
 /**
  * @class Module
@@ -28,9 +30,10 @@ protected:
     const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider;
 
 public:
-    Module(const Eigen::VectorXi *old_allocations_provider_ = nullptr, 
+    Module(const Eigen::VectorXi *old_allocations_provider_ = nullptr,
            const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
-        : old_allocations_provider(old_allocations_provider_), old_cluster_members_provider(old_cluster_members_provider_) {}
+        : old_allocations_provider(old_allocations_provider_),
+          old_cluster_members_provider(old_cluster_members_provider_) {}
 
     void set_old_allocations_provider(const Eigen::VectorXi *provider) { old_allocations_provider = provider; }
 

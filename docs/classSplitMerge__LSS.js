@@ -1,6 +1,6 @@
 var classSplitMerge__LSS =
 [
-    [ "SplitMerge_LSS", "classSplitMerge__LSS.html#a595c757322a9ad77de02a683f1617377", null ],
+    [ "SplitMerge_LSS", "classSplitMerge__LSS.html#a182b199a81c2f8cafca72d6c8bbf43d1", null ],
     [ "choose_clusters_shuffle", "classSplitMerge__LSS.html#a9db1efefb6e1fd16e8be534c540178ba", null ],
     [ "choose_indeces", "classSplitMerge__LSS.html#a72d1782c9ef51178895107d575fc4171", null ],
     [ "compute_acceptance_ratio_merge", "classSplitMerge__LSS.html#a424feff7106b2f43492078d82cf1434f", null ],
@@ -26,6 +26,7 @@ var classSplitMerge__LSS =
     [ "log_merge_gibbs_prob", "classSplitMerge__LSS.html#a16f2309b47927932ba6ec41a64665bd9", null ],
     [ "log_split_gibbs_prob", "classSplitMerge__LSS.html#ace64a91822dea799445ec13c33d54e3c", null ],
     [ "original_allocations", "classSplitMerge__LSS.html#a8469a38fe1119d98269a4373cc3d2063", null ],
+    [ "params", "classSplitMerge__LSS.html#a8519f34b98c3a82b045817e79b1a5b2a", null ],
     [ "S", "classSplitMerge__LSS.html#a339dbb5c0d5dcce9cf351c0dc34a29db", null ],
     [ "shuffle_bool", "classSplitMerge__LSS.html#afa850a59ac5189d46ea4f34babcb41e0", null ]
 ];

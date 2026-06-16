@@ -15,12 +15,10 @@
 
 #include "Data.hpp"
 #include "Likelihood.hpp"
-#include "Params.hpp"
 #include "Process.hpp"
 
-#include <random>
-#include <Rcpp.h>
 #include <Eigen/Dense>
+#include <random>
 
 /**
  * @brief Abstract base class for MCMC sampler implementations
@@ -43,7 +41,7 @@
  * The composition pattern allows flexible combinations of different data types,
  * likelihood models, process priors, and parameter configurations.
  *
- * @see Data, Params, Likelihood, Process
+ * @see Data, Likelihood, Process
  * @see Neal3, SplitMerge, SplitMerge_SAMS
  */
 class Sampler {
@@ -53,10 +51,6 @@ protected:
     /** @brief Reference to the data object containing observations and current
      * allocations */
     Data &data;
-
-    /** @brief Reference to the parameters object containing model hyperparameters
-     * and MCMC settings */
-    const Params &params;
 
     /** @brief Reference to the likelihood computation object for evaluating
      * cluster assignments */
@@ -80,8 +74,6 @@ public:
      *
      * @param d Reference to Data object containing observations and current
      * cluster assignments
-     * @param p Reference to Params object containing hyperparameters and
-     * simulation settings
      * @param l Reference to Likelihood object for evaluating assignment
      * probabilities
      * @param pr Reference to Process object (DP, NGGP, DPW, or NGGPW) defining
@@ -94,8 +86,7 @@ public:
      * - Different Likelihood models handle various data types and distributions
      * - Parameter settings control burn-in, iterations, and hyperparameter values
      */
-    Sampler(Data &d, const Params &p, const Likelihood &l, Process &pr)
-        : data(d), params(p), likelihood(l), process(pr) {};
+    Sampler(Data &d, const Likelihood &l, Process &pr) : data(d), likelihood(l), process(pr) {};
 
     // ========== Pure Virtual Interface ==========
 

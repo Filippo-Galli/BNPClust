@@ -21,16 +21,24 @@ set.seed(44)
 ## Load real data
 files_folder <- "real_data/LA"
 files <- list.files(files_folder)
-file_chosen <- files[3]
-dist_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
+file_chosen <- files[6]
+data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
+data_matrix <- matrix(sapply(data_matrix, function(x) x$mean), ncol = 1)
+
+# add to the first half of data_matrix
+data_matrix[1:(nrow(data_matrix) / 2), ] <- data_matrix[
+    1:(nrow(data_matrix) / 2),
+] +
+    1000
+
 puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
 puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
 # plot_distance(dist_matrix)
 
-if (min(dist_matrix) < 0) {
-    dist_matrix <- dist_matrix + abs(min(dist_matrix))
-}
-diag(dist_matrix) <- 0
+# if (min(dist_matrix) < 0) {
+#     dist_matrix <- dist_matrix + abs(min(dist_matrix))
+# }
+# diag(dist_matrix) <- 0
 
 ##############################################################################
 # Spatial Adjacency Matrix ====
@@ -49,10 +57,7 @@ if (!isSymmetric(W)) {
 # C++ Integration ====
 ##############################################################################
 
-## Load C++ implementation of MCMC algorithm
-# sourceCpp("src/bindings.cpp", rebuild = TRUE, cacheDir = "~/my_rcpp_cache") # useful for perf
-sourceCpp("src/bindings.cpp")
-cat("✅ C++ code compiled successfully!\n\n")
+## C++ implementation is compiled in R/mcmc_loop.R
 
 ##############################################################################
 # Hyperparameter Configuration ====
@@ -63,37 +68,53 @@ cat("✅ C++ code compiled successfully!\n\n")
 
 # Set hyperparameters based on distance matrix and save it for future use
 # hyperparams <- set_hyperparameters(dist_matrix,
-#   k_elbow = 3, plot_clustering = FALSE, plot_distribution = FALSE
+#     k_elbow = 3, plot_clustering = FALSE, plot_distribution = FALSE
 # )
 # saveRDS(hyperparams, file = paste0(files_folder, "/hyperparameters_", sub("\\.rds$", "", file_chosen), ".rds"))
-hyperparams <- readRDS(file = paste0(files_folder, "/hyperparameters_", sub("\\.rds$", "", file_chosen), ".rds"))
+# hyperparams <- readRDS(
+#     file = paste0(
+#         files_folder,
+#         "/hyperparameters_",
+#         sub("\\.rds$", "", file_chosen),
+#         ".rds"
+#     )
+# )
+
+hyperparams <- readRDS(file = paste0(files_folder, "/", files[5]))
 
 ##############################################################################
 # Parameter Object Initialization ====
 ##############################################################################
 
 # Create Params using factory function instead of module constructor
-param <- create_Params(
-    hyperparams$delta1,
-    hyperparams$alpha,
-    hyperparams$beta,
-    hyperparams$delta2,
-    hyperparams$gamma,
-    hyperparams$zeta,
-    5000, # BI
-    15000, # NI
-    1, # a
-    0.1, # sigma
-    1, # tau
-    dist_matrix # D (distance matrix)
+# process_param <- create_NGGP_params(
+#     1, # a
+#     0.1, # sigma
+#     1 # tau
+# )
+
+process_param <- create_DP_params(1)
+s2 <- var(data_matrix)
+alpha0 <- 2.5
+
+utils_param <- create_utils_params(10000, 30000, data_matrix)
+likelihood_param <- create_GaussianMixtureModel_params(
+    m0 = mean(data_matrix),
+    kappa0 = 1.0,
+    alpha0 = alpha0,
+    beta0 = (s2 * 0.15) * (alpha0 - 1)
 )
+
 
 ##############################################################################
 # Covariates Object Initialization ====
 ##############################################################################
 
 # Ensure W is integer matrix
-W <- matrix(as.integer(W), nrow = nrow(W), ncol = ncol(W))
+# W <- matrix(as.integer(W), nrow = nrow(W), ncol = ncol(W))
+
+# Ensure W is double matrix
+W <- matrix(as.double(W), nrow = nrow(W), ncol = ncol(W))
 continuos_covariates <- as.numeric(puma_age_data$AGEP_std_mean)
 binary_covariates <- as.integer(puma_sex_data$SEX_mode)
 
@@ -111,7 +132,15 @@ print(table(hyperparams$initial_clusters))
 # MCMC Execution ====
 ##############################################################################
 
-mcmc_result <- run_mcmc(param, hyperparams$initial_clusters, W, continuos_covariates, binary_covariates)
+mcmc_result <- run_mcmc(
+    likelihood_param,
+    process_param,
+    utils_param,
+    hyperparams$initial_clusters,
+    W,
+    continuos_covariates,
+    binary_covariates
+)
 elapsed_time <- mcmc_result$elapsed_time
 
 ##############################################################################
@@ -120,11 +149,22 @@ elapsed_time <- mcmc_result$elapsed_time
 file_chosen <- sub("\\.rds$", "", file_chosen)
 files_folder_clean <- gsub("/", "_", files_folder)
 data_type <- paste0(files_folder_clean, "_", sub("^distance_", "", file_chosen))
-process <- "NewData-NGGPWx-bin-cont" # Process type: "DP", "DPW", "NGGP", "NGGPW", NGGPWx
+process <- "NGGPWX" # Process type: "DP", "DPW", "NGGP", "NGGPW", NGGPWx
 method <- "LSS_SDDS25+Gibbs1" # MCMC method used
 initialization <- "kmeans" # Initialization strategy
-filename <- paste0(data_type, "_", process, "_", method, "_", initialization, "_")
-save_with_name("results/", param, filename)
+options <- ""
+filename <- paste0(
+    data_type,
+    "_",
+    process,
+    "_",
+    method,
+    "_",
+    initialization,
+    "_",
+    options
+)
+save_with_name(utils_param, process_param, initialization, filename)
 
 ##############################################################################
 # Visualization (Optional) ====

@@ -5,8 +5,8 @@
 
 #pragma once
 
+#include "../../params/NGGP-params.hpp"
 #include "../../utils/Data.hpp"
-#include "../../utils/Params.hpp"
 #include <random>
 
 /**
@@ -29,7 +29,7 @@ class U_sampler {
 
 protected:
   /** @brief Reference to the parameters object containing NGGP parameters. */
-  Params &params;
+  const NGGP_params &params;
 
   /** @brief Reference to the data object containing observations and cluster
    * assignments. */
@@ -151,7 +151,7 @@ public:
    * @param d Reference to the data object containing observations and cluster
    * assignments.
    */
-  U_sampler(Params &p, Data &d) : params(p), data(d) {};
+  U_sampler(NGGP_params &p, Data &d) : params(p), data(d) {};
 
   /**
    * @brief Pure virtual method to update the latent variable U.
@@ -170,13 +170,14 @@ public:
   double get_U() const { return U; }
 
   /**
-  * @brief Getter for the acceptance rate of U updates.
-  * @return The acceptance rate as a double.
-  */
+   * @brief Getter for the acceptance rate of U updates.
+   * @return The acceptance rate as a double.
+   */
   double get_acceptance_rate() const {
-    if(total_iterations == 0)
+    if (total_iterations == 0)
       return 0.0;
-    return static_cast<double>(accepted_U) / static_cast<double>(total_iterations);
+    return static_cast<double>(accepted_U) /
+           static_cast<double>(total_iterations);
   }
 
   /**

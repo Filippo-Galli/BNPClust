@@ -1,6 +1,6 @@
 var classData =
 [
-    [ "Data", "classData.html#a6483ab171a3c41a07758f279da16ca85", null ],
+    [ "Data", "classData.html#aa74733792d50df5ea1e46ab82f0b40af", null ],
     [ "~Data", "classData.html#a3635432c142836f46f99fbdf6273d135", null ],
     [ "compact_cluster", "classData.html#a084c9582515b320c586462db84fe9788", null ],
     [ "get_allocations", "classData.html#a76ebba89fa69c1f2ff4d2905882ee5cb", null ],
@@ -20,5 +20,5 @@ var classData =
     [ "allocations", "classData.html#aa3216ace6edfe6d6a3f522db636d4d49", null ],
     [ "cluster_members", "classData.html#a5cc015bc58a769616d92318242712825", null ],
     [ "K", "classData.html#aea3f372f41512f19256c760098f6a1fc", null ],
-    [ "params", "classData.html#a49af987ead9e377722a4a95a9b868d2c", null ]
+    [ "p", "classData.html#af3dfbaf4b0ed8222d2d204520107ae88", null ]
 ];

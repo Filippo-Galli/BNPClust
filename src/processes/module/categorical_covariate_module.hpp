@@ -7,6 +7,7 @@
 
 #include "../../utils/Data.hpp"
 #include "../../utils/Module.hpp"
+#include <numeric>
 
 /**
  * @class CategoricalCovariatesModule

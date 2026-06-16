@@ -1,6 +1,6 @@
 var classRWMH =
 [
-    [ "RWMH", "classRWMH.html#abd3f2472d65d54f0ff47ef63488c91d9", null ],
+    [ "RWMH", "classRWMH.html#a19f7b104d2efabda7b759d9732108c14", null ],
     [ "Robbins_Monro_tuning", "classRWMH.html#a81e2b14edfbb27123b3a291ae7057fb4", null ],
     [ "sampling_U", "classRWMH.html#af350f5e44ac4f74c84d41f87f52b1aa5", null ],
     [ "sampling_V", "classRWMH.html#a0067c5b24f41c79920c43b7f3ae66c76", null ],

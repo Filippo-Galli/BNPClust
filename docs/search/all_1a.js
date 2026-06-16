@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['tau_0',['tau',['../structParams.html#a9e4aad62277a980bfa8beaa0bd4ea529',1,'Params']]],
+  ['tau_0',['tau',['../structParams.html#a9e4aad62277a980bfa8beaa0bd4ea529',1,'Params::tau'],['../structNGGP__params.html#a81daae025daf94c27667c5cc60edc017',1,'NGGP_params::tau']]],
   ['tau_5fpower_5fsigma_1',['tau_power_sigma',['../classU__sampler.html#a74ac9522035e4694f3ce209d250a11f9',1,'U_sampler']]],
   ['test_20your_20changes_2',['5. Test Your Changes',['../md_CONTRIBUTING.html#autotoc_md26',1,'']]],
   ['the_20repository_3',['1. Fork the Repository',['../md_CONTRIBUTING.html#autotoc_md22',1,'']]],
