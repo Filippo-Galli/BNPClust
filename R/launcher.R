@@ -21,9 +21,16 @@ set.seed(44)
 ## Load real data
 files_folder <- "real_data/LA"
 files <- list.files(files_folder)
-file_chosen <- files[8]
+file_chosen <- files[6]
 data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
 data_matrix <- matrix(sapply(data_matrix, function(x) x$mean), ncol = 1)
+
+# add to the first half of data_matrix
+data_matrix[1:(nrow(data_matrix) / 2), ] <- data_matrix[
+    1:(nrow(data_matrix) / 2),
+] +
+    1000
+
 puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
 puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
 # plot_distance(dist_matrix)
@@ -73,7 +80,7 @@ if (!isSymmetric(W)) {
 #     )
 # )
 
-hyperparams <- readRDS(file = paste0(files_folder, "/", files[6]))
+hyperparams <- readRDS(file = paste0(files_folder, "/", files[5]))
 
 ##############################################################################
 # Parameter Object Initialization ====
@@ -86,17 +93,16 @@ hyperparams <- readRDS(file = paste0(files_folder, "/", files[6]))
 #     1 # tau
 # )
 
-process_param <- create_DP_params(3)
+process_param <- create_DP_params(1)
 s2 <- var(data_matrix)
-alpha0 <- 2
+alpha0 <- 2.5
 
-utils_param <- create_utils_params(5000, 15000, data_matrix)
+utils_param <- create_utils_params(10000, 30000, data_matrix)
 likelihood_param <- create_GaussianMixtureModel_params(
-    data_matrix,
     m0 = mean(data_matrix),
-    kappa0 = 1,
+    kappa0 = 1.0,
     alpha0 = alpha0,
-    beta0 = s2 * (alpha0 - 1)
+    beta0 = (s2 * 0.15) * (alpha0 - 1)
 )
 
 

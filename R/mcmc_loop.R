@@ -142,7 +142,7 @@ run_mcmc <- function(
     )
 
     # Instantiate Sampler (SplitMerge_LSS_SDDS) using factory function
-    sampler <- create_SplitMerge(
+    sm <- create_SplitMerge(
         data,
         likelihood,
         process,
@@ -170,10 +170,10 @@ run_mcmc <- function(
         process_update_params(process)
 
         # MCMC Step
-        #sampler_step(sampler)
+        sampler_step(sm)
 
         # Neal3 Step
-        if (i %% 1 == 0) {
+        if (i %% 25 == 0) {
             sampler_step(neal3)
         }
         # Store results
