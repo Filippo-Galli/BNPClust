@@ -14,7 +14,7 @@
  * variable U.
  *
  * @details This class implements the MALA algorithm, a gradient-based MCMC
- * sampler that uses first-order derivative information to propose more informed
+ * sampler that uses score function to propose more informed
  * moves in the parameter space. The algorithm can operate either on U directly
  * or on V = log(U) for improved numerical stability.
  *
@@ -140,7 +140,7 @@ public:
   MALA(NGGP_params &p, Data &d, bool use_V = false, double eps = 1,
        bool tuning = false)
       : U_sampler(p, d), epsilon(eps), old_epsilon(epsilon),
-        tuning_enabled(tuning) {};
+        tuning_enabled(tuning), use_V(use_V) {};
 
   /**
    * @brief Performs one MALA update step for the latent variable U.
