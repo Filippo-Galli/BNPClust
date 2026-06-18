@@ -11,6 +11,10 @@
 
 #include <Eigen/Dense>
 
+/**
+ * @brief Parameter struct for the Natarajan likelihood model.
+ */
+
 struct Natarajan_params {
 
     /** @brief Shape parameter for the first gamma distribution prior */
