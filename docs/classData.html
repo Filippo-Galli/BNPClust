@@ -117,8 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa74733792d50df5ea1e46ab82f0b40af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classData.html" title="Manages distance matrices and cluster allocations for points.">Data</a> object with a distance matrix.  <br /></td></tr>
 <tr class="memitem:a3635432c142836f46f99fbdf6273d135" id="r_a3635432c142836f46f99fbdf6273d135"><td class="memItemLeft">virtual&#160;</td><td class="memItemRight"><a class="el" href="#a3635432c142836f46f99fbdf6273d135">~Data</a> ()=default</td></tr>
 <tr id="pub-methods-0" class="groupHeader"><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:ad7e997f17eb2f794c0dfc9b6b73260b0" id="r_ad7e997f17eb2f794c0dfc9b6b73260b0"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ad7e997f17eb2f794c0dfc9b6b73260b0">get_distance</a> (int i, int j) const</td></tr>
-<tr class="memdesc:ad7e997f17eb2f794c0dfc9b6b73260b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getters.  <br /></td></tr>
+<tr class="memitem:a0927a8121fb24201602468d32c862668" id="r_a0927a8121fb24201602468d32c862668"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a0927a8121fb24201602468d32c862668">get_data</a> (int i, int j=0) const</td></tr>
+<tr class="memdesc:a0927a8121fb24201602468d32c862668"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getters.  <br /></td></tr>
 <tr class="memitem:a11ff2cd14f9af453675c46bcb0107d3b" id="r_a11ff2cd14f9af453675c46bcb0107d3b"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a11ff2cd14f9af453675c46bcb0107d3b">get_n</a> () const</td></tr>
 <tr class="memdesc:a11ff2cd14f9af453675c46bcb0107d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the total number of points.  <br /></td></tr>
 <tr class="memitem:adf1f6a52cebebeb2afe3a3bdb49fc2fe" id="r_adf1f6a52cebebeb2afe3a3bdb49fc2fe"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#adf1f6a52cebebeb2afe3a3bdb49fc2fe">get_K</a> () const</td></tr>
@@ -484,34 +484,34 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad7e997f17eb2f794c0dfc9b6b73260b0" name="ad7e997f17eb2f794c0dfc9b6b73260b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7e997f17eb2f794c0dfc9b6b73260b0">&#9670;&#160;</a></span>get_distance()</h2>
+<a id="a0927a8121fb24201602468d32c862668" name="a0927a8121fb24201602468d32c862668"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0927a8121fb24201602468d32c862668">&#9670;&#160;</a></span>get_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double Data::get_distance </td>
+          <td class="memname">double Data::get_data </td>
           <td>(</td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>i</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>j</em></span>&#160;) const</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>j</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;) const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Getters. </p>
-<p>Gets the distance between two points </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Gets the data point at index i column j </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">i</td><td>Index of first point </td></tr>
-    <tr><td class="paramname">j</td><td>Index of second point </td></tr>
+    <tr><td class="paramname">i</td><td>Index of the point </td></tr>
+    <tr><td class="paramname">j</td><td>Index of the column </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Distance between points i and j </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Value of the data point at (i, j) </dd></dl>
 
 </div>
 </div>

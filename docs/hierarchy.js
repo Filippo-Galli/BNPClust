@@ -8,12 +8,16 @@ var hierarchy =
     [ "BinaryCache::ClusterStats", "structBinaryCache_1_1ClusterStats.html", null ],
     [ "ContinuosCache::ClusterStats", "structContinuosCache_1_1ClusterStats.html", null ],
     [ "ContinuosCovariatesModule::ClusterStats", "structContinuosCovariatesModule_1_1ClusterStats.html", null ],
+    [ "GaussianMixtureModel_likelihood::ClusterStats", "structGaussianMixtureModel__likelihood_1_1ClusterStats.html", null ],
     [ "SpatialCache::ClusterStats", "structSpatialCache_1_1ClusterStats.html", null ],
     [ "Data", "classData.html", [
       [ "Datax", "classDatax.html", null ]
     ] ],
+    [ "GaussianMixtureModel_params", "structGaussianMixtureModel__params.html", null ],
     [ "Likelihood", "classLikelihood.html", [
       [ "Gamma_likelihood", "classGamma__likelihood.html", null ],
+      [ "Gamma_likelihood_distances", "classGamma__likelihood__distances.html", null ],
+      [ "GaussianMixtureModel_likelihood", "classGaussianMixtureModel__likelihood.html", null ],
       [ "Natarajan_likelihood", "classNatarajan__likelihood.html", null ],
       [ "Natarajan_likelihood_summaryStats", "classNatarajan__likelihood__summaryStats.html", null ],
       [ "Null_likelihood", "classNull__likelihood.html", null ]

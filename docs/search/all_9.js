@@ -15,8 +15,10 @@ var searchData=
   ['allocations_12',['allocations',['../classData.html#aa3216ace6edfe6d6a3f522db636d4d49',1,'Data']]],
   ['allocations_5fptr_13',['allocations_ptr',['../classSpatialCache.html#aef64707c4d94d6f283f0aa1d1d05f380',1,'SpatialCache']]],
   ['alpha_14',['alpha',['../structParams.html#a881058e4167b8bbb7715e23975b0d893',1,'Params::alpha'],['../structNatarajan__params.html#aec614e6658273a392e129b1808de212a',1,'Natarajan_params::alpha']]],
-  ['alpha_5f0_15',['alpha_0',['../classCategoricalCovariatesModule.html#a87f7183a6639723ba0398f46c376a7c2',1,'CategoricalCovariatesModule']]],
-  ['always_5finline_16',['always_inline',['../classContinuosCovariatesModule.html#a5c491682596492f00aa7d4883674659b',1,'ContinuosCovariatesModule::always_inline'],['../classContinuosCovariatesModuleCache.html#ac5dd95a95b6796f0936166fc53c2843a',1,'ContinuosCovariatesModuleCache::always_inline']]],
-  ['and_20documentation_17',['docs and Documentation',['../index.html#autotoc_md6',1,'']]],
-  ['architecture_18',['🏗️ Architecture',['../index.html#autotoc_md7',1,'']]]
+  ['alpha0_15',['alpha0',['../structGaussianMixtureModel__params.html#a62f66077c1bf45ba7d5809581b001297',1,'GaussianMixtureModel_params']]],
+  ['alpha0_5flog_5fbeta0_16',['alpha0_log_beta0',['../classGaussianMixtureModel__likelihood.html#adc589c92ba075ec70fc836803d98559c',1,'GaussianMixtureModel_likelihood']]],
+  ['alpha_5f0_17',['alpha_0',['../classCategoricalCovariatesModule.html#a87f7183a6639723ba0398f46c376a7c2',1,'CategoricalCovariatesModule']]],
+  ['always_5finline_18',['always_inline',['../classContinuosCovariatesModule.html#a5c491682596492f00aa7d4883674659b',1,'ContinuosCovariatesModule::always_inline'],['../classContinuosCovariatesModuleCache.html#ac5dd95a95b6796f0936166fc53c2843a',1,'ContinuosCovariatesModuleCache::always_inline']]],
+  ['and_20documentation_19',['docs and Documentation',['../index.html#autotoc_md6',1,'']]],
+  ['architecture_20',['🏗️ Architecture',['../index.html#autotoc_md7',1,'']]]
 ];

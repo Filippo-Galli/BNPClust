@@ -10,7 +10,7 @@ var classData =
     [ "get_cluster_map", "classData.html#a0227e3d4ce6e235b9ad0381ace11ab70", null ],
     [ "get_cluster_map_copy", "classData.html#a2cc3000cdcf05d51791934abf53cca14", null ],
     [ "get_cluster_size", "classData.html#a2b7114221a3a42f608e4a814e74030e2", null ],
-    [ "get_distance", "classData.html#ad7e997f17eb2f794c0dfc9b6b73260b0", null ],
+    [ "get_data", "classData.html#a0927a8121fb24201602468d32c862668", null ],
     [ "get_K", "classData.html#adf1f6a52cebebeb2afe3a3bdb49fc2fe", null ],
     [ "get_n", "classData.html#a11ff2cd14f9af453675c46bcb0107d3b", null ],
     [ "restore_state", "classData.html#a9b7c10b187a827f8bf1451997860e274", null ],

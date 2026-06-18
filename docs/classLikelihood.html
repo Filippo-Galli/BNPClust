@@ -108,9 +108,11 @@ Inheritance diagram for Likelihood:</div>
   <img src="classLikelihood.png" usemap="#Likelihood_map" alt=""/>
   <map id="Likelihood_map" name="Likelihood_map">
 <area href="classGamma__likelihood.html" title="Computes log-likelihood for clusters based on distance-based cohesion." alt="Gamma_likelihood" shape="rect" coords="0,56,211,80"/>
-<area href="classNatarajan__likelihood.html" title="Computes log-likelihood for clusters based on distance-based cohesion and repulsion." alt="Natarajan_likelihood" shape="rect" coords="221,56,432,80"/>
-<area href="classNatarajan__likelihood__summaryStats.html" title="Computes log-likelihood for clusters based on distance-based cohesion and repulsion using summary sta..." alt="Natarajan_likelihood_summaryStats" shape="rect" coords="442,56,653,80"/>
-<area href="classNull__likelihood.html" title="LogLikelihood equal to 1 to ignore data contribution and focus on prior." alt="Null_likelihood" shape="rect" coords="663,56,874,80"/>
+<area href="classGamma__likelihood__distances.html" title="Computes log-likelihood for clusters based on distance-based cohesion." alt="Gamma_likelihood_distances" shape="rect" coords="221,56,432,80"/>
+<area href="classGaussianMixtureModel__likelihood.html" title="Gaussian Mixture Model likelihood (univariate, collapsed)." alt="GaussianMixtureModel_likelihood" shape="rect" coords="442,56,653,80"/>
+<area href="classNatarajan__likelihood.html" title="Computes log-likelihood for clusters based on distance-based cohesion and repulsion." alt="Natarajan_likelihood" shape="rect" coords="663,56,874,80"/>
+<area href="classNatarajan__likelihood__summaryStats.html" title="Computes log-likelihood for clusters based on distance-based cohesion and repulsion using summary sta..." alt="Natarajan_likelihood_summaryStats" shape="rect" coords="884,56,1095,80"/>
+<area href="classNull__likelihood.html" title="LogLikelihood equal to 1 to ignore data contribution and focus on prior." alt="Null_likelihood" shape="rect" coords="1105,56,1316,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -218,7 +220,7 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Total log-likelihood of the cluster </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Useful for split-merge algorithms </dd></dl>
 
-<p>Implemented in <a class="el" href="classGamma__likelihood.html#a357410c17ad0a81ed11e025cf9cbf9e7">Gamma_likelihood</a>, <a class="el" href="classNatarajan__likelihood.html#a9f601a12863b7d083fca6e8debfe3c7d">Natarajan_likelihood</a>, <a class="el" href="classNatarajan__likelihood__summaryStats.html#af351e03255023e89c201acaa90a728ad">Natarajan_likelihood_summaryStats</a>, and <a class="el" href="classNull__likelihood.html#a4408819632df9aea2ee06922eafd707b">Null_likelihood</a>.</p>
+<p>Implemented in <a class="el" href="classGamma__likelihood.html#a357410c17ad0a81ed11e025cf9cbf9e7">Gamma_likelihood</a>, <a class="el" href="classGamma__likelihood__distances.html#a043a0a6893e2c44f5dac0f74b6690866">Gamma_likelihood_distances</a>, <a class="el" href="classGaussianMixtureModel__likelihood.html#ac3bd61eda7a2fe8cbc27676531209729">GaussianMixtureModel_likelihood</a>, <a class="el" href="classNatarajan__likelihood.html#a9f601a12863b7d083fca6e8debfe3c7d">Natarajan_likelihood</a>, <a class="el" href="classNatarajan__likelihood__summaryStats.html#af351e03255023e89c201acaa90a728ad">Natarajan_likelihood_summaryStats</a>, and <a class="el" href="classNull__likelihood.html#a4408819632df9aea2ee06922eafd707b">Null_likelihood</a>.</p>
 
 </div>
 </div>
@@ -260,7 +262,7 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Total log-likelihood of the cluster </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Useful for split-merge algorithms </dd></dl>
 
-<p>Implemented in <a class="el" href="classGamma__likelihood.html#aac01e63bd4bfb196de8d5e364db55d17">Gamma_likelihood</a>, <a class="el" href="classNatarajan__likelihood.html#affa30f9e62c2727f85a195477eb5036b">Natarajan_likelihood</a>, <a class="el" href="classNatarajan__likelihood__summaryStats.html#a41e09286f1c4fb6893fa3947fa7c52a7">Natarajan_likelihood_summaryStats</a>, and <a class="el" href="classNull__likelihood.html#a98f3ab14da11fbb3f052813b4d0adda9">Null_likelihood</a>.</p>
+<p>Implemented in <a class="el" href="classGamma__likelihood.html#aac01e63bd4bfb196de8d5e364db55d17">Gamma_likelihood</a>, <a class="el" href="classGamma__likelihood__distances.html#ac96c0e14d4c9bca4bb4b8b11bfde799a">Gamma_likelihood_distances</a>, <a class="el" href="classGaussianMixtureModel__likelihood.html#adfb8b64d8877547cb7de2e8fb3173bbd">GaussianMixtureModel_likelihood</a>, <a class="el" href="classNatarajan__likelihood.html#affa30f9e62c2727f85a195477eb5036b">Natarajan_likelihood</a>, <a class="el" href="classNatarajan__likelihood__summaryStats.html#a41e09286f1c4fb6893fa3947fa7c52a7">Natarajan_likelihood_summaryStats</a>, and <a class="el" href="classNull__likelihood.html#a98f3ab14da11fbb3f052813b4d0adda9">Null_likelihood</a>.</p>
 
 </div>
 </div>
@@ -302,7 +304,7 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Conditional log-likelihood </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Useful for Gibbs sampling </dd></dl>
 
-<p>Implemented in <a class="el" href="classGamma__likelihood.html#ac96bea4cd8e2615765f5ee21390bc23b">Gamma_likelihood</a>, <a class="el" href="classNatarajan__likelihood.html#a5059f4ad0c3d8f9da9cfa7ddb7cce10c">Natarajan_likelihood</a>, <a class="el" href="classNatarajan__likelihood__summaryStats.html#a28b41bbd71b01e5f1da9045d270edc0d">Natarajan_likelihood_summaryStats</a>, and <a class="el" href="classNull__likelihood.html#a9b4a4fcefaaaa63fb9be886060093b18">Null_likelihood</a>.</p>
+<p>Implemented in <a class="el" href="classGamma__likelihood.html#ac96bea4cd8e2615765f5ee21390bc23b">Gamma_likelihood</a>, <a class="el" href="classGamma__likelihood__distances.html#aad4cc99dbbc6a760bdb859183a8131d0">Gamma_likelihood_distances</a>, <a class="el" href="classGaussianMixtureModel__likelihood.html#a55ffef42f8e6bbbdc8d7c0e03b79a0c9">GaussianMixtureModel_likelihood</a>, <a class="el" href="classNatarajan__likelihood.html#a5059f4ad0c3d8f9da9cfa7ddb7cce10c">Natarajan_likelihood</a>, <a class="el" href="classNatarajan__likelihood__summaryStats.html#a28b41bbd71b01e5f1da9045d270edc0d">Natarajan_likelihood_summaryStats</a>, and <a class="el" href="classNull__likelihood.html#a9b4a4fcefaaaa63fb9be886060093b18">Null_likelihood</a>.</p>
 
 </div>
 </div>

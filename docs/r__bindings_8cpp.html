@@ -98,6 +98,7 @@ $(function(){initNavTree('r__bindings_8cpp.html','',''); });
 <div class="contents">
 <div class="textblock"><code>#include &quot;Rcpp/XPtr.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="DP-params_8hpp_source.html">params/DP-params.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="GaussianMixtureModel-params_8hpp_source.html">params/GaussianMixtureModel-params.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="NGGP-params_8hpp_source.html">params/NGGP-params.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Natarajan-params_8hpp_source.html">params/Natarajan-params.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils-params_8hpp_source.html">params/utils-params.hpp</a>&quot;</code><br />
@@ -106,7 +107,8 @@ $(function(){initNavTree('r__bindings_8cpp.html','',''); });
 <code>#include &quot;<a class="el" href="Params_8hpp_source.html">utils/Params.hpp</a>&quot;</code><br />
 <code>#include &lt;RcppEigen.h&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
-<code>#include &quot;<a class="el" href="Gamma__likelihood_8hpp_source.html">likelihoods/Gamma_likelihood.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Gamma__likelihood__distances_8hpp_source.html">likelihoods/Gamma_likelihood_distances.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="GaussianMixtureModel__likelihood_8hpp_source.html">likelihoods/GaussianMixtureModel_likelihood.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Natarajan__likelihood_8hpp_source.html">likelihoods/Natarajan_likelihood.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Natarajan__likelihood__summaryStats_8hpp_source.html">likelihoods/Natarajan_likelihood_summaryStats.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Null__likelihood_8hpp_source.html">likelihoods/Null_likelihood.hpp</a>&quot;</code><br />
@@ -148,6 +150,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ab19311c7f2baf1a9ba7a1f6460bf75f8" id="r_ab19311c7f2baf1a9ba7a1f6460bf75f8"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="structNGGP__params.html">NGGP_params</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab19311c7f2baf1a9ba7a1f6460bf75f8">create_NGGP_params</a> (double a, double sigma, double tau)</td></tr>
 <tr class="memitem:aa62f85bc8d08bdaf07c7b5be6dd62408" id="r_aa62f85bc8d08bdaf07c7b5be6dd62408"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="structDP__params.html">DP_params</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa62f85bc8d08bdaf07c7b5be6dd62408">create_DP_params</a> (double a)</td></tr>
 <tr class="memitem:a213897e96cad460e889d5425358d358d" id="r_a213897e96cad460e889d5425358d358d"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a213897e96cad460e889d5425358d358d">create_Natarajan_params</a> (double delta1, double alpha, double beta, double delta2, double gamma, double zeta)</td></tr>
+<tr class="memitem:a24904fadbadd28318cc597cb8ea6a802" id="r_a24904fadbadd28318cc597cb8ea6a802"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="structGaussianMixtureModel__params.html">GaussianMixtureModel_params</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a24904fadbadd28318cc597cb8ea6a802">create_GaussianMixtureModel_params</a> (double m0, double kappa0, double alpha0, double beta0)</td></tr>
 <tr class="memitem:a4f2511de4d1309511109547e320606df" id="r_a4f2511de4d1309511109547e320606df"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classData.html">Data</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4f2511de4d1309511109547e320606df">create_Data</a> (Rcpp::XPtr&lt; <a class="el" href="structutils__params.html">utils_params</a> &gt; params, Eigen::VectorXi initial_allocations)</td></tr>
 <tr class="memitem:af5c573ec497ee3e1a6cb4875c5c24b16" id="r_af5c573ec497ee3e1a6cb4875c5c24b16"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classContinuosCache.html">ContinuosCache</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af5c573ec497ee3e1a6cb4875c5c24b16">create_Continuos_cache</a> (Eigen::VectorXi &amp;initial_allocations, Eigen::VectorXd continuos_covariates)</td></tr>
 <tr class="memitem:a7eb13311621e280c382c755533d6b88f" id="r_a7eb13311621e280c382c755533d6b88f"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classBinaryCache.html">BinaryCache</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7eb13311621e280c382c755533d6b88f">create_Binary_cache</a> (Eigen::VectorXi &amp;initial_allocations, Eigen::VectorXi binary_covariates)</td></tr>
@@ -156,7 +159,8 @@ Functions</h2></td></tr>
 <tr class="memitem:ab98f416c3d07923997f64597507baa2e" id="r_ab98f416c3d07923997f64597507baa2e"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classNatarajan__likelihood.html">Natarajan_likelihood</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab98f416c3d07923997f64597507baa2e">create_Natarajan_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &gt; params, Rcpp::XPtr&lt; <a class="el" href="structutils__params.html">utils_params</a> &gt; utils)</td></tr>
 <tr class="memitem:a95fd3550d50cd8c4c27f18423439ea5e" id="r_a95fd3550d50cd8c4c27f18423439ea5e"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classNatarajan__likelihood__summaryStats.html">Natarajan_likelihood_summaryStats</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a95fd3550d50cd8c4c27f18423439ea5e">create_Natarajan_likelihood_summaryStats</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &gt; params, Rcpp::XPtr&lt; <a class="el" href="structutils__params.html">utils_params</a> &gt; utils)</td></tr>
 <tr class="memitem:afd1561b2eb1de0011cecfed58660a8fb" id="r_afd1561b2eb1de0011cecfed58660a8fb"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classNull__likelihood.html">Null_likelihood</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#afd1561b2eb1de0011cecfed58660a8fb">create_Null_likelihood</a> (SEXP data_sexp)</td></tr>
-<tr class="memitem:a0c883c010ee2ea4a0ac91ae9edcc3cc7" id="r_a0c883c010ee2ea4a0ac91ae9edcc3cc7"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classGamma__likelihood.html">Gamma_likelihood</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0c883c010ee2ea4a0ac91ae9edcc3cc7">create_Gamma_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &gt; params, Rcpp::XPtr&lt; <a class="el" href="structutils__params.html">utils_params</a> &gt; utils)</td></tr>
+<tr class="memitem:a720940114a93f2daa7a5b97069e5637e" id="r_a720940114a93f2daa7a5b97069e5637e"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classGamma__likelihood__distances.html">Gamma_likelihood_distances</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a720940114a93f2daa7a5b97069e5637e">create_Gamma_likelihood_distances</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &gt; params, Rcpp::XPtr&lt; <a class="el" href="structutils__params.html">utils_params</a> &gt; utils)</td></tr>
+<tr class="memitem:a7f96803a8898a00ec4f70d812ff487c8" id="r_a7f96803a8898a00ec4f70d812ff487c8"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classGaussianMixtureModel__likelihood.html">GaussianMixtureModel_likelihood</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7f96803a8898a00ec4f70d812ff487c8">create_GaussianMixtureModel_likelihood</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structGaussianMixtureModel__params.html">GaussianMixtureModel_params</a> &gt; params)</td></tr>
 <tr class="memitem:adfa8b7796c3577087e9d3705396a46c7" id="r_adfa8b7796c3577087e9d3705396a46c7"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classRWMH.html">RWMH</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#adfa8b7796c3577087e9d3705396a46c7">create_RWMH</a> (Rcpp::XPtr&lt; <a class="el" href="structNGGP__params.html">NGGP_params</a> &gt; params, SEXP data_sexp, bool use_V, double proposal_sd, bool tuning_enabled)</td></tr>
 <tr class="memitem:a960aaafbb7c3889a23c3e0b40ef7d106" id="r_a960aaafbb7c3889a23c3e0b40ef7d106"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classMALA.html">MALA</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a960aaafbb7c3889a23c3e0b40ef7d106">create_MALA</a> (Rcpp::XPtr&lt; <a class="el" href="structNGGP__params.html">NGGP_params</a> &gt; params, SEXP data_sexp, bool use_V, double proposal_sd, bool tuning_enabled)</td></tr>
 <tr class="memitem:a14d6f4378db62f5c6ee67bd6d6fea46e" id="r_a14d6f4378db62f5c6ee67bd6d6fea46e"><td class="memItemLeft">Rcpp::XPtr&lt; <a class="el" href="classDP.html">DP</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a14d6f4378db62f5c6ee67bd6d6fea46e">create_DP</a> (SEXP data_sexp, Rcpp::XPtr&lt; <a class="el" href="structDP__params.html">DP_params</a> &gt; params)</td></tr>
@@ -597,14 +601,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0c883c010ee2ea4a0ac91ae9edcc3cc7" name="a0c883c010ee2ea4a0ac91ae9edcc3cc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c883c010ee2ea4a0ac91ae9edcc3cc7">&#9670;&#160;</a></span>create_Gamma_likelihood()</h2>
+<a id="a720940114a93f2daa7a5b97069e5637e" name="a720940114a93f2daa7a5b97069e5637e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a720940114a93f2daa7a5b97069e5637e">&#9670;&#160;</a></span>create_Gamma_likelihood_distances()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classGamma__likelihood.html">Gamma_likelihood</a> &gt; create_Gamma_likelihood </td>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classGamma__likelihood__distances.html">Gamma_likelihood_distances</a> &gt; create_Gamma_likelihood_distances </td>
           <td>(</td>
           <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
         </tr>
@@ -617,6 +621,58 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Rcpp::XPtr&lt; <a class="el" href="structutils__params.html">utils_params</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>utils</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f96803a8898a00ec4f70d812ff487c8" name="a7f96803a8898a00ec4f70d812ff487c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f96803a8898a00ec4f70d812ff487c8">&#9670;&#160;</a></span>create_GaussianMixtureModel_likelihood()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="classGaussianMixtureModel__likelihood.html">GaussianMixtureModel_likelihood</a> &gt; create_GaussianMixtureModel_likelihood </td>
+          <td>(</td>
+          <td class="paramtype">SEXP</td>          <td class="paramname"><span class="paramname"><em>data_sexp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::XPtr&lt; <a class="el" href="structGaussianMixtureModel__params.html">GaussianMixtureModel_params</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>params</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24904fadbadd28318cc597cb8ea6a802" name="a24904fadbadd28318cc597cb8ea6a802"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24904fadbadd28318cc597cb8ea6a802">&#9670;&#160;</a></span>create_GaussianMixtureModel_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::XPtr&lt; <a class="el" href="structGaussianMixtureModel__params.html">GaussianMixtureModel_params</a> &gt; create_GaussianMixtureModel_params </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>m0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>kappa0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>alpha0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>beta0</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
