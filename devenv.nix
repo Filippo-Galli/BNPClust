@@ -43,10 +43,9 @@ in
   env.R_LIBS_USER = "${config.env.DEVENV_STATE}/R";
   env.R_LIBS_SITE = "${pkgs.R}/library";
   env.PKG_CONFIG_PATH = "${pkgs.pkg-config}/lib/pkgconfig:${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.udunits}/lib/pkgconfig";
-  env.LD_LIBRARY_PATH = "${openblas}/lib:${pkgs.llvmPackages_18.openmp}/lib:${pkgs.openssl}/lib:${pkgs.udunits}/lib:${pkgs.geos}/lib:${pkgs.gdal}/lib:${pkgs.proj}/lib:${pkgs.cairo}/lib:${pkgs.pango}/lib:${pkgs.fontconfig}/lib:${pkgs.libpng}/lib:${pkgs.xorg.libX11}/lib";
+  env.LD_LIBRARY_PATH = "${openblas}/lib:${pkgs.llvmPackages_18.openmp}/lib:${pkgs.openssl}/lib:${pkgs.udunits}/lib:${pkgs.geos}/lib:${pkgs.gdal}/lib:${pkgs.proj}/lib:${pkgs.cairo}/lib:${pkgs.pango}/lib:${pkgs.fontconfig}/lib:${pkgs.libpng}/lib:${pkgs.xorg.libX11}/lib:${pkgs.zstd}/lib:${pkgs.xz}/lib:${pkgs.icu}/lib";
 
-  env.LIBRARY_PATH = "${openblas}/lib:${pkgs.llvmPackages_18.openmp}/lib:${pkgs.openssl.dev}/lib:${pkgs.udunits}/lib:${pkgs.geos}/lib:${pkgs.gdal}/lib:${pkgs.proj}/lib:${pkgs.cairo}/lib:${pkgs.pango}/lib:${pkgs.fontconfig}/lib:${pkgs.libpng}/lib:${pkgs.xorg.libX11}/lib";
-
+  env.LIBRARY_PATH = "${openblas}/lib:${pkgs.llvmPackages_18.openmp}/lib:${pkgs.openssl.dev}/lib:${pkgs.udunits}/lib:${pkgs.geos}/lib:${pkgs.gdal}/lib:${pkgs.proj}/lib:${pkgs.cairo}/lib:${pkgs.pango}/lib:${pkgs.fontconfig}/lib:${pkgs.libpng}/lib:${pkgs.xorg.libX11}/lib:${pkgs.zstd}/lib:${pkgs.xz}/lib:${pkgs.icu}/lib";
   env.OPENBLAS_NUM_THREADS = "4";
 
   # Podman
@@ -144,6 +143,11 @@ in
 
     # Documentation
     pkgs.doxygen
+
+    # linking
+    pkgs.zstd
+    pkgs.xz
+    pkgs.icu
   ];
 
   scripts.r-setup.exec = ''

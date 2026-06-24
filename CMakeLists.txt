@@ -43,3 +43,59 @@ if(NOT CMAKE_CROSSCOMPILING)
 endif()
 
 set_target_properties(bnpclust_core PROPERTIES OUTPUT_NAME "bnpclust_core")
+
+##################################
+# R flags from R CMD config
+##################################
+# --- R / Rcpp / RcppEigen ---
+execute_process(
+  COMMAND R CMD config --cppflags
+  OUTPUT_VARIABLE R_CPPFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+  COMMAND R CMD config --ldflags
+  OUTPUT_VARIABLE R_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+  COMMAND Rscript -e "cat(system.file('include', package='Rcpp'))"
+  OUTPUT_VARIABLE RCPP_INCLUDE_DIR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+  COMMAND Rscript -e "cat(system.file('include', package='RcppEigen'))"
+  OUTPUT_VARIABLE RCPPEIGEN_INCLUDE_DIR
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+separate_arguments(R_CPPFLAGS)
+separate_arguments(R_LDFLAGS)
+
+add_library(bnpclust_r SHARED
+  src/r_bindings.cpp
+)
+
+target_include_directories(bnpclust_r PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/src"
+  "${RCPP_INCLUDE_DIR}"
+  "${RCPPEIGEN_INCLUDE_DIR}"
+)
+
+target_compile_options(bnpclust_r PRIVATE
+  ${R_CPPFLAGS}
+)
+
+target_link_libraries(bnpclust_r PRIVATE
+  bnpclust_core
+)
+
+target_link_options(bnpclust_r PRIVATE
+  ${R_LDFLAGS}
+)
+
+set_target_properties(bnpclust_r PROPERTIES
+  OUTPUT_NAME "bnpclust_r"
+  BUILD_RPATH "$ORIGIN"
+  INSTALL_RPATH "$ORIGIN"
+)

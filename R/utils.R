@@ -130,17 +130,17 @@ save_with_name <- function(
     folder <- "results/"
 
     # Nomenclature: initialization + BI + NI + a + sigma + tau
-    if (params_get_name(process_params) == "DP") {
+    if (bnp_mod$params_get_name(process_params) == "DP") {
         subfolder <- paste0(
             filename,
             "_",
             initialization,
             "_BI",
-            params_get_BI(utils_params),
+            bnp_mod$params_get_BI(utils_params),
             "_NI",
-            params_get_NI(utils_params),
+            bnp_mod$params_get_NI(utils_params),
             "_a",
-            DP_params_get_a(process_params),
+            bnp_mod$DP_params_get_a(process_params),
             "/"
         )
     } else {
@@ -149,15 +149,15 @@ save_with_name <- function(
             "_",
             initialization,
             "_BI",
-            params_get_BI(utils_params),
+            bnp_mod$params_get_BI(utils_params),
             "_NI",
-            params_get_NI(utils_params),
+            bnp_mod$params_get_NI(utils_params),
             "_a",
-            NGGP_params_get_a(process_params),
+            bnp_mod$NGGP_params_get_a(process_params),
             "_sigma",
-            params_get_sigma(process_params),
+            bnp_mod$params_get_sigma(process_params),
             "_tau",
-            params_get_tau(process_params),
+            bnp_mod$params_get_tau(process_params),
             "/"
         )
     }

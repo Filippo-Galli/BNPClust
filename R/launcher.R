@@ -21,15 +21,15 @@ set.seed(44)
 ## Load real data
 files_folder <- "real_data/LA"
 files <- list.files(files_folder)
-file_chosen <- files[6]
+file_chosen <- files[3]
 data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
-data_matrix <- matrix(sapply(data_matrix, function(x) x$mean), ncol = 1)
+# data_matrix <- matrix(sapply(data_matrix, function(x) x$mean), ncol = 1)
 
 # add to the first half of data_matrix
-data_matrix[1:(nrow(data_matrix) / 2), ] <- data_matrix[
-    1:(nrow(data_matrix) / 2),
-] +
-    1000
+# data_matrix[1:(nrow(data_matrix) / 2), ] <- data_matrix[
+#     1:(nrow(data_matrix) / 2),
+# ] +
+#     1000
 
 puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
 puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
@@ -93,16 +93,24 @@ hyperparams <- readRDS(file = paste0(files_folder, "/", files[5]))
 #     1 # tau
 # )
 
-process_param <- create_DP_params(1)
-s2 <- var(data_matrix)
-alpha0 <- 2.5
+process_param <- bnp_mod$create_DP_params(1)
+# s2 <- var(data_matrix)
+# alpha0 <- 2.5
 
-utils_param <- create_utils_params(10000, 30000, data_matrix)
-likelihood_param <- create_GaussianMixtureModel_params(
-    m0 = mean(data_matrix),
-    kappa0 = 1.0,
-    alpha0 = alpha0,
-    beta0 = (s2 * 0.15) * (alpha0 - 1)
+# likelihood_param <- bnp_mod$create_GaussianMixtureModel_params(
+#     m0 = mean(data_matrix),
+#     kappa0 = 1.0,
+#     alpha0 = alpha0,
+#     beta0 = (s2 * 0.15) * (alpha0 - 1)
+# )
+utils_param <- bnp_mod$create_utils_params(5000, 15000, data_matrix)
+likelihood_param <- bnp_mod$create_Natarajan_params(
+    hyperparams$delta1,
+    hyperparams$alpha,
+    hyperparams$beta,
+    hyperparams$delta2,
+    hyperparams$gamma,
+    hyperparams$zeta
 )
 
 
@@ -152,7 +160,7 @@ data_type <- paste0(files_folder_clean, "_", sub("^distance_", "", file_chosen))
 process <- "NGGPWX" # Process type: "DP", "DPW", "NGGP", "NGGPW", NGGPWx
 method <- "LSS_SDDS25+Gibbs1" # MCMC method used
 initialization <- "kmeans" # Initialization strategy
-options <- ""
+options <- "TESTTTTTT"
 filename <- paste0(
     data_type,
     "_",

@@ -1,58 +1,8 @@
 library(Rcpp)
 library(RcppEigen)
 
-# Load the C++ module (linking prebuilt core library if available)
-core_lib_dir <- normalizePath("build", mustWork = FALSE)
-
-if (.Platform$OS.type == "windows") {
-    core_lib_path <- file.path(core_lib_dir, "bnpclust_core.dll")
-} else if (Sys.info()[["sysname"]] == "Darwin") {
-    core_lib_path <- file.path(core_lib_dir, "libbnpclust_core.dylib")
-} else {
-    core_lib_path <- file.path(core_lib_dir, "libbnpclust_core.so")
-}
-
-if (!file.exists(core_lib_path)) {
-    stop(
-        "Core library not found. Build it with: cmake -S . -B build && cmake --build build"
-    )
-}
-
-if (.Platform$OS.type == "windows") {
-    Sys.setenv(PKG_LIBS = paste0("-L", core_lib_dir, " -lbnpclust_core"))
-    Sys.setenv(
-        PATH = paste(core_lib_dir, Sys.getenv("PATH"), sep = .Platform$path.sep)
-    )
-} else {
-    Sys.setenv(
-        PKG_LIBS = paste0(
-            "-L",
-            core_lib_dir,
-            " -lbnpclust_core -Wl,-rpath,",
-            core_lib_dir
-        )
-    )
-}
-
-rcpp_eigen_include <- system.file("include", package = "RcppEigen")
-if (!nzchar(rcpp_eigen_include)) {
-    stop("RcppEigen include directory not found. Is RcppEigen installed?")
-}
-existing_cppflags <- Sys.getenv("PKG_CPPFLAGS")
-eigen_cppflags <- paste0("-I", rcpp_eigen_include)
-Sys.setenv(PKG_CPPFLAGS = paste(existing_cppflags, eigen_cppflags))
-
-object_files <- list.files(
-    "src",
-    pattern = "\\.o$",
-    recursive = TRUE,
-    full.names = TRUE
-)
-if (length(object_files) > 0) {
-    unlink(object_files)
-}
-
-Rcpp::sourceCpp("src/r_bindings.cpp", cacheDir = "tmp/rcpp_cache")
+dyn.load("build/libbnpclust_r.so")
+bnp_mod <- Rcpp::Module("bnpclust_module", "libbnpclust_r")
 
 run_mcmc <- function(
     likelihood_param,
@@ -67,12 +17,16 @@ run_mcmc <- function(
     # Ensure types are correct for C++
     initial_allocations <- as.integer(initial_allocations)
 
-    continuos_cache <- create_Continuos_cache(
+    continuos_cache <- bnp_mod$create_Continuos_cache(
         initial_allocations,
         continuos_covariates
     )
-    binary_cache <- create_Binary_cache(initial_allocations, binary_covariates)
+    binary_cache <- bnp_mod$create_Binary_cache(
+        initial_allocations,
+        binary_covariates
+    )
     # spatial_cache <- create_Spatial_cache(initial_allocations, W)
+    print("Caching system instantiated")
 
     # Instantiate Data using factory function
     # data <- create_Datax(
@@ -80,14 +34,25 @@ run_mcmc <- function(
     #     list(binary_cache, continuos_cache),
     #     initial_allocations
     # )
-    data <- create_Data(utils_param, initial_allocations)
+    data <- bnp_mod$create_Data(utils_param, initial_allocations)
+
+    print("Data instantiated")
 
     # Instantiate Likelihood using factory function
-    likelihood <- create_GaussianMixtureModel_likelihood(data, likelihood_param)
-    # likelihood <- create_Natarajan_likelihood(data, likelihood_param, utils_param)
+    # likelihood <- bnp_mod$create_GaussianMixtureModel_likelihood(
+    #     data,
+    #     likelihood_param
+    # )
+    likelihood <- bnp_mod$create_Natarajan_likelihood(
+        data,
+        likelihood_param,
+        utils_param
+    )
     # likelihood <- create_Natarajan_likelihood_summaryStats(data, params)
     # likelihood <- create_Null_likelihood(data, params) # Placeholder likelihood
     # likelihood <- create_Gamma_likelihood(data, params)
+
+    print("Likelihood instantiated")
 
     # Instantiate U_sampler (RWMH) using factory function
     # Constructor: Params&, Data&, bool use_V, double proposal_sd, bool tuning_enabled
@@ -108,7 +73,7 @@ run_mcmc <- function(
     nu <- 1
     S0 <- 1.0
 
-    mod_cont <- create_ContinuosCovariatesModuleCache(
+    mod_cont <- bnp_mod$create_ContinuosCovariatesModuleCache(
         data,
         continuos_cache,
         fixed_v,
@@ -122,7 +87,7 @@ run_mcmc <- function(
 
     # 3. Binary covariate module
     # mod_binary <- create_BinaryCovariatesModule(data, binary_covariates, 0.1, 0.1)
-    mod_binary <- create_BinaryCovariatesModuleCache(
+    mod_binary <- bnp_mod$create_BinaryCovariatesModuleCache(
         data,
         binary_cache,
         0.1,
@@ -133,27 +98,33 @@ run_mcmc <- function(
     # alphas <- rep(1.0, length(unique(categorical_covariates)))
     # mod_categorical <- create_CategoricalCovariatesModule(data, categorical_covariates, alphas)
 
+    print("Covariate modules instantiated")
+
     # Combine modules into NGGPx process
     # process <- create_NGGPx(data, process_param, u_sampler, list(mod_spatial, mod_cont, mod_binary))
     # process <- create_NGGP(data, params, u_sampler)
-    process <- create_DP(
+    process <- bnp_mod$create_DP(
         data,
         process_param
     )
 
+    print("Process instantiated")
+
     # Instantiate Sampler (SplitMerge_LSS_SDDS) using factory function
-    sm <- create_SplitMerge(
+    sm <- bnp_mod$create_SplitMerge_LSS_SDDS(
         data,
+        utils_param,
         likelihood,
-        process,
-        shuffle = TRUE
+        process
     )
 
-    neal3 <- create_Neal3(data, likelihood, process)
+    neal3 <- bnp_mod$create_Neal3(data, likelihood, process)
+
+    print("Sampler instantiated")
 
     # Get parameters for loop using getter functions
-    BI <- params_get_BI(utils_param)
-    NI <- params_get_NI(utils_param)
+    BI <- bnp_mod$params_get_BI(utils_param)
+    NI <- bnp_mod$params_get_NI(utils_param)
     total_iters <- BI + NI
 
     # Results storage
@@ -167,20 +138,20 @@ run_mcmc <- function(
 
     for (i in 1:total_iters) {
         # Update process parameters (U)
-        process_update_params(process)
+        bnp_mod$process_update_params(process)
 
         # MCMC Step
-        sampler_step(sm)
+        bnp_mod$sampler_step(sm)
 
         # Neal3 Step
         if (i %% 25 == 0) {
-            sampler_step(neal3)
+            bnp_mod$sampler_step(neal3)
         }
         # Store results
-        allocations_out[[i]] <- data_get_allocations(data)
-        K_out[i] <- data_get_K(data)
+        allocations_out[[i]] <- bnp_mod$data_get_allocations(data)
+        K_out[i] <- bnp_mod$data_get_K(data)
         if (!is.null(u_sampler)) {
-            U_out[i] <- u_sampler_get_U(u_sampler)
+            U_out[i] <- bnp_mod$u_sampler_get_U(u_sampler)
         }
 
         # Progress
@@ -195,7 +166,7 @@ run_mcmc <- function(
             cat(sprintf(
                 "Iteration %d: Clusters: %d - iter/s: %.2f eta: %.2f\n ",
                 i,
-                data_get_K(data),
+                bnp_mod$data_get_K(data),
                 iter_per_sec,
                 eta
             ))
@@ -208,12 +179,12 @@ run_mcmc <- function(
     if (!is.null(u_sampler)) {
         cat(
             "U acceptance rate:",
-            u_sampler_get_acceptance_rate(u_sampler) * 100,
+            bnp_mod$u_sampler_get_acceptance_rate(u_sampler) * 100,
             "%\n"
         )
     }
     if (exists("sampler")) {
-        lss_sdds_accepted_moves(sampler)
+        bnp_mod$lss_sdds_accepted_moves(sampler)
     }
 
     return(list(

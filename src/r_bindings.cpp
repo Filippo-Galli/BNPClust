@@ -556,3 +556,94 @@ void lss_sdds_accepted_moves(Rcpp::XPtr<SplitMerge_LSS_SDDS> sampler) {
   Rcpp::Rcout << "Ratio accepted shuffles: "
               << sampler->get_accepted_shuffle() * 100 << " %" << std::endl;
 }
+
+// ---------------------------------------------------------
+// RCPP MODULE REGISTRATION
+// ---------------------------------------------------------
+RCPP_MODULE(bnpclust_module) {
+
+  // --- Params ---
+  Rcpp::function("create_Params", &create_Params);
+  Rcpp::function("create_utils_params", &create_utils_params);
+  Rcpp::function("create_NGGP_params", &create_NGGP_params);
+  Rcpp::function("create_DP_params", &create_DP_params);
+  Rcpp::function("create_Natarajan_params", &create_Natarajan_params);
+  Rcpp::function("create_GaussianMixtureModel_params",
+                 &create_GaussianMixtureModel_params);
+
+  // --- Data & Caches ---
+  Rcpp::function("create_Data", &create_Data);
+  Rcpp::function("create_Datax", &create_Datax);
+  Rcpp::function("create_Continuos_cache", &create_Continuos_cache);
+  Rcpp::function("create_Binary_cache", &create_Binary_cache);
+  Rcpp::function("create_Spatial_cache", &create_Spatial_cache);
+
+  // --- Likelihoods ---
+  Rcpp::function("create_Natarajan_likelihood", &create_Natarajan_likelihood);
+  Rcpp::function("create_Natarajan_likelihood_summaryStats",
+                 &create_Natarajan_likelihood_summaryStats);
+  Rcpp::function("create_Null_likelihood", &create_Null_likelihood);
+  Rcpp::function("create_Gamma_likelihood_distances",
+                 &create_Gamma_likelihood_distances);
+  Rcpp::function("create_GaussianMixtureModel_likelihood",
+                 &create_GaussianMixtureModel_likelihood);
+
+  // --- U Samplers ---
+  Rcpp::function("create_RWMH", &create_RWMH);
+  Rcpp::function("create_MALA", &create_MALA);
+
+  // --- Processes & Modules ---
+  Rcpp::function("create_DP", &create_DP);
+  Rcpp::function("create_NGGP", &create_NGGP);
+  Rcpp::function("create_DPx", &create_DPx);
+  Rcpp::function("create_NGGPx", &create_NGGPx);
+
+  Rcpp::function("create_SpatialModule", &create_SpatialModule);
+  Rcpp::function("create_SpatialModuleContinuous",
+                 &create_SpatialModuleContinuous);
+  Rcpp::function("create_SpatialModuleCache", &create_SpatialModuleCache);
+  Rcpp::function("create_ContinuosCovariatesModule",
+                 &create_ContinuosCovariatesModule);
+  Rcpp::function("create_ContinuosCovariatesModuleCache",
+                 &create_ContinuosCovariatesModuleCache);
+  Rcpp::function("create_BinaryCovariatesModule",
+                 &create_BinaryCovariatesModule);
+  Rcpp::function("create_BinaryCovariatesModuleCache",
+                 &create_BinaryCovariatesModuleCache);
+  Rcpp::function("create_CategoricalCovariatesModule",
+                 &create_CategoricalCovariatesModule);
+
+  // --- MCMC Samplers ---
+  Rcpp::function("create_Neal3", &create_Neal3);
+  Rcpp::function("create_Neal3ZDNAM", &create_Neal3ZDNAM);
+  Rcpp::function("create_SplitMerge", &create_SplitMerge);
+  Rcpp::function("create_SplitMerge_SAMS", &create_SplitMerge_SAMS);
+  Rcpp::function("create_SplitMerge_LSS", &create_SplitMerge_LSS);
+  Rcpp::function("create_SplitMerge_LSS_SDDS", &create_SplitMerge_LSS_SDDS);
+
+  // --- Utilities, Getters, and Setters ---
+  Rcpp::function("process_update_params", &process_update_params);
+  Rcpp::function("sampler_step", &sampler_step);
+  Rcpp::function("data_get_allocations", &data_get_allocations);
+  Rcpp::function("data_get_K", &data_get_K);
+
+  Rcpp::function("u_sampler_get_U", &u_sampler_get_U);
+  Rcpp::function("u_sampler_get_acceptance_rate",
+                 &u_sampler_get_acceptance_rate);
+
+  Rcpp::function("params_get_BI", &params_get_BI);
+  Rcpp::function("params_get_NI", &params_get_NI);
+  Rcpp::function("NGGP_params_get_a", &NGGP_params_get_a);
+  Rcpp::function("params_get_sigma", &params_get_sigma);
+  Rcpp::function("params_get_tau", &params_get_tau);
+  Rcpp::function("params_get_name", &params_get_name);
+  Rcpp::function("DP_params_get_a", &DP_params_get_a);
+
+  Rcpp::function("cluster_info_set_allocation", &cluster_info_set_allocation);
+  Rcpp::function("cluster_info_recompute", &cluster_info_recompute);
+
+  Rcpp::function("datax_set_allocation", &datax_set_allocation);
+  Rcpp::function("datax_set_allocations", &datax_set_allocations);
+
+  Rcpp::function("lss_sdds_accepted_moves", &lss_sdds_accepted_moves);
+}
