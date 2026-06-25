@@ -182,7 +182,6 @@ public:
    *
    * @param d Reference to Data object containing observations and cluster
    * assignments
-   * @param p Reference to Params object with model hyperparameters
    * @param l Reference to Likelihood object for computing conditional
    * probabilities
    * @param pr Reference to Process object (DP, NGGP, etc.) defining the prior

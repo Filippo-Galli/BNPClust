@@ -202,7 +202,6 @@ public:
    * @brief Constructor for SAMS (Sequential Allocation Merge-Split) sampler
    *
    * @param d Reference to Data object containing observations
-   * @param p Reference to Params object with hyperparameters
    * @param l Reference to Likelihood object for probability computations
    * @param pr Reference to Process object defining the prior
    * @param shuffle Flag to enable shuffle moves in addition to split-merge

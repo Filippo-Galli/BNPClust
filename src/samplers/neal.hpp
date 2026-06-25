@@ -90,7 +90,6 @@ public:
    * @brief Constructor for Neal's Algorithm 3 sampler
    *
    * @param d Reference to Data object containing observations
-   * @param p Reference to Params object with hyperparameters
    * @param l Reference to Likelihood object for probability computations
    * @param pr Reference to Process object (DP, NGGP, etc.) defining the prior
    *

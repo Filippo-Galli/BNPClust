@@ -72,7 +72,8 @@ public:
   /**
    * @brief Constructs a Likelihood object with precomputation
    * @param data Reference to Data object with distances and allocations
-   * @param param Reference to model parameters
+   * @param params Reference to model parameters
+   * @param utils Reference to utils_params object with utility parameters
    *
    * The constructor precomputes several values for computational efficiency:
    * - Log-gamma values for delta parameters

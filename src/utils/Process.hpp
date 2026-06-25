@@ -76,7 +76,6 @@ public:
    *
    * @param d Reference to Data object containing observations and current
    * allocations
-   * @param p Reference to Params object containing process hyperparameters
    *
    * @details Initializes the process and stores a copy of current allocations
    * for potential rollback operations during split-merge moves.

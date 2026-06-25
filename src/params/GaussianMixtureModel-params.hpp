@@ -29,7 +29,6 @@ struct GaussianMixtureModel_params {
 
   /**
    * @brief Constructor for GaussianMixtureModel_params
-   * @param y Observed data vector (length n)
    * @param m0 Prior mean
    * @param kappa0 Prior strength for mean
    * @param alpha0 Shape for variance prior

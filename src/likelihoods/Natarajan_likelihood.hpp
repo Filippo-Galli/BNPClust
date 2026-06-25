@@ -71,16 +71,17 @@ public:
   /**
    * @brief Constructs a Likelihood object with precomputation
    * @param data Reference to Data object with distances and allocations
-   * @param param Reference to model parameters
+   * @param params Reference to model parameters
+   * @param utils Reference to utility parameters
    *
    * The constructor precomputes several values for computational efficiency:
    * - Log-gamma values for delta parameters
    * - Logarithmic combinations of hyperparameters
    * - Logarithm of the entire distance matrix
    */
-  Natarajan_likelihood(const Data &data, const Natarajan_params &param,
+  Natarajan_likelihood(const Data &data, const Natarajan_params &params,
                        const utils_params &utils)
-      : Likelihood(data), params(param), utils(utils),
+      : Likelihood(data), params(params), utils(utils),
         lgamma_delta1(lgamma(params.delta1)),
         log_beta_alpha(log(params.beta) * params.alpha - lgamma(params.alpha)),
         lgamma_delta2(lgamma(params.delta2)),
