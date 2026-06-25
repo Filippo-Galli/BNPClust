@@ -202,33 +202,27 @@ set_hyperparameters <- function(
         dist_matrix <- as.dist(dist_matrix)
     }
 
-    # Use k-means to get initial clusters
+    # Step 1 & 2: K-means to get initial clusters
     mds_result <- cmdscale(dist_matrix, k = 2)
-    kmeans_result <- kmeans(mds_result, centers = k_elbow, nstart = 25)
-    initial_clusters <- kmeans_result$cluster
+    initial_clusters <- kmeans(
+        mds_result,
+        centers = k_elbow,
+        nstart = 25
+    )$cluster
 
     # Step 3: Split pairwise distances into within-cluster (A) and inter-cluster (B)
-    n <- attr(dist_matrix, "Size") # Get size from dist object
-    dist_matrix <- as.matrix(dist_matrix) # Convert back to matrix for indexing
+    dist_mat <- as.matrix(dist_matrix)
+    n <- nrow(dist_mat)
     cat("Processing", n, "data points...\n")
 
-    # Much more efficient vectorized approach
-    # Create matrices of cluster labels
-    cluster_i <- matrix(rep(initial_clusters, n), nrow = n, byrow = FALSE)
-    cluster_j <- matrix(rep(initial_clusters, n), nrow = n, byrow = TRUE)
+    # Idiomatic R vectorization for distance splitting
+    same_cluster <- outer(initial_clusters, initial_clusters, "==")
+    valid_pairs <- lower.tri(same_cluster)
 
-    # Find same cluster pairs (excluding diagonal)
-    same_cluster <- (cluster_i == cluster_j) &
-        (row(dist_matrix) < col(dist_matrix))
-    diff_cluster <- (cluster_i != cluster_j) &
-        (row(dist_matrix) < col(dist_matrix))
-
-    # Extract distances
-    within_cluster_distances <- dist_matrix[same_cluster]
-    inter_cluster_distances <- dist_matrix[diff_cluster]
+    within_cluster_distances <- dist_mat[same_cluster & valid_pairs]
+    inter_cluster_distances <- dist_mat[!same_cluster & valid_pairs]
 
     cat("Vectorized processing completed!\n")
-
     cat(
         "Within-cluster distances (A):",
         length(within_cluster_distances),
@@ -240,7 +234,7 @@ set_hyperparameters <- function(
         "values\n"
     )
 
-    # Plot the initial clustering from k-means (optional)
+    # Plot the initial clustering (optional)
     if (plot_clustering) {
         cluster_data <- data.frame(
             x = mds_result[, 1],
@@ -248,304 +242,196 @@ set_hyperparameters <- function(
             cluster = as.factor(initial_clusters)
         )
 
-        # Add ground truth if provided
-        if (!is.null(ground_truth)) {
-            cluster_data$ground_truth <- as.factor(ground_truth)
-        }
-
-        cluster_plot <- ggplot(
-            cluster_data,
-            aes(x = x, y = y, color = cluster)
-        ) +
+        p_clust <- ggplot(cluster_data, aes(x = x, y = y, color = cluster)) +
             geom_point(size = 3) +
+            theme_minimal() +
             labs(
                 title = paste("Initial K-means Clustering (K =", k_elbow, ")"),
                 x = "X Coordinate",
                 y = "Y Coordinate"
-            ) +
-            theme_minimal()
+            )
+        print(p_clust)
 
-        print(cluster_plot)
-
-        # Plot ground truth if provided
         if (!is.null(ground_truth)) {
-            gt_plot <- ggplot(
-                cluster_data,
-                aes(x = x, y = y, color = ground_truth)
+            p_gt <- ggplot(
+                cbind(cluster_data, gt = as.factor(ground_truth)),
+                aes(x = x, y = y, color = gt)
             ) +
                 geom_point(size = 3) +
-                labs(
-                    title = "Ground Truth Clustering",
-                    x = "X Coordinate",
-                    y = "Y Coordinate"
-                ) +
-                theme_minimal()
-
-            print(gt_plot)
+                theme_minimal() +
+                labs(title = "Ground Truth Clustering", x = "X", y = "Y")
+            print(p_gt)
         }
     }
 
-    # Step 4: Fit Gamma distribution to within-cluster distances (A)
-    # Using method of moments as initial estimates, then MLE
-    if (length(within_cluster_distances) > 0) {
-        # Remove zeros if any (distances to self)
-        A <- within_cluster_distances[within_cluster_distances > 0]
-
-        if (length(A) > 1) {
-            # Fit gamma distribution using MLE with error handling
-            tryCatch(
-                {
-                    # Add small epsilon to avoid zero values that cause issues
-                    A_safe <- pmax(A, 1e-10)
-
-                    # Try method of moments first for better initial estimates
-                    mean_A <- mean(A_safe)
-                    var_A <- var(A_safe)
-
-                    # Method of moments estimates
-                    shape_est <- mean_A^2 / var_A
-                    rate_est <- mean_A / var_A
-
-                    # Use these as starting values for MLE
-                    gamma_fit_A <- fitdistr(
-                        A_safe,
-                        "gamma",
-                        start = list(shape = shape_est, rate = rate_est),
-                        lower = c(0.01, 0.01)
-                    )
-
-                    delta1 <- gamma_fit_A$estimate["shape"]
-
-                    # delta_1 should be less than 1 for cohesion
-                    if (delta1 > 1) {
-                        print(paste(
-                            "Warning: Fitted delta1 > 1, adjusting to 0.9 for cohesion. Old value: ",
-                            delta1
-                        ))
-                        delta1 <- 0.9 # Adjust shape parameter if needed
-                    }
-
-                    # Step 5: Set alpha and beta
-                    n_A <- length(A)
-                    alpha <- delta1 * n_A
-                    beta <- sum(A)
-
-                    cat("For within-cluster distances:\n")
-                    cat("  delta1 (shape) =", delta1, "\n")
-                    cat("  alpha =", alpha, "\n")
-                    cat("  beta =", beta, "\n")
-                },
-                error = function(e) {
-                    cat(
-                        "Warning: Could not fit gamma distribution to within-cluster distances\n"
-                    )
-                    cat("Error:", e$message, "\n")
-                    delta1 <<- 0.5
-                    alpha <<- 2
-                    beta <<- 2
-                }
-            )
-        } else {
-            # Fallback values
-            delta1 <- 0.5
-            alpha <- 2
-            beta <- 2
-            cat(
-                "Warning: Not enough within-cluster distances, using default values\n"
-            )
+    # Helper Function: Fit Gamma Distribution
+    fit_gamma <- function(dists, is_within, def_shape, def_p1, def_p2) {
+        dists <- dists[dists > 0]
+        if (length(dists) <= 1) {
+            cat("Warning: Not enough distances, using default values\n")
+            return(list(
+                shape = def_shape,
+                p1 = def_p1,
+                p2 = def_p2,
+                valid_d = dists
+            ))
         }
-    } else {
-        # Fallback values
-        delta1 <- 0.5
-        alpha <- 2
-        beta <- 2
-        cat(
-            "Warning: No within-cluster distances found, using default values\n"
+
+        tryCatch(
+            {
+                d_safe <- pmax(dists, 1e-10)
+                m <- mean(d_safe)
+                v <- var(d_safe)
+
+                fit <- MASS::fitdistr(
+                    d_safe,
+                    "gamma",
+                    start = list(shape = m^2 / v, rate = m / v),
+                    lower = c(0.01, 0.01)
+                )
+                shape <- fit$estimate["shape"]
+
+                # Apply shape parameter constraints
+                if (is_within && shape > 1) {
+                    cat(
+                        "Warning: Fitted delta1 > 1, adjusting to 0.9. Old:",
+                        shape,
+                        "\n"
+                    )
+                    shape <- 0.9
+                } else if (!is_within && shape < 1) {
+                    cat(
+                        "Warning: Fitted delta2 < 1, adjusting to 1.5. Old:",
+                        shape,
+                        "\n"
+                    )
+                    shape <- 1.5
+                }
+
+                list(
+                    shape = unname(shape),
+                    p1 = unname(shape * length(dists)),
+                    p2 = sum(dists),
+                    valid_d = dists
+                )
+            },
+            error = function(e) {
+                cat(
+                    "Warning: Could not fit gamma distribution\nError:",
+                    e$message,
+                    "\n"
+                )
+                list(
+                    shape = def_shape,
+                    p1 = def_p1,
+                    p2 = def_p2,
+                    valid_d = dists
+                )
+            }
         )
     }
 
-    # Step 6: Repeat for inter-cluster distances (B)
-    if (length(inter_cluster_distances) > 0) {
-        B <- inter_cluster_distances[inter_cluster_distances > 0]
+    # Step 4 & 5: Fit Within-Cluster (A)
+    cat("For within-cluster distances:\n")
+    fit_A <- fit_gamma(within_cluster_distances, TRUE, 0.5, 2, 2)
+    cat(
+        "  delta1 (shape) =",
+        fit_A$shape,
+        "\n  alpha =",
+        fit_A$p1,
+        "\n  beta =",
+        fit_A$p2,
+        "\n"
+    )
 
-        if (length(B) > 1) {
-            # Fit gamma distribution using MLE with error handling
-            tryCatch(
-                {
-                    # Add small epsilon to avoid zero values that cause issues
-                    B_safe <- pmax(B, 1e-10)
+    # Step 6: Fit Inter-Cluster (B)
+    cat("For inter-cluster distances:\n")
+    fit_B <- fit_gamma(inter_cluster_distances, FALSE, 2.0, 2, 2)
+    cat(
+        "  delta2 (shape) =",
+        fit_B$shape,
+        "\n  zeta =",
+        fit_B$p1,
+        "\n  gamma =",
+        fit_B$p2,
+        "\n"
+    )
 
-                    # Try method of moments first for better initial estimates
-                    mean_B <- mean(B_safe)
-                    var_B <- var(B_safe)
+    # Plot distributions
+    if (plot_distribution) {
+        plot_gamma_hist <- function(
+            dists,
+            shape,
+            p1,
+            p2,
+            fill_c,
+            line_c,
+            title_prefix,
+            labels
+        ) {
+            if (length(dists) > 1) {
+                rate_val <- shape / mean(dists) # E[X] = shape/rate logic
+                title_txt <- sprintf(
+                    "%s Distances with Algorithm's Gamma\n%s = %.3f, %s = %.3f, %s = %.3f",
+                    title_prefix,
+                    labels[1],
+                    shape,
+                    labels[2],
+                    p1,
+                    labels[3],
+                    p2
+                )
 
-                    # Method of moments estimates
-                    shape_est <- mean_B^2 / var_B
-                    rate_est <- mean_B / var_B
-
-                    # Use these as starting values for MLE
-                    gamma_fit_B <- fitdistr(
-                        B_safe,
-                        "gamma",
-                        start = list(shape = shape_est, rate = rate_est),
-                        lower = c(0.01, 0.01)
-                    )
-
-                    delta2 <- gamma_fit_B$estimate["shape"]
-
-                    # delta_2 should be greater than 1 for repulsion
-                    if (delta2 < 1) {
-                        print(paste(
-                            "Warning: Fitted delta2 < 1, adjusting to 1.5 for repulsion. Old value: ",
-                            delta2
-                        ))
-                        delta2 <- 1.5 # Adjust shape parameter if needed
-                    }
-
-                    # Set zeta and gamma (note: gamma is a parameter name, using different variable)
-                    n_B <- length(B)
-                    zeta <- delta2 * n_B
-                    gamma_param <- sum(B) # renamed to avoid conflict with gamma() function
-
-                    cat("For inter-cluster distances:\n")
-                    cat("  delta2 (shape) =", delta2, "\n")
-                    cat("  zeta =", zeta, "\n")
-                    cat("  gamma =", gamma_param, "\n")
-                },
-                error = function(e) {
-                    cat(
-                        "Warning: Could not fit gamma distribution to inter-cluster distances\n"
-                    )
-                    cat("Error:", e$message, "\n")
-                    delta2 <<- 2
-                    zeta <<- 2
-                    gamma_param <<- 2
-                }
-            )
-        } else {
-            # Fallback values
-            delta2 <- 2
-            zeta <- 2
-            gamma_param <- 2
-            cat(
-                "Warning: Not enough inter-cluster distances, using default values\n"
-            )
-        }
-    } else {
-        # Fallback values
-        delta2 <- 2
-        zeta <- 2
-        gamma_param <- 2
-        cat("Warning: No inter-cluster distances found, using default values\n")
-    }
-
-    if (plot_distribution == TRUE) {
-        # First plot: Within-cluster distances with algorithm's gamma parameters
-        if (exists("A") && length(A) > 1) {
-            A_df <- data.frame(Distance = A)
-
-            # Use the algorithm's parameters: delta1, alpha, beta
-            # Convert from alpha, beta to shape, rate parameterization
-            # Your algorithm uses: alpha = delta1 * n_A, beta = sum(A)
-            # For plotting, we need the rate parameter that corresponds to these
-
-            # The relationship is: alpha = shape * rate, beta = sum(data)
-            # So: rate = alpha / delta1 = n_A (when alpha = delta1 * n_A)
-            # But we want E[X] = shape/rate to match the empirical mean
-            # Better approach: use delta1 as shape, and derive rate from the mean
-
-            algorithm_shape_A <- delta1
-            # For gamma distribution: mean = shape/rate, so rate = shape/mean
-            empirical_mean_A <- mean(A)
-            algorithm_rate_A <- algorithm_shape_A / empirical_mean_A
-
-            p1 <- ggplot(A_df, aes(x = Distance)) +
-                geom_histogram(
-                    aes(y = after_stat(density)),
-                    bins = 30,
-                    fill = "lightblue",
-                    color = "black",
-                    alpha = 0.7
-                ) +
-                stat_function(
-                    fun = dgamma,
-                    args = list(
-                        shape = algorithm_shape_A,
-                        rate = algorithm_rate_A
-                    ),
-                    color = "red",
-                    linewidth = 1
-                ) +
-                labs(
-                    title = paste(
-                        "Within-Cluster Distances with Algorithm's Gamma\n",
-                        "δ₁ (shape) =",
-                        round(algorithm_shape_A, 3),
-                        ", α =",
-                        round(alpha, 3),
-                        ", β =",
-                        round(beta, 3)
-                    ),
-                    x = "Distance",
-                    y = "Density"
-                ) +
-                theme_minimal()
-            print(p1)
+                p <- ggplot(data.frame(Dist = dists), aes(x = Dist)) +
+                    geom_histogram(
+                        aes(y = after_stat(density)),
+                        bins = 30,
+                        fill = fill_c,
+                        color = "black",
+                        alpha = 0.7
+                    ) +
+                    stat_function(
+                        fun = dgamma,
+                        args = list(shape = shape, rate = rate_val),
+                        color = line_c,
+                        linewidth = 1
+                    ) +
+                    labs(title = title_txt, x = "Distance", y = "Density") +
+                    theme_minimal()
+                print(p)
+            }
         }
 
-        # Second plot: Inter-cluster distances with algorithm's gamma parameters
-        if (exists("B") && length(B) > 1) {
-            B_df <- data.frame(Distance = B)
-
-            # Use the algorithm's parameters: delta2, zeta, gamma_param
-            algorithm_shape_B <- delta2
-            # For gamma distribution: mean = shape/rate, so rate = shape/mean
-            empirical_mean_B <- mean(B)
-            algorithm_rate_B <- algorithm_shape_B / empirical_mean_B
-
-            p2 <- ggplot(B_df, aes(x = Distance)) +
-                geom_histogram(
-                    aes(y = after_stat(density)),
-                    bins = 30,
-                    fill = "lightgreen",
-                    color = "black",
-                    alpha = 0.7
-                ) +
-                stat_function(
-                    fun = dgamma,
-                    args = list(
-                        shape = algorithm_shape_B,
-                        rate = algorithm_rate_B
-                    ),
-                    color = "blue",
-                    linewidth = 1
-                ) +
-                labs(
-                    title = paste(
-                        "Inter-Cluster Distances with Algorithm's Gamma\n",
-                        "δ₂ (shape) =",
-                        round(algorithm_shape_B, 3),
-                        ", ζ =",
-                        round(zeta, 3),
-                        ", γ =",
-                        round(gamma_param, 3)
-                    ),
-                    x = "Distance",
-                    y = "Density"
-                ) +
-                theme_minimal()
-            print(p2)
-        }
+        plot_gamma_hist(
+            fit_A$valid_d,
+            fit_A$shape,
+            fit_A$p1,
+            fit_A$p2,
+            "lightblue",
+            "red",
+            "Within-Cluster",
+            c("δ₁ (shape)", "α", "β")
+        )
+        plot_gamma_hist(
+            fit_B$valid_d,
+            fit_B$shape,
+            fit_B$p1,
+            fit_B$p2,
+            "lightgreen",
+            "blue",
+            "Inter-Cluster",
+            c("δ₂ (shape)", "ζ", "γ")
+        )
     }
 
     # Return the computed hyperparameters
     return(list(
-        delta1 = delta1,
-        alpha = alpha,
-        beta = beta,
-        delta2 = delta2,
-        zeta = zeta,
-        gamma = gamma_param,
+        delta1 = fit_A$shape,
+        alpha = fit_A$p1,
+        beta = fit_A$p2,
+        delta2 = fit_B$shape,
+        zeta = fit_B$p1,
+        gamma = fit_B$p2,
         k_elbow = k_elbow,
         initial_clusters = initial_clusters,
         ground_truth = ground_truth
