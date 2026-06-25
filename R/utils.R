@@ -188,6 +188,8 @@ save_with_name <- function(
     # Save time taken
     time_file <- paste0(folder, "time_taken.txt")
     writeLines(as.character(elapsed_time), con = time_file)
+
+    return(folder)
 }
 
 set_hyperparameters <- function(

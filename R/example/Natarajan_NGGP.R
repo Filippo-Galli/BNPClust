@@ -18,6 +18,9 @@ source("R/utils.R")
 source("R/utils_plot.R")
 source("R/mcmc_loop.R")
 
+#source("R/data_retrieval/ACF.R")
+#ource("R/distance_retrieval/kde_distances.R")
+
 library(Rcpp)
 library(RcppEigen)
 
@@ -91,109 +94,34 @@ likelihood_param <- bnp_mod$create_Natarajan_params(
 print("Initial cluster allocation:")
 print(table(hyperparams$initial_clusters))
 
-mcmc_result <- run_mcmc(
-    likelihood_param,
-    process_param,
-    utils_param,
-    hyperparams$initial_clusters,
-    W,
-    # continuos_covariates,
-    # binary_covariates
-)
-
-# Ensure types are correct for C++
-initial_allocations <- as.integer(integer(0))
-
-# continuos_cache <- bnp_mod$create_Continuos_cache(
-#     initial_allocations,
-#     continuos_covariates
-# )
-# binary_cache <- bnp_mod$create_Binary_cache(
-#     initial_allocations,
-#     binary_covariates
-# )
-# spatial_cache <- create_Spatial_cache(initial_allocations, W)
 print("Caching system instantiated")
 
-# Instantiate Data using factory function
-# data <- create_Datax(
-#     utils_param,
-#     list(binary_cache, continuos_cache),
-#     initial_allocations
-# )
-data <- bnp_mod$create_Data(utils_param, initial_allocations)
+data <- bnp_mod$create_Data(utils_param, hyperparams$initial_clusters)
 
 print("Data instantiated")
 
-# Instantiate Likelihood using factory function
-# likelihood <- bnp_mod$create_GaussianMixtureModel_likelihood(
-#     data,
-#     likelihood_param
-# )
 likelihood <- bnp_mod$create_Natarajan_likelihood(
     data,
     likelihood_param,
     utils_param
 )
-# likelihood <- create_Natarajan_likelihood_summaryStats(data, params)
-# likelihood <- create_Null_likelihood(data, params) # Placeholder likelihood
-# likelihood <- create_Gamma_likelihood(data, params)
-
 print("Likelihood instantiated")
 
 # Instantiate U_sampler (RWMH) using factory function
-# Constructor: Params&, Data&, bool use_V, double proposal_sd, bool tuning_enabled
 u_sampler <- bnp_mod$create_RWMH(process_param, data, TRUE, 2.0, TRUE)
-# u_sampler <- NULL
 
-# Instantiate Process (NGGPx) using modules
-# 1. Spatial module
-#mod_spatial <- create_SpatialModule(data, W, spatial_coefficient = 0.1)
-# mod_spatial <- create_SpatialModuleContinuous(data, W, spatial_coefficient = 1.0)
-# mod_spatial <- create_SpatialModuleCache(data, cache = spatial_cache, spatial_coefficient = 1.0)
-
-# 2. Covariate module (cached)
-# fixed_v <- TRUE
-# B <- 10 * var(continuos_covariates) # prior variance
-# m <- 0 # prior mean
-# v <- 0.5 * var(continuos_covariates) # known variance
-# nu <- 1
-# S0 <- 1.0
-
-# mod_cont <- bnp_mod$create_ContinuosCovariatesModuleCache(
-#     data,
-#     continuos_cache,
-#     fixed_v,
-#     m,
-#     B,
-#     v,
-#     nu,
-#     S0
-# )
-# mod_cont <- create_ContinuosCovariatesModule(data, continuos_covariates, fixed_v = TRUE, m = m, B = B, v = v)
-
-# 3. Binary covariate module
-# mod_binary <- create_BinaryCovariatesModule(data, binary_covariates, 0.1, 0.1)
-# mod_binary <- bnp_mod$create_BinaryCovariatesModuleCache(
-#     data,
-#     binary_cache,
-#     0.1,
-#     0.1
-# )
-
-# 4. Categorical covariate module
-# alphas <- rep(1.0, length(unique(categorical_covariates)))
-# mod_categorical <- create_CategoricalCovariatesModule(data, categorical_covariates, alphas)
+# Instantiate spatial modules
+mod_spatial <- bnp_mod$create_SpatialModule(data, W, spatial_coefficient = 0.1)
 
 print("Covariate modules instantiated")
 
-# Combine modules into NGGPx process
-# process <- create_NGGPx(data, process_param, u_sampler, list(mod_spatial, mod_cont, mod_binary))
-process <- bnp_mod$create_NGGP(data, process_param, u_sampler)
-# process <- bnp_mod$create_DP(
-#     data,
-#     process_param
-# )
+# Instantiate Process (NGGPx) using factory function
+process <- bnp_mod$create_NGGPx(
+    data,
+    process_param,
+    u_sampler,
+    list(mod_spatial)
+)
 
 print("Process instantiated")
 
@@ -202,9 +130,11 @@ sm <- bnp_mod$create_SplitMerge_LSS_SDDS(
     data,
     utils_param,
     likelihood,
-    process
+    process,
+    FALSE
 )
 
+# Instantiate Neal3 sampler using factory function
 neal3 <- bnp_mod$create_Neal3(data, likelihood, process)
 
 print("Sampler instantiated")
@@ -263,17 +193,15 @@ for (i in 1:total_iters) {
 elapsed_time <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
 cat("MCMC completed.\n")
 cat("Total time (secs):", elapsed_time, "\n")
-if (!is.null(u_sampler)) {
-    cat(
-        "U acceptance rate:",
-        bnp_mod$u_sampler_get_acceptance_rate(u_sampler) * 100,
-        "%\n"
-    )
-}
-if (exists("sampler")) {
-    bnp_mod$lss_sdds_accepted_moves(sampler)
-}
 
+mcmc_result <- list(
+    allocations = allocations_out,
+    K = K_out,
+    U = U_out,
+    elapsed_time = elapsed_time,
+    BI = BI,
+    NI = NI
+)
 
 ##############################################################################
 # 7. Save Results ====
@@ -283,7 +211,7 @@ file_chosen_clean <- sub("\\.rds$", "", file_chosen)
 folder_clean <- gsub("/", "_", files_folder)
 data_tag <- paste0(folder_clean, "_", sub("^distance_", "", file_chosen_clean))
 
-run_process <- "NGGP" # "DP" | "NGGP" | "NGGPW" | "NGGPWx"
+run_process <- "NGGPWx" # "DP" | "NGGP" | "NGGPW" | "NGGPWx"
 run_method <- "LSS_SDDS25+Gibbs1"
 run_init <- "kmeans"
 run_label <- "example"
@@ -296,16 +224,44 @@ output_filename <- paste(
     run_label,
     sep = "_"
 )
-save_with_name(utils_param, process_param, run_init, output_filename)
+folder <- save_with_name(utils_param, process_param, run_init, output_filename)
 
 
 ##############################################################################
 # 8. Visualisation ====
 ##############################################################################
 
-plot_post_distr(mcmc_result, BI = mcmc_result$BI)
-plot_trace_cls(mcmc_result, BI = mcmc_result$BI)
-plot_post_sim_matrix(mcmc_result, BI = mcmc_result$BI)
-plot_trace_U(mcmc_result, BI = mcmc_result$BI)
-plot_acf_U(mcmc_result, BI = mcmc_result$BI)
-plot_cls_est(mcmc_result, BI = mcmc_result$BI)
+plot_folder <- paste0(folder, "/plots/")
+dir.create(plot_folder, recursive = TRUE)
+
+plot_post_distr(
+    mcmc_result,
+    BI = mcmc_result$BI,
+    save = TRUE,
+    folder = plot_folder
+)
+plot_trace_cls(
+    mcmc_result,
+    BI = mcmc_result$BI,
+    save = TRUE,
+    folder = plot_folder
+)
+plot_post_sim_matrix(
+    mcmc_result,
+    BI = mcmc_result$BI,
+    save = TRUE,
+    folder = plot_folder
+)
+plot_trace_U(
+    mcmc_result,
+    BI = mcmc_result$BI,
+    save = TRUE,
+    folder = plot_folder
+)
+plot_acf_U(mcmc_result, BI = mcmc_result$BI, save = TRUE, folder = plot_folder)
+plot_cls_est(
+    mcmc_result,
+    BI = mcmc_result$BI,
+    save = TRUE,
+    folder = plot_folder
+)
