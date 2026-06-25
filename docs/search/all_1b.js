@@ -9,10 +9,9 @@ var searchData=
   ['u_5fsampler_5fmethod_6',['U_sampler_method',['../classNGGP.html#a54461db9db11e9d4164754427e265f08',1,'NGGP']]],
   ['update_5fparams_7',['update_params',['../classDP.html#a577726382e64c057fcbc889325084ad1',1,'DP::update_params()'],['../classDPx.html#ab1c0c87a32004725fba06329f284a0f6',1,'DPx::update_params()'],['../classNGGP.html#a6c28f93e9b1a28edd8eef383c06447a1',1,'NGGP::update_params()'],['../classNGGPx.html#ab0e8dd55878841cc8ca34f377067b035',1,'NGGPx::update_params()'],['../classProcess.html#ac610fb84ed64db2a74fa1447ce5a582e',1,'Process::update_params()']]],
   ['update_5fu_8',['update_U',['../classMALA.html#a40d442a7e6e66c3853e4014326ee5934',1,'MALA::update_U()'],['../classRWMH.html#a1349180615746681801b1b6b86fe1c4b',1,'RWMH::update_U()'],['../classU__sampler.html#a68c7b18e6183b1bc9a1645ff36e0c82f',1,'U_sampler::update_U()']]],
-  ['usage_9',['🛠️ Installation &amp;amp; Usage',['../index.html#autotoc_md12',1,'']]],
-  ['usage_20licensing_10',['💡 Usage &amp;amp; Licensing',['../index.html#autotoc_md17',1,'']]],
-  ['use_5fv_11',['use_V',['../classMALA.html#aa1bd45a50795023b92ea781a495fa599',1,'MALA::use_V'],['../classRWMH.html#a21b4ed6ad1172dfacec56fb3539141a8',1,'RWMH::use_V']]],
-  ['utils_12',['utils',['../classGamma__likelihood.html#a3bf3441730bf0102ff31482e7032d0cc',1,'Gamma_likelihood::utils'],['../classGamma__likelihood__distances.html#aaceefc4290aad32cd54862b3259c0412',1,'Gamma_likelihood_distances::utils'],['../classNatarajan__likelihood.html#a61676acb38ea30ef588f3ba59f9fcd2b',1,'Natarajan_likelihood::utils'],['../classNatarajan__likelihood__summaryStats.html#a2ada59449f1227a68bac4d1c0a29f691',1,'Natarajan_likelihood_summaryStats::utils']]],
-  ['utils_2dparams_2ehpp_13',['utils-params.hpp',['../utils-params_8hpp.html',1,'']]],
-  ['utils_5fparams_14',['utils_params',['../structutils__params.html',1,'utils_params'],['../structutils__params.html#ad4d0401705c54716ddb92f5c6d878608',1,'utils_params::utils_params()']]]
+  ['usage_20licensing_9',['💡 Usage &amp;amp; Licensing',['../index.html#autotoc_md7',1,'']]],
+  ['use_5fv_10',['use_V',['../classMALA.html#aa1bd45a50795023b92ea781a495fa599',1,'MALA::use_V'],['../classRWMH.html#a21b4ed6ad1172dfacec56fb3539141a8',1,'RWMH::use_V']]],
+  ['utils_11',['utils',['../classGamma__likelihood.html#a3bf3441730bf0102ff31482e7032d0cc',1,'Gamma_likelihood::utils'],['../classGamma__likelihood__distances.html#aaceefc4290aad32cd54862b3259c0412',1,'Gamma_likelihood_distances::utils'],['../classNatarajan__likelihood.html#a61676acb38ea30ef588f3ba59f9fcd2b',1,'Natarajan_likelihood::utils'],['../classNatarajan__likelihood__summaryStats.html#a2ada59449f1227a68bac4d1c0a29f691',1,'Natarajan_likelihood_summaryStats::utils']]],
+  ['utils_2dparams_2ehpp_12',['utils-params.hpp',['../utils-params_8hpp.html',1,'']]],
+  ['utils_5fparams_13',['utils_params',['../structutils__params.html',1,'utils_params'],['../structutils__params.html#ad4d0401705c54716ddb92f5c6d878608',1,'utils_params::utils_params()']]]
 ];

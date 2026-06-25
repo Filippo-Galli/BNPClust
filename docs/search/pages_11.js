@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kiss_20principle_0',['KISS Principle',['../md_CONTRIBUTING.html#autotoc_md33',1,'']]]
+  ['licensing_0',['💡 Usage &amp;amp; Licensing',['../index.html#autotoc_md7',1,'']]]
 ];

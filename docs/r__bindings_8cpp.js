@@ -53,6 +53,7 @@ var r__bindings_8cpp =
     [ "params_get_sigma", "r__bindings_8cpp.html#a7bbc53bbb91a9f53ff4daec4098e1c73", null ],
     [ "params_get_tau", "r__bindings_8cpp.html#abe0618c8786465a6b817fe285569df12", null ],
     [ "process_update_params", "r__bindings_8cpp.html#aa87d47c86bd5d0130b38c27f61d60adc", null ],
+    [ "RCPP_MODULE", "r__bindings_8cpp.html#a43dd566d4547a92dba62a06a4656e0a8", null ],
     [ "sampler_step", "r__bindings_8cpp.html#ad75224489af86dcc7dd2b51c30458f1a", null ],
     [ "u_sampler_get_acceptance_rate", "r__bindings_8cpp.html#ab01bf30ad7167309e4627aa43e9b4d5c", null ],
     [ "u_sampler_get_U", "r__bindings_8cpp.html#ae91c08b1506321eeb549a517f49b8349", null ]

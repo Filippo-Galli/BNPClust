@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['6_20commit_20your_20changes_0',['6. Commit Your Changes',['../md_CONTRIBUTING.html#autotoc_md27',1,'']]]
+  ['6_20commit_20your_20changes_0',['6. Commit Your Changes',['../md_CONTRIBUTING.html#autotoc_md17',1,'']]]
 ];

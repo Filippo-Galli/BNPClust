@@ -93,7 +93,7 @@ var NAVTREEINDEX1 =
 "classNGGPx.html#af3ceb8c061b7a549e5c739cad1279b1a":[2,0,27,2],
 "classNatarajan__likelihood.html":[2,0,20],
 "classNatarajan__likelihood.html#a33b9be0b3b23443323429b956b2c2531":[2,0,20,4],
-"classNatarajan__likelihood.html#a48b7bd7d2d88790448e313301ebe8327":[2,0,20,0],
+"classNatarajan__likelihood.html#a45745e27e8f9df3ab050ac3e60e7dcae":[2,0,20,0],
 "classNatarajan__likelihood.html#a5059f4ad0c3d8f9da9cfa7ddb7cce10c":[2,0,20,5],
 "classNatarajan__likelihood.html#a61676acb38ea30ef588f3ba59f9fcd2b":[2,0,20,15],
 "classNatarajan__likelihood.html#a6722ee99fc98177cc9c165ce27456c97":[2,0,20,13],

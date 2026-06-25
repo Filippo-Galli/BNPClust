@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['natarajan_5flikelihood_0',['Natarajan_likelihood',['../classNatarajan__likelihood.html#a48b7bd7d2d88790448e313301ebe8327',1,'Natarajan_likelihood']]],
+  ['natarajan_5flikelihood_0',['Natarajan_likelihood',['../classNatarajan__likelihood.html#a45745e27e8f9df3ab050ac3e60e7dcae',1,'Natarajan_likelihood']]],
   ['natarajan_5flikelihood_5fsummarystats_1',['Natarajan_likelihood_summaryStats',['../classNatarajan__likelihood__summaryStats.html#a5afe31582d8638ced0e275932cb8cad8',1,'Natarajan_likelihood_summaryStats']]],
   ['natarajan_5fparams_2',['Natarajan_params',['../structNatarajan__params.html#a0e21cede7f0c777b78e26406140ad1f5',1,'Natarajan_params']]],
   ['neal3_3',['Neal3',['../classNeal3.html#a86cfe9e38bd7d60e46340df531a359b6',1,'Neal3']]],

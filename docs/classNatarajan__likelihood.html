@@ -113,8 +113,8 @@ Inheritance diagram for Natarajan_likelihood:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a48b7bd7d2d88790448e313301ebe8327" id="r_a48b7bd7d2d88790448e313301ebe8327"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a48b7bd7d2d88790448e313301ebe8327">Natarajan_likelihood</a> (const <a class="el" href="classData.html">Data</a> &amp;<a class="el" href="classLikelihood.html#a5cb2f928da9f5be76c353ea0d9b5f4ce">data</a>, const <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &amp;param, const <a class="el" href="structutils__params.html">utils_params</a> &amp;<a class="el" href="#a61676acb38ea30ef588f3ba59f9fcd2b">utils</a>)</td></tr>
-<tr class="memdesc:a48b7bd7d2d88790448e313301ebe8327"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a> object with precomputation.  <br /></td></tr>
+<tr class="memitem:a45745e27e8f9df3ab050ac3e60e7dcae" id="r_a45745e27e8f9df3ab050ac3e60e7dcae"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a45745e27e8f9df3ab050ac3e60e7dcae">Natarajan_likelihood</a> (const <a class="el" href="classData.html">Data</a> &amp;<a class="el" href="classLikelihood.html#a5cb2f928da9f5be76c353ea0d9b5f4ce">data</a>, const <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &amp;<a class="el" href="#a71c55a4716007fa6a082f73c10130272">params</a>, const <a class="el" href="structutils__params.html">utils_params</a> &amp;<a class="el" href="#a61676acb38ea30ef588f3ba59f9fcd2b">utils</a>)</td></tr>
+<tr class="memdesc:a45745e27e8f9df3ab050ac3e60e7dcae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a> object with precomputation.  <br /></td></tr>
 <tr class="memitem:a9f601a12863b7d083fca6e8debfe3c7d" id="r_a9f601a12863b7d083fca6e8debfe3c7d"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a9f601a12863b7d083fca6e8debfe3c7d">cluster_loglikelihood</a> (int cluster_index) const override final</td></tr>
 <tr class="memdesc:a9f601a12863b7d083fca6e8debfe3c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the full log-likelihood for a cluster.  <br /></td></tr>
 <tr class="memitem:affa30f9e62c2727f85a195477eb5036b" id="r_affa30f9e62c2727f85a195477eb5036b"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#affa30f9e62c2727f85a195477eb5036b">cluster_loglikelihood</a> (int cluster_index, const Eigen::Ref&lt; const Eigen::VectorXi &gt; &amp;cls_ass_k) const override final __attribute__((hot))</td></tr>
@@ -166,8 +166,8 @@ Additional Inherited Members</h2></td></tr>
 <p>This class handles the computation of log-likelihoods for clustering models that incorporate both cohesion (within-cluster similarity) and repulsion (between-cluster dissimilarity) components. It precomputes values for efficiency and provides methods to evaluate both cluster-level and point-level conditional log-likelihoods. reference: Natarajan et al. (2023) "Cohesion and Repulsion in Bayesian
 Distance Clustering" </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a48b7bd7d2d88790448e313301ebe8327" name="a48b7bd7d2d88790448e313301ebe8327"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48b7bd7d2d88790448e313301ebe8327">&#9670;&#160;</a></span>Natarajan_likelihood()</h2>
+<a id="a45745e27e8f9df3ab050ac3e60e7dcae" name="a45745e27e8f9df3ab050ac3e60e7dcae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45745e27e8f9df3ab050ac3e60e7dcae">&#9670;&#160;</a></span>Natarajan_likelihood()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,7 +183,7 @@ Distance Clustering" </p>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>param</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="structNatarajan__params.html">Natarajan_params</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>params</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -202,7 +202,8 @@ Distance Clustering" </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname"><a class="el" href="classLikelihood.html#a5cb2f928da9f5be76c353ea0d9b5f4ce" title="Reference to Data object with distances and allocations.">data</a></td><td>Reference to <a class="el" href="classData.html" title="Manages distance matrices and cluster allocations for points.">Data</a> object with distances and allocations </td></tr>
-    <tr><td class="paramname">param</td><td>Reference to model parameters</td></tr>
+    <tr><td class="paramname"><a class="el" href="#a71c55a4716007fa6a082f73c10130272" title="Reference to model parameters.">params</a></td><td>Reference to model parameters </td></tr>
+    <tr><td class="paramname"><a class="el" href="#a61676acb38ea30ef588f3ba59f9fcd2b" title="Reference to utility parameters.">utils</a></td><td>Reference to utility parameters</td></tr>
   </table>
   </dd>
 </dl>

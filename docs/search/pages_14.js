@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['new_20branch_0',['3. Create a New Branch',['../md_CONTRIBUTING.html#autotoc_md24',1,'']]],
-  ['nonparametric_20clustering_20with_20mcmc_1',['BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC',['../index.html',1,'']]]
+  ['of_20contributions_0',['Types of Contributions',['../md_CONTRIBUTING.html#autotoc_md29',1,'']]],
+  ['organization_1',['Code Organization',['../md_CONTRIBUTING.html#autotoc_md25',1,'']]]
 ];

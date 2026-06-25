@@ -1,6 +1,6 @@
 var classNatarajan__likelihood =
 [
-    [ "Natarajan_likelihood", "classNatarajan__likelihood.html#a48b7bd7d2d88790448e313301ebe8327", null ],
+    [ "Natarajan_likelihood", "classNatarajan__likelihood.html#a45745e27e8f9df3ab050ac3e60e7dcae", null ],
     [ "cluster_loglikelihood", "classNatarajan__likelihood.html#a9f601a12863b7d083fca6e8debfe3c7d", null ],
     [ "cluster_loglikelihood", "classNatarajan__likelihood.html#affa30f9e62c2727f85a195477eb5036b", null ],
     [ "compute_cohesion", "classNatarajan__likelihood.html#aaa7a5745e2a21209046042f83821e37e", null ],

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['usage_0',['🛠️ Installation &amp;amp; Usage',['../index.html#autotoc_md12',1,'']]],
-  ['usage_20licensing_1',['💡 Usage &amp;amp; Licensing',['../index.html#autotoc_md17',1,'']]]
+  ['with_20mcmc_0',['BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC',['../index.html',1,'']]]
 ];
