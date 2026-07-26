@@ -78,6 +78,7 @@ in
     pkgs.rPackages.gtools
     pkgs.rPackages.argparser
     pkgs.rPackages.coda
+    pkgs.rPackages.readxl
 
     # Data analysis packages
     pkgs.rPackages.ggplot2
