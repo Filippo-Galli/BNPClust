@@ -7,74 +7,327 @@
 pums_variables_definition <- list(
     # ========== CONTINUOUS VARIABLES ==========
     continuous = c(
-        "ADJHSG", "ADJINC", # Adjustment factors
-        "FINCP", "HINCP", "INTP", "OIP", "PAP", "PERNP", "PINCP",
-        "RETP", "SEMP", "SSIP", "SSP", "WAGP", # Income
-        "CONP", "ELEP", "FULP", "GASP", "GRNTP", "INSP", "MHP",
-        "MRGP", "RNTP", "SMP", "SMOCP", "VALP", "WATP", # Housing costs
-        "JWMNP", "WKHP", "AGEP", "CITWP", "YOEP", # Time/Years
-        "BDSP", "NOC", "NRC", "NPF", "RMSP", "RACNUM" # Counts
+        "ADJHSG",
+        "ADJINC", # Adjustment factors
+        "FINCP",
+        "HINCP",
+        "INTP",
+        "OIP",
+        "PAP",
+        "PERNP",
+        "PINCP",
+        "RETP",
+        "SEMP",
+        "SSIP",
+        "SSP",
+        "WAGP", # Income
+        "CONP",
+        "ELEP",
+        "FULP",
+        "GASP",
+        "GRNTP",
+        "INSP",
+        "MHP",
+        "MRGP",
+        "RNTP",
+        "SMP",
+        "SMOCP",
+        "VALP",
+        "WATP", # Housing costs
+        "JWMNP",
+        "WKHP",
+        "AGEP",
+        "CITWP",
+        "YOEP", # Time/Years
+        "BDSP",
+        "NOC",
+        "NRC",
+        "NPF",
+        "RMSP",
+        "RACNUM" # Counts
     ),
 
     # ========== CATEGORICAL NOMINAL ==========
     categorical_nominal = c(
-        "RT", "ST", "PUMA", "DIVISION", "REGION", "POBP", "POWPUMA", "POWSP",
-        "MIGPUMA", "MIGSP", "WAOB", # Geography
-        "HHT", "HHL", "RELP", "SFN", "SFR", "MSP", "PAOC", "QTRBIR", # Household
-        "TYPE", "HFL", "RESMODE", "TEN", "VACS", # Housing
-        "SEX", "MAR", "CIT", "MIG", "NATIVITY", "NOP", "ANC", "ANC1P", "ANC2P",
-        "HISP", "RAC1P", "RAC2P", "RAC3P", "LANP", # Demographics
-        "SCH", "COW", "ESR", "INDP", "NAICSP", "OCCP", "SOCP", "FOD1P", "FOD2P",
-        "JWTR", "JWAP", "JWDP", "MIL", "VPS", # Employment
-        "FHINS3C", "FHINS4C", "FHINS5C" # Insurance
+        "RT",
+        "ST",
+        "PUMA",
+        "DIVISION",
+        "REGION",
+        "POBP",
+        "POWPUMA",
+        "POWSP",
+        "MIGPUMA",
+        "MIGSP",
+        "WAOB", # Geography
+        "HHT",
+        "HHL",
+        "RELP",
+        "SFN",
+        "SFR",
+        "MSP",
+        "PAOC",
+        "QTRBIR", # Household
+        "TYPE",
+        "HFL",
+        "RESMODE",
+        "TEN",
+        "VACS", # Housing
+        "SEX",
+        "MAR",
+        "CIT",
+        "MIG",
+        "NATIVITY",
+        "NOP",
+        "ANC",
+        "ANC1P",
+        "ANC2P",
+        "HISP",
+        "RAC1P",
+        "RAC2P",
+        "RAC3P",
+        "LANP", # Demographics
+        "SCH",
+        "COW",
+        "ESR",
+        "INDP",
+        "NAICSP",
+        "OCCP",
+        "SOCP",
+        "FOD1P",
+        "FOD2P",
+        "JWTR",
+        "JWAP",
+        "JWDP",
+        "MIL",
+        "VPS", # Employment
+        "FHINS3C",
+        "FHINS4C",
+        "FHINS5C" # Insurance
     ),
 
     # ========== CATEGORICAL ORDINAL ==========
     categorical_ordinal = c(
-        "ACR", "BLD", "YBL", "MV", "VEH", "TAXP", # Housing
-        "AGS", "GRPIP", "OCPIP", "POVPIP", # Income ratios
-        "SCHG", "SCHL", "ENG", "NP", "R18", "R60", "R65", "FPARC",
-        "HUPAC", "HUPAOC", "HUPARC", "GCM", "MARHT", # Household
-        "WKW", "WKL", "WKEXREL", "WORKSTAT", "WIF", "JWRIP", "DRIVESP",
-        "DECADE", "DRAT" # Work/Disability
+        "ACR",
+        "BLD",
+        "YBL",
+        "MV",
+        "VEH",
+        "TAXP", # Housing
+        "AGS",
+        "GRPIP",
+        "OCPIP",
+        "POVPIP", # Income ratios
+        "SCHG",
+        "SCHL",
+        "ENG",
+        "NP",
+        "R18",
+        "R60",
+        "R65",
+        "FPARC",
+        "HUPAC",
+        "HUPAOC",
+        "HUPARC",
+        "GCM",
+        "MARHT", # Household
+        "WKW",
+        "WKL",
+        "WKEXREL",
+        "WORKSTAT",
+        "WIF",
+        "JWRIP",
+        "DRIVESP",
+        "DECADE",
+        "DRAT" # Work/Disability
     ),
 
     # ========== BINARY (YES/NO) ==========
     binary = c(
-        "BATH", "BUS", "KIT", "PLM", "REFR", "RWAT", "SINK", "STOV", "TEL", "TOIL", # Housing
-        "HUGCL", "LNGI", "MULTG", "NPP", "NR", "PSF", "PARTNER", "RNTM", "SRNT", "SVAL", # Household
-        "DDRS", "DEAR", "DEYE", "DOUT", "DPHY", "DREM", "DIS", "DRATX", # Health
-        "HICOV", "PRIVCOV", "PUBCOV",
+        "BATH",
+        "BUS",
+        "KIT",
+        "PLM",
+        "REFR",
+        "RWAT",
+        "SINK",
+        "STOV",
+        "TEL",
+        "TOIL", # Housing
+        "HUGCL",
+        "LNGI",
+        "MULTG",
+        "NPP",
+        "NR",
+        "PSF",
+        "PARTNER",
+        "RNTM",
+        "SRNT",
+        "SVAL", # Household
+        "DDRS",
+        "DEAR",
+        "DEYE",
+        "DOUT",
+        "DPHY",
+        "DREM",
+        "DIS",
+        "DRATX", # Health
+        "HICOV",
+        "PRIVCOV",
+        "PUBCOV",
         paste0("HINS", 1:7), # Insurance types
-        "FER", "LANX", "GCL", "GCR", # Demographics
-        "RACAIAN", "RACASN", "RACBLK", "RACNHPI", "RACSOR", "RACWHT", "RC", "OC", # Race/ethnicity
-        "FS", "MRGI", "MRGT", "MRGX", "SMX", # Mortgage/Financial
-        "SCIENGP", "SCIENGRLP", "WRK", "NWAB", "NWAV", "NWLA", "NWLK", "NWRE", # Work
-        "MARHD", "MARHM", "MARHW", # Marital
-        paste0("MLPA", "MLPB", "MLPC", "MLPD", "MLPE", "MLPF", "MLPG", "MLPH", "MLPI", "MLPJ", "MLPK") # Military
+        "FER",
+        "LANX",
+        "GCL",
+        "GCR", # Demographics
+        "RACAIAN",
+        "RACASN",
+        "RACBLK",
+        "RACNHPI",
+        "RACSOR",
+        "RACWHT",
+        "RC",
+        "OC", # Race/ethnicity
+        "FS",
+        "MRGI",
+        "MRGT",
+        "MRGX",
+        "SMX", # Mortgage/Financial
+        "SCIENGP",
+        "SCIENGRLP",
+        "WRK",
+        "NWAB",
+        "NWAV",
+        "NWLA",
+        "NWLK",
+        "NWRE", # Work
+        "MARHD",
+        "MARHM",
+        "MARHW", # Marital
+        paste0(
+            "MLPA",
+            "MLPB",
+            "MLPC",
+            "MLPD",
+            "MLPE",
+            "MLPF",
+            "MLPG",
+            "MLPH",
+            "MLPI",
+            "MLPJ",
+            "MLPK"
+        ) # Military
     ),
 
     # ========== ALLOCATION FLAGS ==========
     allocation_flags = c(
-        "FACRP", "FAGSP", "FBATHP", "FBDSP", "FBLDP", "FBUSP",
-        "FCONP", "FELEP", "FFSP", "FFULP", "FGASP", "FHFLP",
-        "FINSP", "FKITP", "FMHP", "FMRGIP", "FMRGP", "FMRGTP",
-        "FMRGXP", "FMVP", "FPLMP", "FREFRP", "FRMSP", "FRNTMP",
-        "FRNTP", "FRWATP", "FSINKP", "FSMP", "FSMXHP", "FSMXSP",
-        "FSTOVP", "FTAXP", "FTELP", "FTENP", "FTOILP", "FVACSP",
-        "FVALP", "FVEHP", "FWATP", "FYBLP",
+        "FACRP",
+        "FAGSP",
+        "FBATHP",
+        "FBDSP",
+        "FBLDP",
+        "FBUSP",
+        "FCONP",
+        "FELEP",
+        "FFSP",
+        "FFULP",
+        "FGASP",
+        "FHFLP",
+        "FINSP",
+        "FKITP",
+        "FMHP",
+        "FMRGIP",
+        "FMRGP",
+        "FMRGTP",
+        "FMRGXP",
+        "FMVP",
+        "FPLMP",
+        "FREFRP",
+        "FRMSP",
+        "FRNTMP",
+        "FRNTP",
+        "FRWATP",
+        "FSINKP",
+        "FSMP",
+        "FSMXHP",
+        "FSMXSP",
+        "FSTOVP",
+        "FTAXP",
+        "FTELP",
+        "FTENP",
+        "FTOILP",
+        "FVACSP",
+        "FVALP",
+        "FVEHP",
+        "FWATP",
+        "FYBLP",
         # Person flags
-        "FAGEP", "FANCP", "FCITP", "FCITWP", "FCOWP", "FDDRSP",
-        "FDEARP", "FDEYEP", "FDOUTP", "FDPHYP", "FDRATP", "FDRATXP",
-        "FDREMP", "FENGP", "FESRP", "FFERP", "FFODP", "FGCLP",
-        "FGCMP", "FGCRP", "FHINS1P", "FHINS2P", "FHINS3P", "FHINS4P",
-        "FHINS5P", "FHINS6P", "FHINS7P", "FHISP", "FINDP", "FINTP",
-        "FJWDP", "FJWMNP", "FJWRIP", "FJWTRP", "FLANP", "FLANXP",
-        "FMARP", "FMARHDP", "FMARHMP", "FMARHTP", "FMARHWP", "FMARHYP",
-        "FMIGP", "FMIGSP", "FMILPP", "FMILSP", "FOCCP", "FOIP",
-        "FPAP", "FPOBP", "FPOWSP", "FRACP", "FRELP", "FRETP",
-        "FSCHGP", "FSCHLP", "FSCHP", "FSEMP", "FSEXP", "FSSIP",
-        "FSSP", "FWAGP", "FWKHP", "FWKLP", "FWKWP", "FWRKP",
+        "FAGEP",
+        "FANCP",
+        "FCITP",
+        "FCITWP",
+        "FCOWP",
+        "FDDRSP",
+        "FDEARP",
+        "FDEYEP",
+        "FDOUTP",
+        "FDPHYP",
+        "FDRATP",
+        "FDRATXP",
+        "FDREMP",
+        "FENGP",
+        "FESRP",
+        "FFERP",
+        "FFODP",
+        "FGCLP",
+        "FGCMP",
+        "FGCRP",
+        "FHINS1P",
+        "FHINS2P",
+        "FHINS3P",
+        "FHINS4P",
+        "FHINS5P",
+        "FHINS6P",
+        "FHINS7P",
+        "FHISP",
+        "FINDP",
+        "FINTP",
+        "FJWDP",
+        "FJWMNP",
+        "FJWRIP",
+        "FJWTRP",
+        "FLANP",
+        "FLANXP",
+        "FMARP",
+        "FMARHDP",
+        "FMARHMP",
+        "FMARHTP",
+        "FMARHWP",
+        "FMARHYP",
+        "FMIGP",
+        "FMIGSP",
+        "FMILPP",
+        "FMILSP",
+        "FOCCP",
+        "FOIP",
+        "FPAP",
+        "FPOBP",
+        "FPOWSP",
+        "FRACP",
+        "FRELP",
+        "FRETP",
+        "FSCHGP",
+        "FSCHLP",
+        "FSCHP",
+        "FSEMP",
+        "FSEXP",
+        "FSSIP",
+        "FSSP",
+        "FWAGP",
+        "FWKHP",
+        "FWKLP",
+        "FWKWP",
+        "FWRKP",
         "FYOEP"
     ),
 
@@ -82,7 +335,8 @@ pums_variables_definition <- list(
     weights = c(
         paste0("WGTP", 1:80), # Housing weight replicates
         paste0("PWGTP", 1:80), # Person weight replicates
-        "WGTP", "PWGTP" # Main weights
+        "WGTP",
+        "PWGTP" # Main weights
     )
 )
 
@@ -94,34 +348,51 @@ cat("Total PUMS variables defined:", length(all_pums_vars), "\n")
 
 library(argparser)
 
-parser <- arg_parser("Simplified Census Data Workflow - Enhanced with Full Covariates")
+parser <- arg_parser(
+    "Simplified Census Data Workflow - Enhanced with Full Covariates"
+)
 
-parser <- add_argument(parser, "--states",
+parser <- add_argument(
+    parser,
+    "--states",
     default = "LA",
     help = "Comma-separated states or regions (West, Midwest, South, Northeast, USA, LA)"
 )
 
-parser <- add_argument(parser, "--num-datasets",
-    type = "integer", default = 1,
+parser <- add_argument(
+    parser,
+    "--num-datasets",
+    type = "integer",
+    default = 1,
     help = "Number of subsampled datasets to generate"
 )
 
-parser <- add_argument(parser, "--subsample-size",
-    type = "integer", default = -1,
+parser <- add_argument(
+    parser,
+    "--subsample-size",
+    type = "integer",
+    default = -1,
     help = "Number of observations per PUMA in each subsample (use -1 for all observations)"
 )
 
-parser <- add_argument(parser, "--cores",
-    type = "integer", default = 1,
+parser <- add_argument(
+    parser,
+    "--cores",
+    type = "integer",
+    default = 1,
     help = "Number of cores for parallel download (default: 1)"
 )
 
-parser <- add_argument(parser, "--output-dir",
+parser <- add_argument(
+    parser,
+    "--output-dir",
     default = "input/LA/",
     help = "Output directory for processed data"
 )
 
-parser <- add_argument(parser, "--keep-raw",
+parser <- add_argument(
+    parser,
+    "--keep-raw",
     flag = TRUE,
     help = "Keep raw downloaded files (default: delete after processing)"
 )
@@ -143,54 +414,175 @@ suppressMessages({
 
 STATE_FIPS <- c(
     # West
-    "California" = "06", "Nevada" = "32", "Oregon" = "41", "Washington" = "53",
-    "Arizona" = "04", "Idaho" = "16", "Utah" = "49", "Montana" = "30",
-    "Wyoming" = "56", "Colorado" = "08", "New Mexico" = "35", "Alaska" = "02", "Hawaii" = "15",
+    "California" = "06",
+    "Nevada" = "32",
+    "Oregon" = "41",
+    "Washington" = "53",
+    "Arizona" = "04",
+    "Idaho" = "16",
+    "Utah" = "49",
+    "Montana" = "30",
+    "Wyoming" = "56",
+    "Colorado" = "08",
+    "New Mexico" = "35",
+    "Alaska" = "02",
+    "Hawaii" = "15",
     # Midwest
-    "North Dakota" = "38", "South Dakota" = "46", "Nebraska" = "31", "Kansas" = "20",
-    "Minnesota" = "27", "Iowa" = "19", "Missouri" = "29", "Wisconsin" = "55",
-    "Illinois" = "17", "Michigan" = "26", "Indiana" = "18", "Ohio" = "39",
+    "North Dakota" = "38",
+    "South Dakota" = "46",
+    "Nebraska" = "31",
+    "Kansas" = "20",
+    "Minnesota" = "27",
+    "Iowa" = "19",
+    "Missouri" = "29",
+    "Wisconsin" = "55",
+    "Illinois" = "17",
+    "Michigan" = "26",
+    "Indiana" = "18",
+    "Ohio" = "39",
     # South
-    "Texas" = "48", "Oklahoma" = "40", "Arkansas" = "05", "Louisiana" = "22",
-    "Mississippi" = "28", "Alabama" = "01", "Tennessee" = "47", "Kentucky" = "21",
-    "West Virginia" = "54", "Virginia" = "51", "North Carolina" = "37", "South Carolina" = "45",
-    "Georgia" = "13", "Florida" = "12",
+    "Texas" = "48",
+    "Oklahoma" = "40",
+    "Arkansas" = "05",
+    "Louisiana" = "22",
+    "Mississippi" = "28",
+    "Alabama" = "01",
+    "Tennessee" = "47",
+    "Kentucky" = "21",
+    "West Virginia" = "54",
+    "Virginia" = "51",
+    "North Carolina" = "37",
+    "South Carolina" = "45",
+    "Georgia" = "13",
+    "Florida" = "12",
     # Northeast
-    "Maryland" = "24", "Delaware" = "10", "District of Columbia" = "11", "Pennsylvania" = "42",
-    "New Jersey" = "34", "New York" = "36", "Connecticut" = "09", "Rhode Island" = "44",
-    "Massachusetts" = "25", "Vermont" = "50", "New Hampshire" = "33", "Maine" = "23"
+    "Maryland" = "24",
+    "Delaware" = "10",
+    "District of Columbia" = "11",
+    "Pennsylvania" = "42",
+    "New Jersey" = "34",
+    "New York" = "36",
+    "Connecticut" = "09",
+    "Rhode Island" = "44",
+    "Massachusetts" = "25",
+    "Vermont" = "50",
+    "New Hampshire" = "33",
+    "Maine" = "23"
 )
 
 STATE_ABBREV <- c(
-    "06" = "ca", "32" = "nv", "41" = "or", "53" = "wa", "04" = "az", "16" = "id",
-    "49" = "ut", "30" = "mt", "56" = "wy", "08" = "co", "35" = "nm", "02" = "ak", "15" = "hi",
-    "38" = "nd", "46" = "sd", "31" = "ne", "20" = "ks", "27" = "mn", "19" = "ia",
-    "29" = "mo", "55" = "wi", "17" = "il", "26" = "mi", "18" = "in", "39" = "oh",
-    "48" = "tx", "40" = "ok", "05" = "ar", "22" = "la", "28" = "ms", "01" = "al",
-    "47" = "tn", "21" = "ky", "54" = "wv", "51" = "va", "37" = "nc", "45" = "sc",
-    "13" = "ga", "12" = "fl", "24" = "md", "10" = "de", "11" = "dc", "42" = "pa",
-    "34" = "nj", "36" = "ny", "09" = "ct", "44" = "ri", "25" = "ma", "50" = "vt",
-    "33" = "nh", "23" = "me"
+    "06" = "ca",
+    "32" = "nv",
+    "41" = "or",
+    "53" = "wa",
+    "04" = "az",
+    "16" = "id",
+    "49" = "ut",
+    "30" = "mt",
+    "56" = "wy",
+    "08" = "co",
+    "35" = "nm",
+    "02" = "ak",
+    "15" = "hi",
+    "38" = "nd",
+    "46" = "sd",
+    "31" = "ne",
+    "20" = "ks",
+    "27" = "mn",
+    "19" = "ia",
+    "29" = "mo",
+    "55" = "wi",
+    "17" = "il",
+    "26" = "mi",
+    "18" = "in",
+    "39" = "oh",
+    "48" = "tx",
+    "40" = "ok",
+    "05" = "ar",
+    "22" = "la",
+    "28" = "ms",
+    "01" = "al",
+    "47" = "tn",
+    "21" = "ky",
+    "54" = "wv",
+    "51" = "va",
+    "37" = "nc",
+    "45" = "sc",
+    "13" = "ga",
+    "12" = "fl",
+    "24" = "md",
+    "10" = "de",
+    "11" = "dc",
+    "42" = "pa",
+    "34" = "nj",
+    "36" = "ny",
+    "09" = "ct",
+    "44" = "ri",
+    "25" = "ma",
+    "50" = "vt",
+    "33" = "nh",
+    "23" = "me"
 )
 
 REGIONS <- list(
     West = c(
-        "California", "Nevada", "Oregon", "Washington", "Arizona", "Idaho",
-        "Utah", "Montana", "Wyoming", "Colorado", "New Mexico", "Alaska", "Hawaii"
+        "California",
+        "Nevada",
+        "Oregon",
+        "Washington",
+        "Arizona",
+        "Idaho",
+        "Utah",
+        "Montana",
+        "Wyoming",
+        "Colorado",
+        "New Mexico",
+        "Alaska",
+        "Hawaii"
     ),
     Midwest = c(
-        "North Dakota", "South Dakota", "Nebraska", "Kansas", "Minnesota",
-        "Iowa", "Missouri", "Wisconsin", "Illinois", "Michigan", "Indiana", "Ohio"
+        "North Dakota",
+        "South Dakota",
+        "Nebraska",
+        "Kansas",
+        "Minnesota",
+        "Iowa",
+        "Missouri",
+        "Wisconsin",
+        "Illinois",
+        "Michigan",
+        "Indiana",
+        "Ohio"
     ),
     South = c(
-        "Texas", "Oklahoma", "Arkansas", "Louisiana", "Mississippi", "Alabama",
-        "Tennessee", "Kentucky", "West Virginia", "Virginia", "North Carolina",
-        "South Carolina", "Georgia", "Florida"
+        "Texas",
+        "Oklahoma",
+        "Arkansas",
+        "Louisiana",
+        "Mississippi",
+        "Alabama",
+        "Tennessee",
+        "Kentucky",
+        "West Virginia",
+        "Virginia",
+        "North Carolina",
+        "South Carolina",
+        "Georgia",
+        "Florida"
     ),
     Northeast = c(
-        "Maryland", "Delaware", "District of Columbia", "Pennsylvania",
-        "New Jersey", "New York", "Connecticut", "Rhode Island", "Massachusetts",
-        "Vermont", "New Hampshire", "Maine"
+        "Maryland",
+        "Delaware",
+        "District of Columbia",
+        "Pennsylvania",
+        "New Jersey",
+        "New York",
+        "Connecticut",
+        "Rhode Island",
+        "Massachusetts",
+        "Vermont",
+        "New Hampshire",
+        "Maine"
     ),
     LA = c("California"),
     USA = names(STATE_FIPS)
@@ -208,7 +600,11 @@ parse_states <- function(states_string) {
         if (length(region_match) > 0) {
             region_name <- names(REGIONS)[region_match[1]]
             selected <- c(selected, REGIONS[[region_name]])
-            cat(sprintf(" Region '%s' → %d states\n", region_name, length(REGIONS[[region_name]])))
+            cat(sprintf(
+                " Region '%s' → %d states\n",
+                region_name,
+                length(REGIONS[[region_name]])
+            ))
             if (toupper(region_name) == "LA") {
                 filter_la <- TRUE
             }
@@ -216,6 +612,7 @@ parse_states <- function(states_string) {
             selected <- c(selected, item)
         }
     }
+
     list(states = unique(selected), filter_la_bay_area = filter_la)
 }
 
@@ -227,7 +624,9 @@ cat("\n=== Selected States ===\n")
 cat(sprintf("Total: %d states\n", length(states_to_process)))
 cat(paste(states_to_process, collapse = ", "), "\n")
 if (filter_la_bay_area) {
-    cat("Note: Will filter to LA Bay Area (93 PUMAs in LA, Orange, Ventura counties)\n")
+    cat(
+        "Note: Will filter to LA Bay Area (93 PUMAs in LA, Orange, Ventura counties)\n"
+    )
 }
 
 # Validate states
@@ -245,7 +644,9 @@ dir.create(args$output_dir, showWarnings = FALSE, recursive = TRUE)
 cat("\n=== Downloading Data ===\n")
 
 download_with_progress <- function(url, destfile, quiet = FALSE) {
-    if (!quiet) cat(sprintf(" Downloading: %s\n", basename(url)))
+    if (!quiet) {
+        cat(sprintf(" Downloading: %s\n", basename(url)))
+    }
 
     # Try aria2c if available (faster split downloading)
     if (nzchar(Sys.which("aria2c"))) {
@@ -257,12 +658,20 @@ download_with_progress <- function(url, destfile, quiet = FALSE) {
         # --file-allocation=none: faster startup
         cmd <- sprintf(
             "aria2c -x 4 -s 4 --allow-overwrite=true --file-allocation=none -d '%s' -o '%s' '%s' %s",
-            dir_name, file_name, url, if (quiet) "-q" else ""
+            dir_name,
+            file_name,
+            url,
+            if (quiet) "-q" else ""
         )
 
         status <- system(cmd, ignore.stdout = quiet, ignore.stderr = quiet)
         if (status == 0 && file.exists(destfile)) {
-            if (!quiet) cat(sprintf(" ✓ Downloaded (aria2c): %.2f MB\n", file.size(destfile) / 1024^2))
+            if (!quiet) {
+                cat(sprintf(
+                    " ✓ Downloaded (aria2c): %.2f MB\n",
+                    file.size(destfile) / 1024^2
+                ))
+            }
             return(TRUE)
         }
     }
@@ -274,13 +683,20 @@ download_with_progress <- function(url, destfile, quiet = FALSE) {
             TRUE
         },
         error = function(e) {
-            if (!quiet) cat(sprintf(" ✗ Failed: %s\n", e$message))
+            if (!quiet) {
+                cat(sprintf(" ✗ Failed: %s\n", e$message))
+            }
             FALSE
         }
     )
 
     if (result && file.exists(destfile)) {
-        if (!quiet) cat(sprintf(" ✓ Downloaded: %.2f MB\n", file.size(destfile) / 1024^2))
+        if (!quiet) {
+            cat(sprintf(
+                " ✓ Downloaded: %.2f MB\n",
+                file.size(destfile) / 1024^2
+            ))
+        }
     }
     return(result)
 }
@@ -308,7 +724,10 @@ process_state_download <- function(i) {
     state <- states_to_process[i]
     fips <- STATE_FIPS[state]
     abbrev <- STATE_ABBREV[fips]
-    url <- sprintf("https://www2.census.gov/programs-surveys/acs/experimental/2020/data/pums/1-Year/csv_p%s.zip", abbrev)
+    url <- sprintf(
+        "https://www2.census.gov/programs-surveys/acs/experimental/2020/data/pums/1-Year/csv_p%s.zip",
+        abbrev
+    )
     destfile <- sprintf("raw/csv_p%s.zip", abbrev)
 
     # For parallel, we suppress individual progress bars and start/end messages to avoid clutter
@@ -320,7 +739,9 @@ process_state_download <- function(i) {
 
     if (download_with_progress(url, destfile, quiet = is_parallel)) {
         unzip(destfile, exdir = "raw")
-        if (!is_parallel) cat(" ✓ Extracted\n")
+        if (!is_parallel) {
+            cat(" ✓ Extracted\n")
+        }
         return(list(state = state, success = TRUE))
     } else {
         return(list(state = state, success = FALSE))
@@ -328,7 +749,11 @@ process_state_download <- function(i) {
 }
 
 if (args$cores > 1) {
-    results <- mclapply(seq_along(states_to_process), process_state_download, mc.cores = args$cores)
+    results <- mclapply(
+        seq_along(states_to_process),
+        process_state_download,
+        mc.cores = args$cores
+    )
 
     for (res in results) {
         if (!is.null(res) && !inherits(res, "try-error")) {
@@ -355,7 +780,10 @@ if (args$cores > 1) {
 }
 
 if (length(failed_states) > 0) {
-    warning(sprintf("Failed to download: %s", paste(failed_states, collapse = ", ")))
+    warning(sprintf(
+        "Failed to download: %s",
+        paste(failed_states, collapse = ", ")
+    ))
     states_to_process <- downloaded_states
 }
 
@@ -365,7 +793,8 @@ if (length(downloaded_states) == 0) {
 
 cat(sprintf(
     "\n✓ Successfully downloaded %d/%d states\n",
-    length(downloaded_states), length(states_to_process) + length(failed_states)
+    length(downloaded_states),
+    length(states_to_process) + length(failed_states)
 ))
 
 # ========== Load and process data ==========
@@ -453,7 +882,10 @@ missing_vars <- setdiff(effective_pums_vars, present_vars)
 cat(sprintf("Variables missing from raw data: %d\n", length(missing_vars)))
 
 if (length(missing_vars) > 0) {
-    cat(sprintf("  Adding %d NA columns for missing covariates...\n", length(missing_vars)))
+    cat(sprintf(
+        "  Adding %d NA columns for missing covariates...\n",
+        length(missing_vars)
+    ))
     for (var in missing_vars) {
         census_data[[var]] <- NA
     }
@@ -514,7 +946,10 @@ if (filter_la_bay_area) {
 # Match data and geography
 cat("Matching data and geography... ")
 
-common_pumas <- intersect(sf_counties$STATE_PUMA, unique(census_data$STATE_PUMA))
+common_pumas <- intersect(
+    sf_counties$STATE_PUMA,
+    unique(census_data$STATE_PUMA)
+)
 
 if (length(common_pumas) == 0) {
     stop("No matching PUMAs found between shapefile and data!")
@@ -543,7 +978,10 @@ adj_list <- poly2nb(sf_counties, queen = FALSE, snap = 0.01)
 isolated <- which(card(adj_list) == 0)
 
 if (length(isolated) > 0) {
-    cat(sprintf("\n Warning: %d isolated PUMAs (no neighbors)\n", length(isolated)))
+    cat(sprintf(
+        "\n Warning: %d isolated PUMAs (no neighbors)\n",
+        length(isolated)
+    ))
 }
 
 W <- nb2mat(adj_list, style = "B", zero.policy = TRUE)
@@ -558,7 +996,8 @@ min_size <- min(sapply(data_by_puma, nrow))
 if (args$subsample_size != -1 && args$subsample_size > min_size) {
     stop(sprintf(
         "Subsample size (%d) exceeds minimum PUMA size (%d)",
-        args$subsample_size, min_size
+        args$subsample_size,
+        min_size
     ))
 }
 
@@ -570,20 +1009,26 @@ adj_list <- poly2nb(sf_counties, queen = FALSE, snap = 100)
 isolated <- which(card(adj_list) == 0)
 
 if (length(isolated) > 0) {
-    cat(sprintf("\n Warning: %d isolated PUMAs (no neighbors)\n", length(isolated)))
+    cat(sprintf(
+        "\n Warning: %d isolated PUMAs (no neighbors)\n",
+        length(isolated)
+    ))
 }
 
 n <- nrow(sf_counties)
 
 # 1. Extract all neighbor pairs as a two-column matrix (i < j only, no duplicates)
-neighbor_pairs <- do.call(rbind, lapply(seq_len(n), function(i) {
-    js <- adj_list[[i]]
-    js <- js[js > i & js != 0] # upper triangle only
-    if (length(js) == 0) {
-        return(NULL)
-    }
-    cbind(i = i, j = js)
-}))
+neighbor_pairs <- do.call(
+    rbind,
+    lapply(seq_len(n), function(i) {
+        js <- adj_list[[i]]
+        js <- js[js > i & js != 0] # upper triangle only
+        if (length(js) == 0) {
+            return(NULL)
+        }
+        cbind(i = i, j = js)
+    })
+)
 
 cat(sprintf("\n  Found %d unique neighbor pairs\n", nrow(neighbor_pairs)))
 
@@ -608,7 +1053,9 @@ colnames(W_cont) <- sf_counties$STATE_PUMA
 # ========== Generate datasets ==========
 
 if (args$subsample_size == -1) {
-    cat("\nNote: Subsample size set to -1. Generating 1 dataset with ALL observations.\n")
+    cat(
+        "\nNote: Subsample size set to -1. Generating 1 dataset with ALL observations.\n"
+    )
     args$num_datasets <- 1
 }
 
@@ -621,26 +1068,36 @@ data <- lapply(data_by_puma, function(df) {
 
 # Save full dataset as CSV (long format)
 cat("Saving full dataset as CSV... ")
-full_data_long <- do.call(rbind, lapply(names(data_by_puma), function(puma_id) {
-    data.frame(
-        COD_PUMA = puma_id,
-        NAME_PUMA = paste(sf_counties$State[sf_counties$STATE_PUMA == puma_id],
-            sf_counties$Name[sf_counties$STATE_PUMA == puma_id],
-            sep = " - "
-        ),
-        log_income = data_by_puma[[puma_id]]$LPINCP,
-        stringsAsFactors = FALSE
-    )
-}))
+full_data_long <- do.call(
+    rbind,
+    lapply(names(data_by_puma), function(puma_id) {
+        data.frame(
+            COD_PUMA = puma_id,
+            NAME_PUMA = paste(
+                sf_counties$State[sf_counties$STATE_PUMA == puma_id],
+                sf_counties$Name[sf_counties$STATE_PUMA == puma_id],
+                sep = " - "
+            ),
+            log_income = data_by_puma[[puma_id]]$LPINCP,
+            stringsAsFactors = FALSE
+        )
+    })
+)
 
-write.csv(full_data_long, file.path(args$output_dir, "full_dataset.csv"), row.names = FALSE)
+write.csv(
+    full_data_long,
+    file.path(args$output_dir, "full_dataset.csv"),
+    row.names = FALSE
+)
 rm(full_data_long)
 gc()
 cat("✓\n")
 
 # ========== CREATE ENHANCED full_dataset_covariates ==========
 
-cat("\nBuilding and saving full_dataset_covariates with all loaded PUMS variables...\n")
+cat(
+    "\nBuilding and saving full_dataset_covariates with all loaded PUMS variables...\n"
+)
 
 # Columns to include: effective PUMS vars present in census_data
 puma_covariate_cols <- intersect(effective_pums_vars, colnames(census_data))
@@ -652,7 +1109,10 @@ total_cov_rows <- 0L
 full_dataset_covariates <- list()
 
 for (puma_id in names(data_by_puma)) {
-    puma_covariates <- data_by_puma[[puma_id]][, puma_covariate_cols, drop = FALSE]
+    puma_covariates <- data_by_puma[[puma_id]][,
+        puma_covariate_cols,
+        drop = FALSE
+    ]
 
     # RDS list entry
     full_dataset_covariates[[puma_id]] <- puma_covariates
@@ -661,9 +1121,11 @@ for (puma_id in names(data_by_puma)) {
     puma_csv <- puma_covariates
     puma_csv$COD_PUMA <- puma_id
     puma_csv <- puma_csv[, c("COD_PUMA", puma_covariate_cols), drop = FALSE]
-    write.table(puma_csv,
+    write.table(
+        puma_csv,
         file = cov_csv_path,
-        sep = ",", row.names = FALSE,
+        sep = ",",
+        row.names = FALSE,
         col.names = !cov_csv_header_written,
         append = cov_csv_header_written,
         quote = TRUE
@@ -676,10 +1138,13 @@ for (puma_id in names(data_by_puma)) {
 cat("\nVerification:\n")
 cat(sprintf("  Number of PUMAs: %d\n", length(full_dataset_covariates)))
 cat(sprintf("  Columns per PUMA: %d\n", ncol(full_dataset_covariates[[1]])))
-cat(sprintf("  Observations per PUMA: %s\n", paste(
-    sapply(full_dataset_covariates, nrow),
-    collapse = " | "
-)))
+cat(sprintf(
+    "  Observations per PUMA: %s\n",
+    paste(
+        sapply(full_dataset_covariates, nrow),
+        collapse = " | "
+    )
+))
 
 # Save as RDS (list format for LA.R)
 saveRDS(
@@ -689,7 +1154,8 @@ saveRDS(
 cat(sprintf("✓ Saved full_dataset_covariates.rds (list format)\n"))
 cat(sprintf(
     "✓ Saved full_dataset_covariates.csv (%d rows, %d columns)\n",
-    total_cov_rows, length(puma_covariate_cols) + 1L
+    total_cov_rows,
+    length(puma_covariate_cols) + 1L
 ))
 
 # Free large objects no longer needed
@@ -701,7 +1167,8 @@ set.seed(230196)
 
 cat(sprintf(
     "Generating %d subsampled datasets (n=%s per PUMA)...\n",
-    args$num_datasets, if (args$subsample_size == -1) "ALL" else args$subsample_size
+    args$num_datasets,
+    if (args$subsample_size == -1) "ALL" else args$subsample_size
 ))
 
 for (i in 1:args$num_datasets) {
@@ -716,7 +1183,8 @@ for (i in 1:args$num_datasets) {
 
         data.frame(
             COD_PUMA = puma_id,
-            NAME_PUMA = paste(sf_counties$State[sf_counties$STATE_PUMA == puma_id],
+            NAME_PUMA = paste(
+                sf_counties$State[sf_counties$STATE_PUMA == puma_id],
                 sf_counties$Name[sf_counties$STATE_PUMA == puma_id],
                 sep = " - "
             ),
@@ -754,8 +1222,11 @@ geometry_sf <- sf_counties %>%
 geometry_dir <- file.path(args$output_dir, "counties-pumas")
 dir.create(geometry_dir, showWarnings = FALSE, recursive = TRUE)
 
-st_write(geometry_sf, file.path(geometry_dir, "counties-pumas.shp"),
-    append = FALSE, quiet = TRUE
+st_write(
+    geometry_sf,
+    file.path(geometry_dir, "counties-pumas.shp"),
+    append = FALSE,
+    quiet = TRUE
 )
 cat(" ✓ Shapefile\n")
 
@@ -783,7 +1254,8 @@ cat(strrep("=", 70), "\n\n", sep = "")
 
 cat(sprintf(
     "States processed: %d (%s)\n",
-    length(states_to_process), paste(states_to_process, collapse = ", ")
+    length(states_to_process),
+    paste(states_to_process, collapse = ", ")
 ))
 
 if (filter_la_bay_area) {
@@ -791,15 +1263,31 @@ if (filter_la_bay_area) {
 }
 
 cat(sprintf("PUMAs: %d\n", nrow(geometry_sf)))
-cat(sprintf("Total observations: %s\n", format(nrow(census_data), big.mark = ",")))
+cat(sprintf(
+    "Total observations: %s\n",
+    format(nrow(census_data), big.mark = ",")
+))
 cat(sprintf("Datasets generated: %d\n", args$num_datasets))
 
 cat("\n")
 cat("Output files:\n")
-cat(sprintf(" %s/full_dataset.csv (all observations in long format)\n", args$output_dir))
-cat(sprintf(" %s/full_dataset_covariates.rds (COMPLETE covariates as list, for LA.R)\n", args$output_dir))
-cat(sprintf(" %s/full_dataset_covariates.csv (COMPLETE covariates as CSV)\n", args$output_dir))
-cat(sprintf(" %s/data_001.csv ... data_%03d.csv (subsampled observations)\n", args$output_dir, args$num_datasets))
+cat(sprintf(
+    " %s/full_dataset.csv (all observations in long format)\n",
+    args$output_dir
+))
+cat(sprintf(
+    " %s/full_dataset_covariates.rds (COMPLETE covariates as list, for LA.R)\n",
+    args$output_dir
+))
+cat(sprintf(
+    " %s/full_dataset_covariates.csv (COMPLETE covariates as CSV)\n",
+    args$output_dir
+))
+cat(sprintf(
+    " %s/data_001.csv ... data_%03d.csv (subsampled observations)\n",
+    args$output_dir,
+    args$num_datasets
+))
 cat(sprintf(" %s/geometry.rds\n", args$output_dir))
 cat(sprintf(" %s/adj_matrix.rds\n", args$output_dir))
 cat(sprintf(" %s/counties-pumas/counties-pumas.shp\n", args$output_dir))
@@ -807,8 +1295,12 @@ cat(sprintf(" %s/counties-pumas/counties-pumas.shp\n", args$output_dir))
 cat("\n")
 cat("CSV Format for covariates:\n")
 cat(" - COD_PUMA: Unique PUMA identifier (e.g., 06_03701)\n")
-cat(" - All other columns: PUMS variables as defined in pums_variables_definition\n")
+cat(
+    " - All other columns: PUMS variables as defined in pums_variables_definition\n"
+)
 cat("\n")
 cat("RDS Format for LA.R:\n")
 cat(" - List object where names are COD_PUMA values\n")
-cat(" - Each element is a dataframe containing all PUMS variables for that PUMA\n")
+cat(
+    " - Each element is a dataframe containing all PUMS variables for that PUMA\n"
+)
