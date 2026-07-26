@@ -24,13 +24,20 @@ GaussianMixtureModel_likelihood::ClusterStats
 GaussianMixtureModel_likelihood::compute_stats(
     const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const {
   ClusterStats stats;
-  stats.n = cls_ass_k.size();
-  for (int i = 0; i < stats.n; ++i) {
-    const int idx = cls_ass_k(i);
-    const double val = data.get_data(idx);
-    stats.sum += val;
-    stats.sumsq += val * val;
+
+  for (int r = 0; r < cls_ass_k.size(); ++r) {
+    const int area_idx = cls_ass_k(r);
+
+    for (int j = 0; j < data.get_p(); ++j) {
+      const double val = data.get_data(area_idx, j);
+      if (std::isnan(val))
+        continue;
+      stats.n += 1;
+      stats.sum += val;
+      stats.sumsq += val * val;
+    }
   }
+
   return stats;
 }
 
@@ -89,14 +96,29 @@ double GaussianMixtureModel_likelihood::cluster_loglikelihood(
 
 double GaussianMixtureModel_likelihood::point_loglikelihood_cond(
     int point_index, int cluster_index) const {
-  const double x = data.get_data(point_index);
+  ClusterStats point_stats;
+
+  for (int j = 0; j < data.get_p(); ++j) {
+    const double x = data.get_data(point_index, j);
+    point_stats.n += 1;
+    point_stats.sum += x;
+    point_stats.sumsq += x * x;
+  }
 
   if (cluster_index >= data.get_K()) {
     ClusterStats empty;
-    return log_predictive_from_stats(empty, x);
+    return log_marginal_likelihood(point_stats) -
+           log_marginal_likelihood(empty);
   }
 
   auto cls_ass_k = data.get_cluster_assignments_ref(cluster_index);
-  const ClusterStats stats = compute_stats(cls_ass_k);
-  return log_predictive_from_stats(stats, x);
+  ClusterStats cluster_stats = compute_stats(cls_ass_k);
+
+  ClusterStats updated = cluster_stats;
+  updated.n += point_stats.n;
+  updated.sum += point_stats.sum;
+  updated.sumsq += point_stats.sumsq;
+
+  return log_marginal_likelihood(updated) -
+         log_marginal_likelihood(cluster_stats);
 }
