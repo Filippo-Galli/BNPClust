@@ -9,17 +9,11 @@
 #   4. Parameter object initialisation
 #   5. MCMC execution (SplitMerge LSS-SDDS + Neal-3 scan)
 #   6. Result saving and visualisation
-#
-# All alternative models / likelihood / process choices are kept as
-# commented-out blocks so the file doubles as a quick reference card.
 ##############################################################################
 
 source("R/utils.R")
 source("R/utils_plot.R")
 source("R/mcmc_loop.R")
-
-#source("R/data_retrieval/ACF.R")
-#ource("R/distance_retrieval/kde_distances.R")
 
 library(Rcpp)
 library(RcppEigen)
@@ -31,6 +25,13 @@ bnp_mod <- Rcpp::Module("bnpclust_module", "libbnpclust_r")
 set.seed(44)
 
 ##############################################################################
+# Data Retrieval ====
+##############################################################################
+#source("R/data_retrieval/ACF.R")
+#source("R/distance_retrieval/kde_distances.R")
+#source("R/covariate_selection/LA.R")
+
+##############################################################################
 # Data Loading ====
 ##############################################################################
 
@@ -40,8 +41,9 @@ files <- list.files(files_folder)
 file_chosen <- files[2]
 data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
 
+
 ##############################################################################
-# Spatial Adjacency Matrix ====
+# Covariates ====
 ##############################################################################
 
 W <- readRDS(file = paste0(files_folder, "/adj_matrix.rds"))
@@ -52,6 +54,11 @@ if (!isSymmetric(W)) {
 }
 
 W <- matrix(as.integer(W), nrow = nrow(W), ncol = ncol(W))
+
+puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
+puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
+continuos_covariates <- as.numeric(puma_age_data$AGEP_std_mean)
+binary_covariates <- as.integer(puma_sex_data$SEX_mode)
 
 ##############################################################################
 # Hyperparameter Configuration ====
@@ -78,6 +85,7 @@ process_param <- bnp_mod$create_NGGP_params(
 )
 
 utils_param <- bnp_mod$create_utils_params(5000, 15000, data_matrix)
+
 likelihood_param <- bnp_mod$create_Natarajan_params(
     hyperparams$delta1,
     hyperparams$alpha,
@@ -95,8 +103,20 @@ print("Initial cluster allocation:")
 print(table(hyperparams$initial_clusters))
 
 print("Caching system instantiated")
+continuos_cache <- bnp_mod$create_Continuos_cache(
+    hyperparams$initial_clusters,
+    continuos_covariates
+)
+binary_cache <- bnp_mod$create_Binary_cache(
+    hyperparams$initial_clusters,
+    binary_covariates
+)
 
-data <- bnp_mod$create_Data(utils_param, hyperparams$initial_clusters)
+data <- bnp_mod$create_Datax(
+    utils_param,
+    list(binary_cache, continuos_cache),
+    hyperparams$initial_clusters
+)
 
 print("Data instantiated")
 
@@ -113,6 +133,33 @@ u_sampler <- bnp_mod$create_RWMH(process_param, data, TRUE, 2.0, TRUE)
 # Instantiate spatial modules
 mod_spatial <- bnp_mod$create_SpatialModule(data, W, spatial_coefficient = 0.1)
 
+# 2. Covariate module (cached)
+fixed_v <- TRUE
+B <- 10 * var(continuos_covariates) # prior variance
+m <- 0 # prior mean
+v <- 0.5 * var(continuos_covariates) # known variance
+nu <- 1
+S0 <- 1.0
+
+mod_cont <- bnp_mod$create_ContinuosCovariatesModuleCache(
+    data,
+    continuos_cache,
+    fixed_v,
+    m,
+    B,
+    v,
+    nu,
+    S0
+)
+
+# 3. Binary covariate module
+mod_binary <- bnp_mod$create_BinaryCovariatesModuleCache(
+    data,
+    binary_cache,
+    0.1,
+    0.1
+)
+
 print("Covariate modules instantiated")
 
 # Instantiate Process (NGGPx) using factory function
@@ -120,7 +167,7 @@ process <- bnp_mod$create_NGGPx(
     data,
     process_param,
     u_sampler,
-    list(mod_spatial)
+    list(mod_spatial, mod_cont, mod_binary)
 )
 
 print("Process instantiated")
