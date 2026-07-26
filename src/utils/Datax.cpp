@@ -63,13 +63,12 @@ void Datax::set_allocation(int index, int cluster) {
         return;
     }
 
-    auto old_cluster_it = cluster_members.find(old_cluster);
-
     Data::set_allocation_wo_compaction(index, cluster);
     for(auto && ci : cluster_info)
         ci->set_allocation(index, cluster, old_cluster);
 
     // Check if old cluster became empty and needs compaction
+    auto old_cluster_it = cluster_members.find(old_cluster);
     if (old_cluster_it != cluster_members.end() && old_cluster_it->second.empty()) {
         Datax::compact_cluster(old_cluster);
     }

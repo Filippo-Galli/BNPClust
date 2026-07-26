@@ -84,6 +84,12 @@ public:
   int get_K() const { return K; }
 
   /**
+   * @brief Gets the number of columns in the data
+   * @return Number of columns
+   */
+  int get_p() const { return p.p; }
+
+  /**
    * @brief Gets the cluster allocations vector
    * @return Reference to the allocations vector
    */
@@ -95,7 +101,13 @@ public:
    * @return Number of points in the cluster (0 if cluster doesn't exist)
    */
   int get_cluster_size(unsigned cluster_index) const {
-    return (cluster_index < K) ? cluster_members.at(cluster_index).size() : 0;
+    if (cluster_index >= static_cast<unsigned>(K)) {
+      return 0;
+    }
+
+    const auto it = cluster_members.find(static_cast<int>(cluster_index));
+    return (it != cluster_members.end()) ? static_cast<int>(it->second.size())
+                                         : 0;
   }
 
   /**
