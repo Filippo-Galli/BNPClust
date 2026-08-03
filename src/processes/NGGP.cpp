@@ -28,7 +28,9 @@ double NGGP::gibbs_prior_existing_cluster(int cls_idx, int obs_idx) const {
    */
 
   int cluster_size = data.get_cluster_size(cls_idx);
-  return (cluster_size - params.sigma > 0) ? log(cluster_size - params.sigma) : std::numeric_limits<double>::lowest();
+  return (cluster_size - params.sigma) > 0
+             ? log(cluster_size - params.sigma)
+             : std::numeric_limits<double>::lowest();
 }
 
 Eigen::VectorXd NGGP::gibbs_prior_existing_clusters(int obs_idx) const {
@@ -48,8 +50,9 @@ Eigen::VectorXd NGGP::gibbs_prior_existing_clusters(int obs_idx) const {
   // Compute prior for each existing cluster
   for (int k = 0; k < data.get_K(); ++k) {
     const int cluster_size = data.get_cluster_size(k);
-    double prior = cluster_size  - params.sigma > 0 ? log(cluster_size - params.sigma)
-                                    : std::numeric_limits<double>::lowest();
+    double prior = (cluster_size - params.sigma) > 0
+                       ? log(cluster_size - params.sigma)
+                       : std::numeric_limits<double>::lowest();
     priors(k) = prior;
   }
 
@@ -86,10 +89,14 @@ double NGGP::prior_ratio_split(int ci, int cj) const {
 
   double log_acceptance_ratio = 0.0;
   log_acceptance_ratio += log_a;
-  log_acceptance_ratio += params.sigma * log(params.tau + U_sampler_method.get_U());
-  log_acceptance_ratio -= n_ci + n_cj - params.sigma > 0 ? lgamma(n_ci + n_cj - params.sigma) : 0;
-  log_acceptance_ratio += n_ci - params.sigma > 0 ? lgamma(n_ci - params.sigma) : 0;
-  log_acceptance_ratio += n_cj - params.sigma > 0 ? lgamma(n_cj - params.sigma) : 0;
+  log_acceptance_ratio +=
+      params.sigma * log(params.tau + U_sampler_method.get_U());
+  log_acceptance_ratio -=
+      n_ci + n_cj - params.sigma > 0 ? lgamma(n_ci + n_cj - params.sigma) : 0;
+  log_acceptance_ratio +=
+      n_ci - params.sigma > 0 ? lgamma(n_ci - params.sigma) : 0;
+  log_acceptance_ratio +=
+      n_cj - params.sigma > 0 ? lgamma(n_cj - params.sigma) : 0;
 
   return log_acceptance_ratio;
 }
@@ -109,10 +116,14 @@ double NGGP::prior_ratio_merge(int size_old_ci, int size_old_cj) const {
   const int size_merge = size_old_ci + size_old_cj;
 
   double log_acceptance_ratio = -log_a;
-  log_acceptance_ratio -= params.sigma * log(params.tau + U_sampler_method.get_U());
-  log_acceptance_ratio += size_merge - params.sigma > 0 ? lgamma(size_merge - params.sigma) : 0;
-  log_acceptance_ratio -= size_old_ci - params.sigma > 0 ? lgamma(size_old_ci - params.sigma) : 0;
-  log_acceptance_ratio -= size_old_cj - params.sigma > 0 ? lgamma(size_old_cj - params.sigma) : 0;
+  log_acceptance_ratio -=
+      params.sigma * log(params.tau + U_sampler_method.get_U());
+  log_acceptance_ratio +=
+      size_merge - params.sigma > 0 ? lgamma(size_merge - params.sigma) : 0;
+  log_acceptance_ratio -=
+      size_old_ci - params.sigma > 0 ? lgamma(size_old_ci - params.sigma) : 0;
+  log_acceptance_ratio -=
+      size_old_cj - params.sigma > 0 ? lgamma(size_old_cj - params.sigma) : 0;
 
   return log_acceptance_ratio;
 }
@@ -136,10 +147,14 @@ double NGGP::prior_ratio_shuffle(int size_old_ci, int size_old_cj, int ci,
   const int n_cj = data.get_cluster_size(cj);
 
   double log_acceptance_ratio = 0.0;
-  log_acceptance_ratio += n_ci - params.sigma > 0 ? lgamma(n_ci - params.sigma) : 0;
-  log_acceptance_ratio += n_cj - params.sigma > 0 ? lgamma(n_cj - params.sigma) : 0;
-  log_acceptance_ratio -= size_old_ci - params.sigma > 0 ? lgamma(size_old_ci - params.sigma) : 0;
-  log_acceptance_ratio -= size_old_cj - params.sigma > 0 ? lgamma(size_old_cj - params.sigma) : 0;
+  log_acceptance_ratio +=
+      n_ci - params.sigma > 0 ? lgamma(n_ci - params.sigma) : 0;
+  log_acceptance_ratio +=
+      n_cj - params.sigma > 0 ? lgamma(n_cj - params.sigma) : 0;
+  log_acceptance_ratio -=
+      size_old_ci - params.sigma > 0 ? lgamma(size_old_ci - params.sigma) : 0;
+  log_acceptance_ratio -=
+      size_old_cj - params.sigma > 0 ? lgamma(size_old_cj - params.sigma) : 0;
 
   return log_acceptance_ratio;
 }

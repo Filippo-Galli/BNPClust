@@ -23,8 +23,13 @@ ContinuosCovariatesModule::compute_cluster_statistics(const Eigen::Ref<const Eig
 double ContinuosCovariatesModule::compute_similarity_cls(int cls_idx, bool old_allo) const {
     ClusterStats stats;
 
-    if (old_allo) {
-        const auto &old_cls_allo = old_cluster_members_provider->at(cls_idx);
+    if (old_allo && old_cluster_members_provider) {
+        const auto old_cls_it = old_cluster_members_provider->find(cls_idx);
+        if (old_cls_it == old_cluster_members_provider->end()) {
+            return compute_log_marginal_likelihood(stats);
+        }
+
+        const auto &old_cls_allo = old_cls_it->second;
         stats = compute_cluster_statistics(Eigen::Map<const Eigen::VectorXi>(old_cls_allo.data(), old_cls_allo.size()));
 
     } else {

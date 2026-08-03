@@ -23,7 +23,11 @@ double SpatialModuleCache::compute_similarity_obs(int obs_idx, int cls_idx) cons
 double SpatialModuleCache::compute_similarity_cls(int cls_idx, bool old_allo) const {
 
     if (old_allo && old_cluster_members_provider) {
-        const auto &members = old_cluster_members_provider->at(cls_idx);
+        const auto members_it = old_cluster_members_provider->find(cls_idx);
+        if (members_it == old_cluster_members_provider->end()) {
+            return 0.0;
+        }
+        const auto &members = members_it->second;
         const int *allocations = old_allocations_provider->data();
 
         double total_neighbors = 0;

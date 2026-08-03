@@ -39,21 +39,42 @@ void SpatialModule::neighbor_cache_compute() {
 
 double SpatialModule::compute_similarity_cls(int cls_idx, bool old_allo) const {
 
-    const Eigen::VectorXi & cls_idx_allocations =
-        (old_allo && old_cluster_members_provider) ? Eigen::Map<const Eigen::VectorXi>(old_cluster_members_provider->at(cls_idx).data(), old_cluster_members_provider->at(cls_idx).size()) : data_module.get_cluster_assignments(cls_idx);
-
     double total_neighbors = 0;
-    for(auto && i : cls_idx_allocations){
-        // Use cached neighbor indices instead of iterating over full adjacency matrix
-        const std::vector<int> &row = neighbor_cache[i];
+    if (old_allo && old_cluster_members_provider) {
+        const auto members_it = old_cluster_members_provider->find(cls_idx);
+        if (members_it == old_cluster_members_provider->end()) {
+            return 0.0;
+        }
 
-        // Count neighbors in each cluster
-        for (size_t j = 0; j < row.size(); ++j) {
-            int neighbor_idx = row[j];
-            int cluster_i = data_module.get_cluster_assignment(neighbor_idx);
+        for (const auto &i : members_it->second) {
+            // Use cached neighbor indices instead of iterating over full adjacency matrix
+            const std::vector<int> &row = neighbor_cache[i];
 
-            if (cluster_i != -1 && cluster_i == cls_idx) {
-                ++total_neighbors;
+            // Count neighbors in each cluster
+            for (size_t j = 0; j < row.size(); ++j) {
+                int neighbor_idx = row[j];
+                int cluster_i = data_module.get_cluster_assignment(neighbor_idx);
+
+                if (cluster_i != -1 && cluster_i == cls_idx) {
+                    ++total_neighbors;
+                }
+            }
+        }
+    } else {
+        const Eigen::VectorXi &cls_idx_allocations =
+            data_module.get_cluster_assignments(cls_idx);
+        for(auto && i : cls_idx_allocations){
+            // Use cached neighbor indices instead of iterating over full adjacency matrix
+            const std::vector<int> &row = neighbor_cache[i];
+
+            // Count neighbors in each cluster
+            for (size_t j = 0; j < row.size(); ++j) {
+                int neighbor_idx = row[j];
+                int cluster_i = data_module.get_cluster_assignment(neighbor_idx);
+
+                if (cluster_i != -1 && cluster_i == cls_idx) {
+                    ++total_neighbors;
+                }
             }
         }
     }
