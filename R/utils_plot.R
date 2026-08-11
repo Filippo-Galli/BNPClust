@@ -22,6 +22,7 @@ suppressMessages(library(reshape2))
 suppressMessages(library(cluster))
 suppressMessages(library(label.switching))
 suppressMessages(library(coda))
+source("R/utils.R")
 
 ## @brief Generate consistent colors for clusters
 ## @param n_clusters Number of clusters
@@ -1171,6 +1172,153 @@ plot_map_prior_mean_comuni <- function(
     invisible(p)
 }
 
+
+plot_pairwise_distances <- function(
+    results,
+    BI,
+    point_estimate = NULL,
+    save_bool = FALSE,
+    folder = "results/plots/",
+    input_dir = "input/LA/",
+    log_bool = FALSE,
+    puma_col = "COD_PUMA" # e.g. "PUMA", "puma", "puma_code", etc.
+) {
+    if (!dir.exists(folder)) {
+        dir.create(folder, recursive = TRUE)
+    }
+
+    if (is.null(point_estimate)) {
+        point_estimate <- plot_cls_est(results, BI, save = FALSE)
+    }
+
+    csv_file <- file.path(input_dir, "full_dataset.csv")
+    raw_data <- read.csv(csv_file, stringsAsFactors = FALSE)
+
+    # Auto-detect PUMA column if not specified
+    if (is.null(puma_col)) {
+        candidates <- grep(
+            "(?i)^puma",
+            names(raw_data),
+            value = TRUE,
+            perl = TRUE
+        )
+        if (length(candidates) == 0) {
+            stop(
+                "No PUMA column found in full_dataset.csv. ",
+                "Available columns: ",
+                paste(names(raw_data), collapse = ", "),
+                ". Please specify `puma_col`."
+            )
+        }
+        if (length(candidates) > 1) {
+            warning(
+                "Multiple PUMA-like columns found: ",
+                paste(candidates, collapse = ", "),
+                ". Using the first: ",
+                candidates[1]
+            )
+        }
+        puma_col <- candidates[1]
+    }
+
+    if (!puma_col %in% names(raw_data)) {
+        stop(
+            "Specified puma_col = '",
+            puma_col,
+            "' not found in data. ",
+            "Available columns: ",
+            paste(names(raw_data), collapse = ", ")
+        )
+    }
+
+    if (!log_bool) {
+        raw_data$income_val <- exp(raw_data$log_income)
+    } else {
+        raw_data$income_val <- raw_data$log_income
+    }
+
+    puma_levels <- sort(unique(raw_data[[puma_col]]))
+
+    if (length(point_estimate) != length(puma_levels)) {
+        stop(
+            "Length of point_estimate (",
+            length(point_estimate),
+            ") does not match number of PUMAs (",
+            length(puma_levels),
+            ").\n",
+            "Check that plot_cls_est returns one cluster per PUMA and that ",
+            "the PUMA column name is correct (currently using '",
+            puma_col,
+            "')."
+        )
+    }
+
+    puma_clusters <- data.frame(
+        puma = puma_levels,
+        cluster = point_estimate,
+        stringsAsFactors = FALSE
+    )
+
+    # Merge cluster labels to raw_data by PUMA
+    data <- merge(
+        raw_data,
+        puma_clusters,
+        by.x = puma_col,
+        by.y = "puma",
+        sort = FALSE
+    )
+
+    n_cluster <- length(unique(data$cluster))
+
+    # compute KDE for each cluster
+    density_list <- lapply(split(data, data$cluster), function(y_i) {
+        density(y_i$income_val, n = 512, kernel = "epanechnikov")
+    })
+
+    # Pairwise distances between clusters
+    data_matrix <- matrix(0, nrow = n_cluster, ncol = n_cluster)
+
+    total_iterations <- n_cluster * (n_cluster + 1) / 2
+    pb <- txtProgressBar(min = 0, max = total_iterations, style = 3)
+    iteration <- 0
+
+    for (i in seq_along(density_list)) {
+        for (k in i:length(density_list)) {
+            data_matrix[i, k] <- compute_kde_distances(
+                density_list[[i]],
+                density_list[[k]],
+                type = "Jeff"
+            )
+
+            if (i != k) {
+                data_matrix[k, i] <- data_matrix[i, k]
+            }
+
+            iteration <- iteration + 1
+            setTxtProgressBar(pb, iteration)
+        }
+    }
+
+    close(pb)
+
+    rownames(data_matrix) <- colnames(data_matrix) <- paste0(
+        "cluster",
+        seq_len(n_cluster)
+    )
+
+    if (save_bool) {
+        write.table(
+            data_matrix,
+            file = paste0(folder, "pairwise_distances.txt"),
+            sep = "\t",
+            row.names = TRUE,
+            col.names = TRUE
+        )
+    }
+
+    return(data_matrix)
+}
+
 plot_hist_cls_pumas <- function(
     results,
     BI,
@@ -1178,7 +1326,7 @@ plot_hist_cls_pumas <- function(
     point_estimate = NULL,
     save_bool = FALSE,
     folder = "results/plots/",
-    log_bool = TRUE,
+    log_bool = FALSE,
     unit_ids = NULL
 ) {
     cat("Computing histograms of cluster assignments (Long Format)...\n")
@@ -1189,7 +1337,7 @@ plot_hist_cls_pumas <- function(
 
     # 2. TRANSFORM & SPLIT (The critical change)
     # Convert log-income to original scale first
-    if (log_bool) {
+    if (!log_bool) {
         raw_data$income_val <- exp(raw_data$log_income)
     } else {
         raw_data$income_val <- raw_data$log_income

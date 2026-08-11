@@ -316,11 +316,30 @@ puma_ids <- sf::st_read(
     paste0("input/LA/counties-pumas/counties-pumas.shp"),
     quiet = TRUE
 )[["COD_PUMA"]]
+point_estimates <- plot_cls_est(mcmc_result, BI, save = FALSE)
 plot_map_cls(
     mcmc_result,
     BI = mcmc_result$BI,
+    point_estimate = point_estimates,
     unit_ids = puma_ids,
     save = TRUE,
     folder = plot_folder,
     rotation_deg = 13 # 13 for LA and 5 for USA
+)
+plot_hist_cls_pumas(
+    results = mcmc_result,
+    BI = BI,
+    point_estimate = point_estimates,
+    unit_ids = puma_ids,
+    save = TRUE,
+    folder = plot_folder
+)
+
+plot_pairwise_distances(
+    results = mcmc_result,
+    BI = mcmc_result$BI,
+    point_estimate = point_estimates,
+    save = TRUE,
+    folder = plot_folder,
+    log_bool = TRUE
 )
