@@ -478,6 +478,114 @@ plot_acf_U <- function(results, BI, save = FALSE, folder = "results/plots/") {
     }
 }
 
+plot_inter_intra_histograms <- function(
+    clustering,
+    dist_matrix,
+    save = FALSE,
+    folder = NULL,
+    x_lim = NULL,
+    y_lim = NULL
+) {
+    # 1. Ensure dist_matrix is a matrix
+    if (!inherits(dist_matrix, "matrix")) {
+        dist_matrix <- as.matrix(dist_matrix)
+    }
+
+    # 2. Extract initial cluster assignments
+    clusters <- clustering
+
+    # 3. Split pairwise distances (ignoring diagonal/upper triangle)
+    same_cluster <- outer(clusters, clusters, "==")
+    valid_pairs <- lower.tri(same_cluster)
+
+    within_dist <- dist_matrix[same_cluster & valid_pairs]
+    inter_dist <- dist_matrix[!same_cluster & valid_pairs]
+
+    # Filter out 0s just like in the original fit_gamma function
+    within_dist <- within_dist[within_dist > 0]
+    inter_dist <- inter_dist[inter_dist > 0]
+
+    print(paste(
+        "Within-Cluster (Intra) count:",
+        length(within_dist),
+        "Inter-Cluster count:",
+        length(inter_dist),
+        "Equal value inter -cluster distances:",
+        sum(table(inter_dist) > 1)
+    ))
+
+    # 4. Create a combined data frame for ggplot
+    df <- data.frame(
+        Distance = c(within_dist, inter_dist),
+        Type = factor(
+            c(
+                rep("Within-Cluster (Intra)", length(within_dist)),
+                rep("Inter-Cluster", length(inter_dist))
+            ),
+            levels = c("Within-Cluster (Intra)", "Inter-Cluster")
+        )
+    )
+
+    # 5. Reconstruct Gamma rates using the stored hyperparameters
+    # Rate = shape / mean = shape / (sum / N) = (shape * N) / sum = p1 / p2
+    rate_within <- hyperparams$alpha / hyperparams$beta
+    rate_inter <- hyperparams$zeta / hyperparams$gamma
+
+    # 6. Generate the plot
+    p <- ggplot(df, aes(x = Distance, fill = Type)) +
+        # Plot density histograms so the curves match the scale
+        geom_histogram(
+            aes(y = after_stat(density)),
+            position = "identity",
+            alpha = 0.1,
+            bins = 40,
+            color = "black"
+        ) +
+        # # Overlay the Gamma fit for Within-Cluster
+        # stat_function(
+        #     fun = dgamma,
+        #     args = list(shape = hyperparams$delta1, rate = rate_within),
+        #     color = "blue",
+        #     linewidth = 1.2,
+        #     linetype = "dashed"
+        # ) +
+        # # Overlay the Gamma fit for Inter-Cluster
+        # stat_function(
+        #     fun = dgamma,
+        #     args = list(shape = hyperparams$delta2, rate = rate_inter),
+        #     color = "darkgreen",
+        #     linewidth = 1.2,
+        #     linetype = "dashed"
+        # ) +
+        # Aesthetics
+        # scale_fill_manual(
+        #     values = c(
+        #         "Within-Cluster (Intra)" = "lightblue",
+        #         "Inter-Cluster" = "lightgreen"
+        #     )
+        # ) +
+        coord_cartesian(xlim = x_lim, ylim = y_lim) +
+        theme_minimal() +
+        labs(
+            # title = "Intra- vs Inter-Cluster Distance Distributions",
+            # subtitle = "Dashed lines represent the fitted Gamma distributions",
+            x = "Distance",
+            y = "Density",
+            # fill = "Distance Type"
+        ) +
+        theme(legend.position = "bottom")
+
+    if (save) {
+        ggsave(
+            filename = paste0(folder, "intra_inter_dist.png"),
+            plot = p,
+            width = 8,
+            height = 6
+        )
+    }
+    return(p)
+}
+
 plot_k_means <- function(dist_matrix, max_k = 10) {
     # Ensure dist_matrix is in the right format
     if (!inherits(dist_matrix, "dist")) {
@@ -624,12 +732,23 @@ plot_map_cls <- function(
     id_col = "COD_PUMA",
     unit_ids = NULL,
     simplify_geom = TRUE,
-    dTolerance = 100
+    dTolerance = 100,
+    rotation_deg = 5, # for LA, 13 for USA
+    zoom_to_data = TRUE,
+    margin_frac = 0.05
 ) {
     cat("Computing map of cluster assignments...\n")
 
-    if (!requireNamespace("sf", quietly = TRUE)) {
-        stop("Package 'sf' is required for plot_map_cls().")
+    # --- Check Dependencies ---
+    pkgs <- c("sf", "dplyr", "ggplot2")
+    missing_pkgs <- pkgs[
+        !vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)
+    ]
+    if (length(missing_pkgs) > 0) {
+        stop(
+            "Missing required packages: ",
+            paste(missing_pkgs, collapse = ", ")
+        )
     }
 
     # Only compute point_estimate if not provided
@@ -669,42 +788,104 @@ plot_map_cls <- function(
     )
     names(cluster_df)[1] <- id_col
 
-    # Read shapefile - only columns we need
+    # --- Load Geometry ---
+    cat("Loading map geometry...\n")
     geom <- sf::st_read(shp[1], quiet = TRUE)
-    geom <- geom[, c(id_col, attr(geom, "sf_column"))]
+
+    if (!id_col %in% names(geom)) {
+        stop("Column '", id_col, "' not found in shapefile.")
+    }
+
     geom[[id_col]] <- as.character(geom[[id_col]])
 
-    # Use match-based join (faster than merge for simple cases)
-    idx <- match(geom[[id_col]], cluster_df[[id_col]])
-    keep <- !is.na(idx)
-    geom <- geom[keep, ]
-    geom$cluster <- cluster_df$cluster[idx[keep]]
-
-    # Simplify geometry for faster rendering (optional)
+    # Optional simplification
     if (simplify_geom && nrow(geom) > 50) {
-        geom <- sf::st_simplify(
-            geom,
-            preserveTopology = TRUE,
-            dTolerance = dTolerance
+        geom <- sf::st_simplify(geom, dTolerance = dTolerance)
+    }
+
+    # --- Optional rotation (matching plot_map_data_cardinality style) ---
+    if (is.numeric(rotation_deg) && rotation_deg != 0) {
+        theta <- rotation_deg * pi / 180
+        rot <- matrix(
+            c(cos(theta), sin(theta), -sin(theta), cos(theta)),
+            nrow = 2,
+            byrow = TRUE
+        )
+
+        geom_rot <- geom %>%
+            dplyr::mutate(geometry_rot = sf::st_geometry(.) * rot) %>%
+            sf::st_drop_geometry() %>%
+            dplyr::rename(geometry = geometry_rot) %>%
+            sf::st_as_sf()
+
+        sf::st_crs(geom_rot) <- sf::st_crs(geom)
+        geom <- geom_rot
+    }
+
+    # --- Join cluster data to geometry ---
+    map_data <- dplyr::left_join(geom, cluster_df, by = id_col)
+
+    # Use only observed units for framing if requested
+    map_data_main <- if (isTRUE(zoom_to_data)) {
+        dplyr::filter(map_data, !is.na(cluster))
+    } else {
+        map_data
+    }
+
+    if (nrow(map_data_main) == 0) {
+        stop(
+            "No matching map polygons after join. Check ID formats in data and shapefile."
         )
     }
 
-    p <- ggplot2::ggplot(geom) +
+    # --- Bounding box for centered framing ---
+    bbox <- sf::st_bbox(map_data_main)
+    x_margin <- margin_frac * (bbox["xmax"] - bbox["xmin"])
+    y_margin <- margin_frac * (bbox["ymax"] - bbox["ymin"])
+
+    # --- Plot ---
+    cat("Generating plot...\n")
+
+    p <- ggplot2::ggplot(map_data_main) +
         ggplot2::geom_sf(
             ggplot2::aes(fill = cluster),
-            color = "grey60",
-            linewidth = 0.2
+            color = "white",
+            linewidth = 0.05
         ) +
         ggplot2::scale_fill_manual(
             values = cluster_colors,
             drop = FALSE,
-            na.value = "lightgrey"
+            na.value = "lightgrey",
+            name = "Cluster"
         ) +
-        ggplot2::labs(
-            # title = "PUMAs by Cluster Assignment",
-            fill = "Cluster"
+        ggplot2::coord_sf(
+            xlim = c(bbox["xmin"] - x_margin, bbox["xmax"] + x_margin),
+            ylim = c(bbox["ymin"] - y_margin, bbox["ymax"] + y_margin),
+            expand = FALSE
         ) +
-        ggplot2::theme_minimal()
+        ggplot2::theme_light() +
+        ggplot2::theme(
+            panel.grid.major = ggplot2::element_blank(),
+            panel.grid.minor = ggplot2::element_blank(),
+            panel.background = ggplot2::element_rect(
+                fill = "transparent",
+                color = NA
+            ),
+            plot.background = ggplot2::element_rect(
+                fill = "transparent",
+                color = NA
+            ),
+            legend.background = ggplot2::element_rect(
+                fill = "transparent",
+                color = NA
+            ),
+            legend.box.background = ggplot2::element_rect(
+                fill = "transparent",
+                color = NA
+            ),
+            panel.border = ggplot2::element_blank(),
+            axis.text = ggplot2::element_text(color = "grey60", size = 8)
+        )
 
     print(p)
 
@@ -712,12 +893,18 @@ plot_map_cls <- function(
         if (!dir.exists(folder)) {
             dir.create(folder, recursive = TRUE)
         }
+
+        out_file <- file.path(folder, "puma_clusters.png")
+
         ggplot2::ggsave(
-            file.path(folder, "puma_clusters.png"),
-            p,
+            filename = out_file,
+            plot = p,
             width = 10,
-            height = 8
+            height = 8,
+            bg = "transparent"
         )
+
+        cat("Saved to:", out_file, "\n")
     }
 
     invisible(p)

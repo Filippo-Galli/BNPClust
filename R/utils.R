@@ -303,11 +303,11 @@ set_hyperparameters <- function(
                     shape <- 0.9
                 } else if (!is_within && shape < 1) {
                     cat(
-                        "Warning: Fitted delta2 < 1, adjusting to 1.5. Old:",
+                        "Warning: Fitted delta2 < 1, adjusting to 1.1. Old:",
                         shape,
                         "\n"
                     )
-                    shape <- 1.5
+                    shape <- 1.1
                 }
 
                 list(
