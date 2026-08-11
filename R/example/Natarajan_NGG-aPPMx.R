@@ -13,7 +13,6 @@
 
 source("R/utils.R")
 source("R/utils_plot.R")
-source("R/mcmc_loop.R")
 
 library(Rcpp)
 library(RcppEigen)
@@ -131,7 +130,7 @@ print("Likelihood instantiated")
 u_sampler <- bnp_mod$create_RWMH(process_param, data, TRUE, 2.0, TRUE)
 
 # Instantiate spatial modules
-mod_spatial <- bnp_mod$create_SpatialModule(data, W, spatial_coefficient = 0.1)
+mod_spatial <- bnp_mod$create_SpatialModule(data, W, spatial_coefficient = 1)
 
 # 2. Covariate module (cached)
 fixed_v <- TRUE
@@ -178,7 +177,7 @@ sm <- bnp_mod$create_SplitMerge_LSS_SDDS(
     utils_param,
     likelihood,
     process,
-    FALSE
+    TRUE
 )
 
 # Instantiate Neal3 sampler using factory function
@@ -311,4 +310,17 @@ plot_cls_est(
     BI = mcmc_result$BI,
     save = TRUE,
     folder = plot_folder
+)
+
+puma_ids <- sf::st_read(
+    paste0("input/LA/counties-pumas/counties-pumas.shp"),
+    quiet = TRUE
+)[["COD_PUMA"]]
+plot_map_cls(
+    mcmc_result,
+    BI = mcmc_result$BI,
+    unit_ids = puma_ids,
+    save = TRUE,
+    folder = plot_folder,
+    rotation_deg = 13 # 13 for LA and 5 for USA
 )
