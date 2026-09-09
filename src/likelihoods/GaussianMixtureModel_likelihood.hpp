@@ -7,7 +7,7 @@ class GaussianMixtureModel_likelihood : public Likelihood {
 private:
   const GaussianMixtureModel_params &params;
 
-  const double log_pi;
+  const double log_2pi;
   const double lgamma_alpha0;
 
   struct ClusterStats {

@@ -1,10 +1,21 @@
 #include "GaussianMixtureModel_likelihood.hpp"
 #include <cmath>
+#include <cstdint>
+#include <cstring>
 #include <stdexcept>
+
+static inline bool is_missing_val(double x) {
+  if (std::isnan(x) || !std::isfinite(x))
+    return true;
+  uint64_t bits;
+  std::memcpy(&bits, &x, sizeof(bits));
+  // Check if exponent is all 1s (IEEE 754 NaN or Inf, including R NA_real_ 0x7ff00000000007a2)
+  return ((bits & 0x7FF0000000000000ULL) == 0x7FF0000000000000ULL);
+}
 
 GaussianMixtureModel_likelihood::GaussianMixtureModel_likelihood(
     const Data &data, const GaussianMixtureModel_params &params)
-    : Likelihood(data), params(params), log_pi(std::log(M_PI)),
+    : Likelihood(data), params(params), log_2pi(std::log(2.0 * M_PI)),
       lgamma_alpha0(std::lgamma(params.alpha0)) {
   if (params.kappa0 <= 0.0 || params.alpha0 <= 0.0 || params.beta0 <= 0.0) {
     throw std::invalid_argument("GaussianMixtureModel_likelihood: kappa0, "
@@ -17,7 +28,7 @@ GaussianMixtureModel_likelihood::compute_area_stats(int area_index) const {
   ClusterStats stats;
   for (int j = 0; j < data.get_p(); ++j) {
     const double x = data.get_data(area_index, j);
-    if (std::isnan(x))
+    if (is_missing_val(x))
       continue;
     stats.n += 1;
     stats.sum += x;
@@ -62,7 +73,7 @@ double GaussianMixtureModel_likelihood::log_marginal_likelihood(
   logp += 0.5 * (std::log(params.kappa0) - std::log(kappa_n));
   logp += params.alpha0 * std::log(params.beta0) - alpha_n * std::log(beta_n);
   logp += std::lgamma(alpha_n) - lgamma_alpha0;
-  logp += -0.5 * n * log_pi;
+  logp += -0.5 * n * log_2pi;
   return logp;
 }
 
