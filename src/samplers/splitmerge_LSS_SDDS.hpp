@@ -264,7 +264,8 @@ private:
   /**
    * @brief Compute acceptance ratio for LSS merge move
    *
-   * @param likelihood_old_clusters Joint log-likelihood of clusters ci and cj before merge
+   * @param likelihood_old_clusters Joint log-likelihood of clusters ci and cj
+   * before merge
    * @return Log acceptance ratio for the merge proposal
    */
   double compute_acceptance_ratio_merge(double likelihood_old_clusters);
@@ -285,7 +286,8 @@ private:
   /**
    * @brief Compute acceptance ratio for LSS shuffle move
    *
-   * @param likelihood_old_clusters Joint log-likelihood of clusters before shuffle
+   * @param likelihood_old_clusters Joint log-likelihood of clusters before
+   * shuffle
    * @param old_ci_size Size of cluster ci before shuffle
    * @param old_cj_size Size of cluster cj before shuffle
    * @return Log acceptance ratio for the shuffle proposal
@@ -338,10 +340,10 @@ public:
       }
     }
 
-    // Compute the 70th percentile of pairwise distances
+    // Compute the 50th percentile of pairwise distances
     if (!pairwise_dists.empty()) {
       auto q_it = pairwise_dists.begin() +
-                  static_cast<size_t>(pairwise_dists.size() * 0.70);
+                  static_cast<size_t>(pairwise_dists.size() * 0.50);
       std::nth_element(pairwise_dists.begin(), q_it, pairwise_dists.end());
       temperature = *q_it;
       if (temperature < 1e-12)

@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+add_compile_options(-fno-finite-math-only)
+
 # --- Default to Release if nothing specified ---
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
@@ -34,7 +36,7 @@ target_link_libraries(bnpclust_core PUBLIC OpenMP::OpenMP_CXX)
 # --- Machine-specific flags (only when building natively, not cross-compiling) ---
 if(NOT CMAKE_CROSSCOMPILING)
   target_compile_options(bnpclust_core PRIVATE
-    $<$<CONFIG:Release>:-march=native -mtune=native -ffast-math -funroll-loops -ftree-vectorize>
+    $<$<CONFIG:Release>:-march=native -mtune=native -O3 -funroll-loops -ftree-vectorize>
     $<$<CONFIG:Debug>:-fsanitize=address -fno-omit-frame-pointer>
   )
   target_link_options(bnpclust_core PRIVATE
