@@ -69,9 +69,13 @@ class SplitMerge_LSS_SDDS : public Sampler {
 private:
   const utils_params &params;
 
+  std::vector<double> row_max_distances;
+  double temperature;
+
   // ========== Random Number Generation ==========
 
-  /** @brief Mersenne Twister random number generator for sampling operations */
+  /** @brief Mersenne Twister random number generator for sampling
+      operations */
   mutable std::mt19937 gen;
 
   // ========== Move Selection Variables ==========
@@ -260,21 +264,10 @@ private:
   /**
    * @brief Compute acceptance ratio for LSS merge move
    *
-   * @param likelihood_old_ci Log-likelihood of first original cluster ci before
-   * merge
-   * @param likelihood_old_cj Log-likelihood of second original cluster cj
-   * before merge
+   * @param likelihood_old_clusters Joint log-likelihood of clusters ci and cj before merge
    * @return Log acceptance ratio for the merge proposal
-   *
-   * @details Computes log acceptance ratio as:
-   * log(α) = log(prior_ratio) + log(likelihood_ratio) + log(proposal_ratio)
-   * where:
-   * - prior_ratio accounts for cluster size changes
-   * - likelihood_ratio = L(ci_merged) - L(ci_old) - L(cj_old)
-   * - proposal_ratio is log_merge_gibbs_prob (0 for dumb merge)
    */
-  double compute_acceptance_ratio_merge(double likelihood_old_ci,
-                                        double likelihood_old_cj);
+  double compute_acceptance_ratio_merge(double likelihood_old_clusters);
 
   // ========== Shuffle Move Implementation ==========
 
@@ -292,21 +285,12 @@ private:
   /**
    * @brief Compute acceptance ratio for LSS shuffle move
    *
-   * @param likelihood_old_ci Log-likelihood of first cluster ci before shuffle
-   * @param likelihood_old_cj Log-likelihood of second cluster cj before shuffle
+   * @param likelihood_old_clusters Joint log-likelihood of clusters before shuffle
    * @param old_ci_size Size of cluster ci before shuffle
    * @param old_cj_size Size of cluster cj before shuffle
    * @return Log acceptance ratio for the shuffle proposal
-   *
-   * @details Computes log acceptance ratio as:
-   * log(α) = log(prior_ratio) + log(likelihood_ratio) + log(proposal_ratio)
-   * where:
-   * - prior_ratio accounts for cluster size changes in shuffle
-   * - likelihood_ratio = L(ci_new) + L(cj_new) - L(ci_old) - L(cj_old)
-   * - proposal_ratio = log_merge_gibbs_prob - log_split_gibbs_prob
    */
-  double compute_acceptance_ratio_shuffle(double likelihood_old_ci,
-                                          double likelihood_old_cj,
+  double compute_acceptance_ratio_shuffle(double likelihood_old_clusters,
                                           int old_ci_size, int old_cj_size);
 
 public:
@@ -336,7 +320,36 @@ public:
                       bool shuffle)
       : Sampler(d, l, pr), params(p), shuffle_bool(shuffle),
         original_allocations(pr.old_allocations_view()), gen(rd()),
-        dis_real(0.0, 1.0), dis_int(0, 1) {};
+        dis_real(0.0, 1.0), dis_int(0, 1) {
+
+    // Precompute row max distances for efficiency
+    row_max_distances.resize(data.get_n());
+    for (int i = 0; i < data.get_n(); ++i) {
+      row_max_distances[i] = params.D.row(i).maxCoeff();
+    }
+    const int n = data.get_n();
+
+    // Take all pairwise distances (i < j)
+    std::vector<double> pairwise_dists;
+    pairwise_dists.reserve(n * (n - 1) / 2);
+    for (int i = 0; i < n; ++i) {
+      for (int j = i + 1; j < n; ++j) {
+        pairwise_dists.push_back(params.D(i, j));
+      }
+    }
+
+    // Compute the 70th percentile of pairwise distances
+    if (!pairwise_dists.empty()) {
+      auto q_it = pairwise_dists.begin() +
+                  static_cast<size_t>(pairwise_dists.size() * 0.70);
+      std::nth_element(pairwise_dists.begin(), q_it, pairwise_dists.end());
+      temperature = *q_it;
+      if (temperature < 1e-12)
+        temperature = 1.0;
+    } else {
+      temperature = 1.0;
+    }
+  };
 
   // ========== MCMC Interface ==========
 

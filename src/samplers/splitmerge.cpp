@@ -129,12 +129,10 @@ void SplitMerge::restricted_gibbs(int iterations, bool only_probabilities) {
   }
 }
 
-double SplitMerge::compute_acceptance_ratio_merge(double likelihood_old_ci,
-                                                  double likelihood_old_cj) {
+double SplitMerge::compute_acceptance_ratio_merge(double likelihood_old_clusters) {
   /**
    * @brief Compute the log acceptance ratio for a merge move.
-   * @param likelihood_old_ci The log likelihood of cluster ci before the merge.
-   * @param likelihood_old_cj The log likelihood of cluster cj before the merge.
+   * @param likelihood_old_clusters The joint log likelihood of clusters ci and cj before the merge.
    * @return The log acceptance ratio for the merge move.
    */
 
@@ -144,18 +142,8 @@ double SplitMerge::compute_acceptance_ratio_merge(double likelihood_old_ci,
   double log_prior_ratio = process.prior_ratio_merge(size_old_ci, size_old_cj);
 
   // Likelihood ratio
-  double log_likelihood_ratio = 0;
-  log_likelihood_ratio += likelihood.cluster_loglikelihood(ci);
-  log_likelihood_ratio -= likelihood_old_ci;
-  log_likelihood_ratio -= likelihood_old_cj;
-
-  // Proposal ratio (already computed in merge_move before calling this
-  // function)
-
-  // Rcpp::Rcout << "\t[DEBUG - Merge] log_prior_ratio: " << log_prior_ratio
-  //             << ", log_likelihood_ratio: " << log_likelihood_ratio
-  //             << ", log_merge_gibbs_prob: " << log_merge_gibbs_prob
-  //             << std::endl;
+  double log_likelihood_ratio =
+      likelihood.cluster_loglikelihood(ci) - likelihood_old_clusters;
 
   return log_prior_ratio + log_likelihood_ratio + log_merge_gibbs_prob;
 }
@@ -170,8 +158,7 @@ void SplitMerge::merge_move() {
   // Reset log probabilities
   log_merge_gibbs_prob = 0;
 
-  double likelihood_old_ci = likelihood.cluster_loglikelihood(ci);
-  double likelihood_old_cj = likelihood.cluster_loglikelihood(cj);
+  double likelihood_old_clusters = likelihood.clusters_loglikelihood(ci, cj);
 
   // CRITICAL: Compute the proposal probability BEFORE actually merging
   // This is the probability of generating the current split state from the
@@ -188,7 +175,7 @@ void SplitMerge::merge_move() {
   }
 
   // Compute acceptance ratio
-  double acceptance_ratio = compute_acceptance_ratio_merge(likelihood_old_ci, likelihood_old_cj);
+  double acceptance_ratio = compute_acceptance_ratio_merge(likelihood_old_clusters);
 
   // Rcpp::Rcout << "[DEBUG - Merge] acceptance_ratio: " << acceptance_ratio
   //             << std::endl;
@@ -255,17 +242,15 @@ SplitMerge::compute_acceptance_ratio_split(double likelihood_old_cluster) {
   double log_prior_ratio = process.prior_ratio_split(ci, cj);
 
   // Likelihood ratio
-  double log_likelihood_ratio = 0;
-  log_likelihood_ratio += likelihood.cluster_loglikelihood(ci);
-  log_likelihood_ratio += likelihood.cluster_loglikelihood(cj);
-  log_likelihood_ratio -= likelihood_old_cluster;
+  double log_likelihood_ratio =
+      likelihood.clusters_loglikelihood(ci, cj) - likelihood_old_cluster;
 
   // Rcpp::Rcout << "\t[DEBUG - Split] log_prior_ratio: " << log_prior_ratio
   //             << ", log_likelihood_ratio: " << log_likelihood_ratio
   //             << ", log_split_gibbs_prob: " << log_split_gibbs_prob
   //             << std::endl;
 
-  return log_split_gibbs_prob + log_likelihood_ratio + log_prior_ratio;
+  return -log_split_gibbs_prob + log_likelihood_ratio + log_prior_ratio;
 }
 
 void SplitMerge::shuffle() {
@@ -284,8 +269,7 @@ void SplitMerge::shuffle() {
   }
 
   // Compute old likelihoods and sizes
-  double likelihood_old_ci = likelihood.cluster_loglikelihood(ci);
-  double likelihood_old_cj = likelihood.cluster_loglikelihood(cj);
+  double likelihood_old_clusters = likelihood.clusters_loglikelihood(ci, cj);
   int old_ci_size = data.get_cluster_size(ci);
   int old_cj_size = data.get_cluster_size(cj);
 
@@ -293,7 +277,8 @@ void SplitMerge::shuffle() {
   restricted_gibbs(5);
 
   // Compute acceptance ratio
-  double log_acceptance_ratio = compute_acceptance_ratio_shuffle(likelihood_old_ci, likelihood_old_cj, old_ci_size, old_cj_size);
+  double log_acceptance_ratio = compute_acceptance_ratio_shuffle(
+      likelihood_old_clusters, old_ci_size, old_cj_size);
 
   // Accept or reject the move
   std::uniform_real_distribution<> acceptance_ratio_dis(0.0, 1.0);
@@ -303,8 +288,7 @@ void SplitMerge::shuffle() {
     accepted_shuffle++;
 }
 
-double SplitMerge::compute_acceptance_ratio_shuffle(double likelihood_old_ci,
-                                                    double likelihood_old_cj,
+double SplitMerge::compute_acceptance_ratio_shuffle(double likelihood_old_clusters,
                                                     int old_ci_size,
                                                     int old_cj_size) {
   /**
@@ -317,10 +301,8 @@ double SplitMerge::compute_acceptance_ratio_shuffle(double likelihood_old_ci,
       process.prior_ratio_shuffle(old_ci_size, old_cj_size, ci, cj);
 
   // Likelihood ratio
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(ci);
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(cj);
-  log_acceptance_ratio -= likelihood_old_ci;
-  log_acceptance_ratio -= likelihood_old_cj;
+  log_acceptance_ratio +=
+      likelihood.clusters_loglikelihood(ci, cj) - likelihood_old_clusters;
 
   // Proposal ratio
   log_acceptance_ratio -= log_split_gibbs_prob;

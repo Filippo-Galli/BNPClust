@@ -52,6 +52,18 @@ public:
       const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const = 0;
 
   /**
+   * @brief Computes the joint log-likelihood for two clusters
+   * @param c1 Index of first cluster
+   * @param c2 Index of second cluster
+   * @return Joint log-likelihood of clusters c1 and c2
+   * @note Default implementation assumes cluster independence.
+   *       Derived classes with inter-cluster interactions can override this.
+   */
+  virtual double clusters_loglikelihood(int c1, int c2) const {
+    return cluster_loglikelihood(c1) + cluster_loglikelihood(c2);
+  }
+
+  /**
    * @brief Conditional log-likelihood of a point in a particular cluster
    * @param point_index Index of the point to evaluate
    * @param cluster_index Index of the cluster

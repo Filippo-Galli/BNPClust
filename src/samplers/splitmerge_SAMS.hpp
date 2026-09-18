@@ -165,12 +165,10 @@ private:
   /**
    * @brief Compute acceptance ratio for SAMS merge move
    *
-   * @param likelihood_old_ci Likelihood of first original cluster
-   * @param likelihood_old_cj Likelihood of second original cluster
+   * @param likelihood_old_clusters Joint likelihood of the two original clusters
    * @return Log acceptance ratio for the merge proposal
    */
-  double compute_acceptance_ratio_merge(double likelihood_old_ci,
-                                        double likelihood_old_cj);
+  double compute_acceptance_ratio_merge(double likelihood_old_clusters);
 
   // ========== Shuffle Move Implementation ==========
 
@@ -185,14 +183,12 @@ private:
   /**
    * @brief Compute acceptance ratio for SAMS shuffle move
    *
-   * @param likelihood_old_ci Likelihood of first cluster before shuffle
-   * @param likelihood_old_cj Likelihood of second cluster before shuffle
+   * @param likelihood_old_clusters Joint likelihood of clusters before shuffle
    * @param old_ci_size Size of first cluster before shuffle
    * @param old_cj_size Size of second cluster before shuffle
    * @return Log acceptance ratio for the shuffle proposal
    */
-  double compute_acceptance_ratio_shuffle(double likelihood_old_ci,
-                                          double likelihood_old_cj,
+  double compute_acceptance_ratio_shuffle(double likelihood_old_clusters,
                                           int old_ci_size, int old_cj_size);
 
 public:

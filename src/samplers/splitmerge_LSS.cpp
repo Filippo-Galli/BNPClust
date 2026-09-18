@@ -192,12 +192,10 @@ void SplitMerge_LSS::sequential_allocation(int iterations,
 }
 
 double
-SplitMerge_LSS::compute_acceptance_ratio_merge(double likelihood_old_ci,
-                                               double likelihood_old_cj) {
+SplitMerge_LSS::compute_acceptance_ratio_merge(double likelihood_old_clusters) {
   /**
    * @brief Compute the log acceptance ratio for a merge move.
-   * @param likelihood_old_ci The log likelihood of cluster ci before the merge.
-   * @param likelihood_old_cj The log likelihood of cluster cj before the merge.
+   * @param likelihood_old_clusters The joint log likelihood of clusters ci and cj before the merge.
    * @return The log acceptance ratio for the merge move.
    */
 
@@ -207,9 +205,7 @@ SplitMerge_LSS::compute_acceptance_ratio_merge(double likelihood_old_ci,
   double log_acceptance_ratio = process.prior_ratio_merge(size_old_ci, size_old_cj);
 
   // Likelihood ratio
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(ci);
-  log_acceptance_ratio -= likelihood_old_ci;
-  log_acceptance_ratio -= likelihood_old_cj;
+  log_acceptance_ratio += likelihood.cluster_loglikelihood(ci) - likelihood_old_clusters;
 
   // Proposal ratio
   log_acceptance_ratio += log_merge_gibbs_prob;
@@ -227,8 +223,7 @@ void SplitMerge_LSS::merge_move() {
   // Reset log probabilities
   log_merge_gibbs_prob = 0;
 
-  double likelihood_old_ci = likelihood.cluster_loglikelihood(ci);
-  double likelihood_old_cj = likelihood.cluster_loglikelihood(cj);
+  double likelihood_old_clusters = likelihood.clusters_loglikelihood(ci, cj);
 
   sequential_allocation(1, true); // only compute probabilities
 
@@ -244,7 +239,7 @@ void SplitMerge_LSS::merge_move() {
 
   // Compute acceptance ratio
   double acceptance_ratio =
-      compute_acceptance_ratio_merge(likelihood_old_ci, likelihood_old_cj);
+      compute_acceptance_ratio_merge(likelihood_old_clusters);
 
   // Accept or reject the move
   std::uniform_real_distribution<> dis(0.0, 1.0);
@@ -305,9 +300,8 @@ SplitMerge_LSS::compute_acceptance_ratio_split(double likelihood_old_cluster) {
   double log_acceptance_ratio = process.prior_ratio_split(ci, cj);
 
   // Likelihood ratio
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(ci);
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(cj);
-  log_acceptance_ratio -= likelihood_old_cluster;
+  log_acceptance_ratio +=
+      likelihood.clusters_loglikelihood(ci, cj) - likelihood_old_cluster;
 
   // Proposal ratio
   log_acceptance_ratio -= log_split_gibbs_prob;
@@ -330,8 +324,7 @@ void SplitMerge_LSS::shuffle() {
     return; // No point in shuffling if there's only one cluster
 
   // Get number of points in clusters ci and cj and likelihoods
-  double likelihood_old_ci = likelihood.cluster_loglikelihood(ci);
-  double likelihood_old_cj = likelihood.cluster_loglikelihood(cj);
+  double likelihood_old_clusters = likelihood.clusters_loglikelihood(ci, cj);
   int old_ci_size = data.get_cluster_size(ci);
   int old_cj_size = data.get_cluster_size(cj);
 
@@ -343,7 +336,7 @@ void SplitMerge_LSS::shuffle() {
 
   // Compute acceptance ratio
   double log_acceptance_ratio = compute_acceptance_ratio_shuffle(
-      likelihood_old_ci, likelihood_old_cj, old_ci_size, old_cj_size);
+      likelihood_old_clusters, old_ci_size, old_cj_size);
 
   // Accept or reject the move
   std::uniform_real_distribution<> acceptance_ratio_dis(0.0, 1.0);
@@ -355,8 +348,7 @@ void SplitMerge_LSS::shuffle() {
 }
 
 double SplitMerge_LSS::compute_acceptance_ratio_shuffle(
-    double likelihood_old_ci, double likelihood_old_cj, int old_ci_size,
-    int old_cj_size) {
+    double likelihood_old_clusters, int old_ci_size, int old_cj_size) {
   /**
    * @brief Compute the log acceptance ratio for a shuffle move.
    * @return The log acceptance ratio for the shuffle move.
@@ -367,10 +359,8 @@ double SplitMerge_LSS::compute_acceptance_ratio_shuffle(
       process.prior_ratio_shuffle(old_ci_size, old_cj_size, ci, cj);
 
   // Likelihood ratio
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(ci);
-  log_acceptance_ratio += likelihood.cluster_loglikelihood(cj);
-  log_acceptance_ratio -= likelihood_old_ci;
-  log_acceptance_ratio -= likelihood_old_cj;
+  log_acceptance_ratio +=
+      likelihood.clusters_loglikelihood(ci, cj) - likelihood_old_clusters;
 
   // Proposal ratio
   log_acceptance_ratio -= log_split_gibbs_prob;
