@@ -178,3 +178,45 @@ double Natarajan_likelihood_summaryStats::compute_repulsion(
 
   return loglik;
 }
+
+double Natarajan_likelihood_summaryStats::pairwise_repulsion(int cluster_1,
+                                                             int cluster_2) const {
+  if (cluster_1 == cluster_2)
+    return 0.0;
+
+  auto cls_ass_k = data.get_cluster_assignments_ref(cluster_1);
+  auto cls_ass_t = data.get_cluster_assignments_ref(cluster_2);
+  const int n_k = cls_ass_k.size();
+  const int n_t = cls_ass_t.size();
+
+  if (n_k == 0 || n_t == 0)
+    return 0.0;
+
+  const double *__restrict__ D_data = utils.D.data();
+
+  double sum = 0.0;
+
+  for (const auto &idx_i : cls_ass_k) {
+    const double *D_row = D_data + idx_i * D_cols;
+
+    for (const auto &idx_j : cls_ass_t) {
+      sum += D_row[idx_j];
+    }
+  }
+
+  double emp_mean = sum / (n_t * n_k);
+
+  double rep = 0.0;
+  rep += emp_mean * (params.delta2 - 1);
+  rep -= lgamma_delta2;
+  rep += log_gamma_zeta;
+  rep += lgamma(params.delta2 + params.zeta);
+  rep -= log(params.gamma + sum) * (params.delta2 + params.zeta);
+
+  return rep;
+}
+
+double Natarajan_likelihood_summaryStats::clusters_loglikelihood(int c1, int c2) const {
+  return cluster_loglikelihood(c1) + cluster_loglikelihood(c2) - pairwise_repulsion(c1, c2);
+}
+

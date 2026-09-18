@@ -179,3 +179,48 @@ double Natarajan_likelihood::compute_repulsion(
 
   return loglik;
 }
+
+double Natarajan_likelihood::pairwise_repulsion(int cluster_1,
+                                                int cluster_2) const {
+  if (cluster_1 == cluster_2)
+    return 0.0;
+
+  auto cls_ass_k = data.get_cluster_assignments_ref(cluster_1);
+  auto cls_ass_t = data.get_cluster_assignments_ref(cluster_2);
+  const int n_k = cls_ass_k.size();
+  const int n_t = cls_ass_t.size();
+
+  if (n_k == 0 || n_t == 0)
+    return 0.0;
+
+  const double *__restrict__ D_data = utils.D.data();
+  const double *__restrict__ logD_data = log_D_data.data();
+
+  double log_prod = 0;
+  double sum = 0;
+
+  for (const auto &idx_i : cls_ass_k) {
+    const double *D_row = D_data + idx_i * D_cols;
+    const double *logD_row = logD_data + idx_i * D_cols;
+
+    for (const auto &idx_j : cls_ass_t) {
+      sum += D_row[idx_j];
+      log_prod += logD_row[idx_j];
+    }
+  }
+
+  const int n_pairs = n_k * n_t;
+  double rep = 0.0;
+  rep += log_prod * (params.delta2 - 1);
+  rep -= lgamma_delta2 * n_pairs;
+  rep += log_gamma_zeta;
+  rep += lgamma(n_pairs * params.delta2 + params.zeta);
+  rep -= log(params.gamma + sum) * (n_pairs * params.delta2 + params.zeta);
+
+  return rep;
+}
+
+double Natarajan_likelihood::clusters_loglikelihood(int c1, int c2) const {
+  return cluster_loglikelihood(c1) + cluster_loglikelihood(c2) - pairwise_repulsion(c1, c2);
+}
+

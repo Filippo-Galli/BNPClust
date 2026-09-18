@@ -134,6 +134,14 @@ public:
       __attribute__((hot));
 
   /**
+   * @brief Computes the joint log-likelihood for two clusters accounting for pairwise repulsion
+   * @param c1 Index of first cluster
+   * @param c2 Index of second cluster
+   * @return Joint log-likelihood of clusters c1 and c2
+   */
+  double clusters_loglikelihood(int c1, int c2) const override final;
+
+  /**
    * @brief Computes the conditional log-likelihood of a point given a cluster
    * @param point_index Index of the point to evaluate
    * @param cluster_index Index of the target cluster
@@ -146,4 +154,12 @@ public:
   double point_loglikelihood_cond(int point_index,
                                   int cluster_index) const override final
       __attribute__((hot));
+
+  /**
+   * @brief Computes the pairwise repulsion between two clusters
+   * @param cluster_1 Index of first cluster
+   * @param cluster_2 Index of second cluster
+   * @return Log repulsion contribution between cluster_1 and cluster_2
+   */
+  double pairwise_repulsion(int cluster_1, int cluster_2) const;
 };
