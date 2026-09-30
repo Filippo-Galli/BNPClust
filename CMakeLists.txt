@@ -117,6 +117,24 @@ else()
   target_link_options(bnpclust_r PRIVATE ${R_LDFLAGS})
 endif()
 
+include(GNUInstallDirs)
+
+install(
+  TARGETS bnpclust_core
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+if(BNPCLUST_BUILD_R)
+  install(
+    TARGETS bnpclust_r
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+endif()
+
 set_target_properties(bnpclust_r PROPERTIES
   OUTPUT_NAME "bnpclust_r"
   BUILD_RPATH "$ORIGIN"
