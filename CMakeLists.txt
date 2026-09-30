@@ -47,32 +47,49 @@ endif()
 set_target_properties(bnpclust_core PROPERTIES OUTPUT_NAME "bnpclust_core")
 
 ##################################
-# R flags from R CMD config
+# R / Rcpp / RcppEigen
 ##################################
-# --- R / Rcpp / RcppEigen ---
-execute_process(
-  COMMAND R CMD config --cppflags
-  OUTPUT_VARIABLE R_CPPFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-execute_process(
-  COMMAND R CMD config --ldflags
-  OUTPUT_VARIABLE R_LDFLAGS
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-execute_process(
-  COMMAND Rscript -e "cat(system.file('include', package='Rcpp'))"
-  OUTPUT_VARIABLE RCPP_INCLUDE_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-execute_process(
-  COMMAND Rscript -e "cat(system.file('include', package='RcppEigen'))"
-  OUTPUT_VARIABLE RCPPEIGEN_INCLUDE_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+  pkg_check_modules(R IMPORTED_TARGET libR)
+endif()
 
-separate_arguments(R_CPPFLAGS)
-separate_arguments(R_LDFLAGS)
+if(NOT TARGET PkgConfig::R)
+  # Fallback to R CMD config if pkg-config is not available
+  find_program(R_EXECUTABLE R REQUIRED)
+  execute_process(
+    COMMAND ${R_EXECUTABLE} CMD config --cppflags
+    OUTPUT_VARIABLE R_CPPFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  execute_process(
+    COMMAND ${R_EXECUTABLE} CMD config --ldflags
+    OUTPUT_VARIABLE R_LDFLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  separate_arguments(R_CPPFLAGS)
+  separate_arguments(R_LDFLAGS)
+endif()
+
+# Allow passing RCPP_INCLUDE_DIR and RCPPEIGEN_INCLUDE_DIR from CMake command line (-D...)
+# This is crucial for Nix derivations to avoid running Rscript in pure build sandboxes
+if(NOT RCPP_INCLUDE_DIR)
+  find_program(RSCRIPT_EXECUTABLE Rscript REQUIRED)
+  execute_process(
+    COMMAND env -u R_LIBS_USER ${RSCRIPT_EXECUTABLE} -e "cat(system.file('include', package='Rcpp'))"
+    OUTPUT_VARIABLE RCPP_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+endif()
+
+if(NOT RCPPEIGEN_INCLUDE_DIR)
+  find_program(RSCRIPT_EXECUTABLE Rscript REQUIRED)
+  execute_process(
+    COMMAND env -u R_LIBS_USER ${RSCRIPT_EXECUTABLE} -e "cat(system.file('include', package='RcppEigen'))"
+    OUTPUT_VARIABLE RCPPEIGEN_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+endif()
 
 add_library(bnpclust_r SHARED
   src/r_bindings.cpp
@@ -84,17 +101,21 @@ target_include_directories(bnpclust_r PRIVATE
   "${RCPPEIGEN_INCLUDE_DIR}"
 )
 
-target_compile_options(bnpclust_r PRIVATE
-  ${R_CPPFLAGS}
+# ENABLE_LEGACY_NONAPI is needed for R >= 4.6 compatibility when using Rcpp headers that reference R_NamespaceRegistry
+target_compile_definitions(bnpclust_r PRIVATE
+  ENABLE_LEGACY_NONAPI
 )
 
 target_link_libraries(bnpclust_r PRIVATE
   bnpclust_core
 )
 
-target_link_options(bnpclust_r PRIVATE
-  ${R_LDFLAGS}
-)
+if(TARGET PkgConfig::R)
+  target_link_libraries(bnpclust_r PRIVATE PkgConfig::R)
+else()
+  target_compile_options(bnpclust_r PRIVATE ${R_CPPFLAGS})
+  target_link_options(bnpclust_r PRIVATE ${R_LDFLAGS})
+endif()
 
 set_target_properties(bnpclust_r PROPERTIES
   OUTPUT_NAME "bnpclust_r"
