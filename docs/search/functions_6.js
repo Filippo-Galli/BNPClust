@@ -1,14 +1,7 @@
 var searchData=
 [
-  ['natarajan_5flikelihood_0',['Natarajan_likelihood',['../classNatarajan__likelihood.html#a45745e27e8f9df3ab050ac3e60e7dcae',1,'Natarajan_likelihood']]],
-  ['natarajan_5flikelihood_5fsummarystats_1',['Natarajan_likelihood_summaryStats',['../classNatarajan__likelihood__summaryStats.html#a5afe31582d8638ced0e275932cb8cad8',1,'Natarajan_likelihood_summaryStats']]],
-  ['natarajan_5fparams_2',['Natarajan_params',['../structNatarajan__params.html#a0e21cede7f0c777b78e26406140ad1f5',1,'Natarajan_params']]],
-  ['neal3_3',['Neal3',['../classNeal3.html#a86cfe9e38bd7d60e46340df531a359b6',1,'Neal3']]],
-  ['neal3zdnam_4',['Neal3ZDNAM',['../classNeal3ZDNAM.html#aa969a40bc39359e134b8ae26ec4bed43',1,'Neal3ZDNAM']]],
-  ['neighbor_5fcache_5fcompute_5',['neighbor_cache_compute',['../classSpatialModule.html#a838c7393c68a6670ef16a7fd311b88b9',1,'SpatialModule::neighbor_cache_compute()'],['../classSpatialModuleContinuous.html#a4edd3926ffdbefb0640d9065aa10a746',1,'SpatialModuleContinuous::neighbor_cache_compute()'],['../classSpatialCache.html#a1ba50a0cace2d3224ab4eba6a4b3c582',1,'SpatialCache::neighbor_cache_compute()']]],
-  ['nggp_6',['NGGP',['../classNGGP.html#a9aa94acd612872cac7d6095fd681d492',1,'NGGP']]],
-  ['nggp_5fparams_7',['NGGP_params',['../structNGGP__params.html#acd6c2c612344e3b1a52e30196666b14b',1,'NGGP_params']]],
-  ['nggp_5fparams_5fget_5fa_8',['NGGP_params_get_a',['../r__bindings_8cpp.html#ab516101684022507d811d09370a4ea0c',1,'r_bindings.cpp']]],
-  ['nggpx_9',['NGGPx',['../classNGGPx.html#a4a18500e5cf62bce72d90ded68cb10f6',1,'NGGPx']]],
-  ['null_5flikelihood_10',['Null_likelihood',['../classNull__likelihood.html#a73731fe6633912cc558b3180acd2c169',1,'Null_likelihood']]]
+  ['mala_0',['MALA',['../classMALA.html#ada8f2e8db40d4a0324398613c8c99643',1,'MALA']]],
+  ['merge_5fmove_1',['merge_move',['../classSplitMerge.html#a81747132bb2e0601a4e20c12d26197aa',1,'SplitMerge::merge_move()'],['../classSplitMerge__LSS.html#a592b28bad845e868b2baef627472a8c3',1,'SplitMerge_LSS::merge_move()'],['../classSplitMerge__SAMS.html#a6f774a8523fa9cd09826aecd6a177d11',1,'SplitMerge_SAMS::merge_move()']]],
+  ['module_2',['Module',['../classModule.html#a4b1fffbc65ffbf0ca18f7d59394bd46d',1,'Module']]],
+  ['move_5fcluster_5finfo_3',['move_cluster_info',['../classClusterInfo.html#a22014a13e7a2323724e7b492b53b9313',1,'ClusterInfo::move_cluster_info()'],['../classBinaryCache.html#aa43d71b5aa9f06c44de37646afbf2279',1,'BinaryCache::move_cluster_info()'],['../classContinuosCache.html#a2db1521deac927377241efe6514ebf7c',1,'ContinuosCache::move_cluster_info()'],['../classSpatialCache.html#a7ee1017c4760707056a65e12b421c1ea',1,'SpatialCache::move_cluster_info()']]]
 ];

@@ -13,6 +13,7 @@ var classData =
     [ "get_data", "classData.html#a0927a8121fb24201602468d32c862668", null ],
     [ "get_K", "classData.html#adf1f6a52cebebeb2afe3a3bdb49fc2fe", null ],
     [ "get_n", "classData.html#a11ff2cd14f9af453675c46bcb0107d3b", null ],
+    [ "get_p", "classData.html#a4e5d2570d124588c02f698872aee85f7", null ],
     [ "restore_state", "classData.html#a9b7c10b187a827f8bf1451997860e274", null ],
     [ "set_allocation", "classData.html#a010f0f017f255c52592cf2794abb53ab", null ],
     [ "set_allocation_wo_compaction", "classData.html#a515215b9e507e7d4aa8bd155759fb247", null ],

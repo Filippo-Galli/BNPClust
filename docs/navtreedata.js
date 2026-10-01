@@ -77,11 +77,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "ClusterInfo_8hpp.html",
-"classGamma__likelihood.html#a357410c17ad0a81ed11e025cf9cbf9e7",
-"classSplitMerge.html#a918acf018b41086f3ce1a1440aced4ad",
-"neal__ZDNAM_8hpp.html"
+"classGamma__likelihood.html#a3069e04c50789e78c617a12d5f50e2f3",
+"classSplitMerge.html#a5bfc16aa4e6d36eb42f8a0d6a5f4a493",
+"md_CONTRIBUTING.html#autotoc_md31"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronization';
-var SYNCOFFMSG = 'click to enable panel synchronization';
-var LISTOFALLMEMBERS = 'List of all members';
+const SYNCONMSG = 'click to disable panel synchronization';
+const SYNCOFFMSG = 'click to enable panel synchronization';
+const LISTOFALLMEMBERS = 'List of all members';

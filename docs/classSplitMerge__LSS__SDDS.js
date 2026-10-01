@@ -3,8 +3,8 @@ var classSplitMerge__LSS__SDDS =
     [ "SplitMerge_LSS_SDDS", "classSplitMerge__LSS__SDDS.html#a3401e0a0393dd4b3816fa40ce825b71c", null ],
     [ "choose_clusters_shuffle", "classSplitMerge__LSS__SDDS.html#a96cc367501cc94c64ce76ab2eaf9395f", null ],
     [ "choose_indeces", "classSplitMerge__LSS__SDDS.html#a9887cb056c346c7aed94db4f25b1122a", null ],
-    [ "compute_acceptance_ratio_merge", "classSplitMerge__LSS__SDDS.html#aa4348f50180fe57df8d86a497df90acd", null ],
-    [ "compute_acceptance_ratio_shuffle", "classSplitMerge__LSS__SDDS.html#a5f75d2bca86a931352bc5e11793adfae", null ],
+    [ "compute_acceptance_ratio_merge", "classSplitMerge__LSS__SDDS.html#aca6be15bac325a3234dab665b1d792de", null ],
+    [ "compute_acceptance_ratio_shuffle", "classSplitMerge__LSS__SDDS.html#a4f8cfba51776d7c938557fbf6d47a281", null ],
     [ "compute_acceptance_ratio_split", "classSplitMerge__LSS__SDDS.html#a2c1a640715782e4cf48f15489e7e4624", null ],
     [ "dumb_merge_move", "classSplitMerge__LSS__SDDS.html#a5b905d39d9714364a859dfb8f23d5690", null ],
     [ "dumb_split_move", "classSplitMerge__LSS__SDDS.html#a262468ac51cfdd1e45f82417f91f5864", null ],
@@ -36,8 +36,10 @@ var classSplitMerge__LSS__SDDS =
     [ "params", "classSplitMerge__LSS__SDDS.html#a090b7944c6dd429faddafac93cd7f2ed", null ],
     [ "probs", "classSplitMerge__LSS__SDDS.html#a72368dd573af97e4d3b4ea321805eb1e", null ],
     [ "rand_split_prob", "classSplitMerge__LSS__SDDS.html#a703cfdea33d5b09e8ad73128f9153a87", null ],
+    [ "row_max_distances", "classSplitMerge__LSS__SDDS.html#addfbd9b2b7dd13aa87cea4cabdfb021a", null ],
     [ "S", "classSplitMerge__LSS__SDDS.html#ab89d3b1669dc604e8eacb2ee938a93a0", null ],
     [ "shuffle_bool", "classSplitMerge__LSS__SDDS.html#aa067403728ed88f2b18980e4d0bb0379", null ],
     [ "shuffle_moves", "classSplitMerge__LSS__SDDS.html#a2358fba9da34ef5d95de965fbff98962", null ],
-    [ "split_moves", "classSplitMerge__LSS__SDDS.html#a0f163be215c374cff321f1defbe77dea", null ]
+    [ "split_moves", "classSplitMerge__LSS__SDDS.html#a0f163be215c374cff321f1defbe77dea", null ],
+    [ "temperature", "classSplitMerge__LSS__SDDS.html#a24991778cc3f719049f9013f93215f6d", null ]
 ];

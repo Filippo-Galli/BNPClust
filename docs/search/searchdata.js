@@ -3,7 +3,7 @@ var indexSectionsWithContent =
   0: "123456789abcdefgiklmnopqrstuvwyz~✨🏗🐛💡📁📖🔧",
   1: "bcdglmnprsu",
   2: "bcdglmnprsu",
-  3: "bcdglmnoprsu~",
+  3: "bcdgilmnoprsu~",
   4: "abcdefgiklmnoprstuvwz",
   5: "v",
   6: "123456789abcdfgiklmnopqrstuwy✨🏗🐛💡📁📖🔧"
