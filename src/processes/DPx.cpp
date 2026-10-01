@@ -93,17 +93,17 @@ double DPx::prior_ratio_merge(int size_old_ci, int size_old_cj) const {
 
     // DP prior part
     double log_acceptance_ratio = DP::prior_ratio_merge(size_old_ci, size_old_cj);
-    // Spatial part
+    // Spatial / module part: sim(new merged ci) - sim(old ci) - sim(old cj)
+    const int new_ci = data.get_allocations()[idx_i];
+    for (auto &mod : modules) {
+        log_acceptance_ratio += mod->compute_similarity_cls(new_ci, false);
+    }
+
     const int old_ci = old_allocations[idx_i];
     const int old_cj = old_allocations[idx_j];
     for (auto &mod : modules) {
-        log_acceptance_ratio += mod->compute_similarity_cls(old_ci, false);
-        log_acceptance_ratio += mod->compute_similarity_cls(old_cj, false);
-    }
-
-    const int new_ci = data.get_allocations()[idx_i];
-    for (auto &mod : modules) {
-        log_acceptance_ratio -= mod->compute_similarity_cls(new_ci, true);
+        log_acceptance_ratio -= mod->compute_similarity_cls(old_ci, true);
+        log_acceptance_ratio -= mod->compute_similarity_cls(old_cj, true);
     }
     return log_acceptance_ratio;
 }
@@ -125,11 +125,19 @@ double DPx::prior_ratio_shuffle(int size_old_ci, int size_old_cj, int ci, int cj
     // DP prior part
     double log_acceptance_ratio = DP::prior_ratio_shuffle(size_old_ci, size_old_cj, ci, cj);
 
+    // Module-based similarity ratio: sim(new ci) + sim(new cj) - sim(old ci) - sim(old cj)
+    const int new_ci = data.get_allocations()[idx_i];
+    const int new_cj = data.get_allocations()[idx_j];
     for (auto &mod : modules) {
-        log_acceptance_ratio += mod->compute_similarity_cls(old_allocations[idx_i], false);
-        log_acceptance_ratio += mod->compute_similarity_cls(old_allocations[idx_j], false);
-        log_acceptance_ratio -= mod->compute_similarity_cls(data.get_allocations()[idx_i], true);
-        log_acceptance_ratio -= mod->compute_similarity_cls(data.get_allocations()[idx_j], true);
+        log_acceptance_ratio += mod->compute_similarity_cls(new_ci, false);
+        log_acceptance_ratio += mod->compute_similarity_cls(new_cj, false);
+    }
+
+    const int old_ci = old_allocations[idx_i];
+    const int old_cj = old_allocations[idx_j];
+    for (auto &mod : modules) {
+        log_acceptance_ratio -= mod->compute_similarity_cls(old_ci, true);
+        log_acceptance_ratio -= mod->compute_similarity_cls(old_cj, true);
     }
 
     return log_acceptance_ratio;

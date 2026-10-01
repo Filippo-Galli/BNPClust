@@ -1,14 +1,11 @@
 ##############################################################################
-# BNPClust — Self-Contained Example
+# In this script we simulate spatial data and run BNPClust on it. The simulation
+# data are taken from the supplementary material of
+# "Gianella, M., Quintana, F. A., and Guglielmi, A. (2026b).
+# Consensus Monte Carlo for Large Spatial Dataset."
 #
-# Runs a full Bayesian nonparametric clustering chain using BNPClust's
-# C++ backend via Rcpp modules. The script covers:
-#   1. Library / module loading
-#   2. Data loading (real or simulated)
-#   3. Hyperparameter configuration (Natarajan likelihood)
-#   4. Parameter object initialisation
-#   5. MCMC execution (SplitMerge LSS-SDDS + Neal-3 scan)
-#   6. Result saving and visualisation
+# NOTE: the original supplementary example uses I = 9 areas (3 x 3 grid).
+# Here we scale the same construction up to I = 36 areas (6 x 6 grid).
 ##############################################################################
 
 source("R/utils.R")
@@ -24,27 +21,139 @@ bnp_mod <- Rcpp::Module("bnpclust_module", "libbnpclust_r")
 set.seed(44)
 
 ##############################################################################
-# Data Retrieval ====
-##############################################################################
-#source("R/data_retrieval/ACF.R")
-#source("R/distance_retrieval/kde_distances.R")
-#source("R/covariate_selection/LA.R")
-
-##############################################################################
-# Data Loading ====
+# Data Creation ====
 ##############################################################################
 
-## Load real data
-files_folder <- "real_data/LA"
-file_chosen <- "distance_jeff_divergences.rds"
-data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
+I_side <- 6
+I <- I_side^2
+N_i <- 100
 
+# Centres of each area (unit square split into I_side x I_side equal cells)
+area_grid <- expand.grid(
+    row = 1:I_side,
+    col = 1:I_side
+)
+area_grid$x <- (area_grid$col - 0.5) / I_side
+area_grid$y <- (area_grid$row - 0.5) / I_side
+
+x_centre <- mean(range(area_grid$x)) # grid centre coordinate (x_bar)
+y_centre <- mean(range(area_grid$y)) # grid centre coordinate (y_bar)
+
+# alr-transformed weights, eq. (8)
+w_tilde_1 <- 3 * (area_grid$x - x_centre) + 3 * (area_grid$y - y_centre)
+w_tilde_2 <- -3 * (area_grid$x - x_centre) - 3 * (area_grid$y - y_centre)
+
+# Inverse-alr (logistic) transform, eq. (5), with H = 3 mixture components
+denom <- 1 + exp(w_tilde_1) + exp(w_tilde_2)
+w1 <- exp(w_tilde_1) / denom
+w2 <- exp(w_tilde_2) / denom
+w3 <- 1 / denom
+
+area_weights <- cbind(w1, w2, w3)
+stopifnot(all(abs(rowSums(area_weights) - 1) < 1e-10))
+
+mixture_means <- c(-5, 0, 5)
+mixture_sd <- 1
+
+simulate_area <- function(w, n, means, sd) {
+    comp <- sample.int(length(means), size = n, replace = TRUE, prob = w)
+    rnorm(n, mean = means[comp], sd = sd)
+}
+
+data_list <- lapply(seq_len(I), function(i) {
+    simulate_area(area_weights[i, ], N_i, mixture_means, mixture_sd)
+})
+
+# Long-format table: one row per observation, tagged with its area
+sim_data <- do.call(
+    rbind,
+    lapply(seq_len(I), function(i) {
+        data.frame(area = i, y = data_list[[i]])
+    })
+)
+
+# Bookkeeping used later on for saving results / output naming
+files_folder <- paste0("simulated/grid", I)
+file_chosen <- paste0("distance_grid", I_side, "x", I_side, ".rds")
+
+cat(
+    "Simulated",
+    I,
+    "areas with",
+    N_i,
+    "observations each (N =",
+    nrow(sim_data),
+    ")\n"
+)
 
 ##############################################################################
-# Covariates ====
+# kde distances matrix ====
 ##############################################################################
 
-W <- readRDS(file = paste0(files_folder, "/adj_matrix.rds"))
+# Perform KDE for each area and store the full density objects
+density_list <- lapply(data_list, function(y_i) {
+    density(y_i, n = 512, kernel = "epanechnikov")
+})
+
+data_matrix <- matrix(0, nrow = I, ncol = I)
+
+# Create progress bar
+total_iterations <- I * (I + 1) / 2
+pb <- txtProgressBar(min = 0, max = total_iterations, style = 3)
+iteration <- 0
+
+# Compute Jeffreys divergence (upper triangle + copy to lower for symmetry)
+for (i in seq_along(density_list)) {
+    for (k in i:length(density_list)) {
+        data_matrix[i, k] <- compute_kde_distances(
+            density_list[[i]],
+            density_list[[k]],
+            type = "Jeff"
+        )
+
+        # Copy to lower triangle for symmetry (skip diagonal)
+        if (i != k) {
+            data_matrix[k, i] <- data_matrix[i, k]
+        }
+
+        # Update progress bar
+        iteration <- iteration + 1
+        setTxtProgressBar(pb, iteration)
+    }
+}
+
+# Close progress bar[cite: 1]
+close(pb)
+
+rownames(data_matrix) <- colnames(data_matrix) <- paste0("area", seq_len(I))
+
+cat(
+    "\nKDE-based Jeffreys Divergence matrix between areas computed (",
+    I,
+    "x",
+    I,
+    ")\n"
+)
+
+##############################################################################
+# Spatial matrix ====
+##############################################################################
+
+W <- matrix(0L, nrow = I, ncol = I)
+for (i in seq_len(I)) {
+    for (k in seq_len(I)) {
+        if (i == k) {
+            next
+        }
+        same_row <- area_grid$row[i] == area_grid$row[k]
+        same_col <- area_grid$col[i] == area_grid$col[k]
+        adjacent_col <- abs(area_grid$col[i] - area_grid$col[k]) == 1
+        adjacent_row <- abs(area_grid$row[i] - area_grid$row[k]) == 1
+        if ((same_row && adjacent_col) || (same_col && adjacent_row)) {
+            W[i, k] <- 1L
+        }
+    }
+}
 
 # Check is W is symmetric
 if (!isSymmetric(W)) {
@@ -53,10 +162,6 @@ if (!isSymmetric(W)) {
 
 W <- matrix(as.integer(W), nrow = nrow(W), ncol = ncol(W))
 
-puma_age_data <- readRDS(file = paste0(files_folder, "/puma_age_stats.rds"))
-puma_sex_data <- readRDS(file = paste0(files_folder, "/puma_sex_stats.rds"))
-continuos_covariates <- as.numeric(puma_age_data$AGEP_std_mean)
-binary_covariates <- as.integer(puma_sex_data$SEX_mode)
 
 ##############################################################################
 # Hyperparameter Configuration ====
@@ -65,9 +170,7 @@ binary_covariates <- as.integer(puma_sex_data$SEX_mode)
 # Set hyperparameters based on distance matrix and save it for future use
 hyperparams <- set_hyperparameters(
     data_matrix,
-    k_elbow = 3,
-    plot_clustering = FALSE,
-    plot_distribution = FALSE
+    k_elbow = 5
 )
 
 hyperparams$initial_clusters <- as.integer(hyperparams$initial_clusters - 1)
@@ -101,18 +204,8 @@ print("Initial cluster allocation:")
 print(table(hyperparams$initial_clusters))
 
 print("Caching system instantiated")
-continuos_cache <- bnp_mod$create_Continuos_cache(
-    hyperparams$initial_clusters,
-    continuos_covariates
-)
-binary_cache <- bnp_mod$create_Binary_cache(
-    hyperparams$initial_clusters,
-    binary_covariates
-)
-
-data <- bnp_mod$create_Datax(
+data <- bnp_mod$create_Data(
     utils_param,
-    list(binary_cache, continuos_cache),
     hyperparams$initial_clusters
 )
 
@@ -130,34 +223,6 @@ u_sampler <- bnp_mod$create_RWMH(process_param, data, TRUE, 2.0, TRUE)
 
 # Instantiate spatial modules
 mod_spatial <- bnp_mod$create_SpatialModule(data, W, spatial_coefficient = 1)
-
-# 2. Covariate module (cached)
-fixed_v <- TRUE
-B <- 10 * var(continuos_covariates) # prior variance
-m <- 0 # prior mean
-v <- 0.5 * var(continuos_covariates) # known variance
-nu <- 1
-S0 <- 1.0
-
-mod_cont <- bnp_mod$create_ContinuosCovariatesModuleCache(
-    data,
-    continuos_cache,
-    fixed_v,
-    m,
-    B,
-    v,
-    nu,
-    S0
-)
-
-# 3. Binary covariate module
-mod_binary <- bnp_mod$create_BinaryCovariatesModuleCache(
-    data,
-    binary_cache,
-    0.1,
-    0.1
-)
-
 print("Covariate modules instantiated")
 
 # Instantiate Process (NGGPx) using factory function
@@ -165,7 +230,7 @@ process <- bnp_mod$create_NGGPx(
     data,
     process_param,
     u_sampler,
-    list(mod_spatial, mod_cont, mod_binary)
+    list(mod_spatial)
 )
 
 print("Process instantiated")
@@ -205,7 +270,7 @@ for (i in 1:total_iters) {
     # MCMC Step
     bnp_mod$sampler_step(sm)
 
-    # Neal3 Step
+    # Neal3 Step (run Gibbs every 25 moves of Split-Merge)
     if (i %% 25 == 0) {
         bnp_mod$sampler_step(neal3)
     }
@@ -311,34 +376,11 @@ plot_cls_est(
     folder = plot_folder
 )
 
-puma_ids <- sf::st_read(
-    paste0("input/LA/counties-pumas/counties-pumas.shp"),
-    quiet = TRUE
-)[["COD_PUMA"]]
-point_estimates <- plot_cls_est(mcmc_result, BI, save = FALSE)
-plot_map_cls(
-    mcmc_result,
-    BI = mcmc_result$BI,
-    point_estimate = point_estimates,
-    unit_ids = puma_ids,
+plot_inter_intra_histograms(
+    hyperparams$initial_clusters,
+    data_matrix,
     save = TRUE,
     folder = plot_folder,
-    rotation_deg = 13 # 13 for LA and 5 for USA
-)
-plot_hist_cls_pumas(
-    results = mcmc_result,
-    BI = BI,
-    point_estimate = point_estimates,
-    unit_ids = puma_ids,
-    save = TRUE,
-    folder = plot_folder
-)
-
-plot_pairwise_distances(
-    results = mcmc_result,
-    BI = mcmc_result$BI,
-    point_estimate = point_estimates,
-    save = TRUE,
-    folder = plot_folder,
-    log_bool = TRUE
+    x_lim = c(0, 7.5),
+    y_lim = c(0, 1.5)
 )

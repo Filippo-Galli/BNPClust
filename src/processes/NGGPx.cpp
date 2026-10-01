@@ -66,18 +66,17 @@ double NGGPx::prior_ratio_merge(int size_old_ci, int size_old_cj) const {
     // NGGP prior ratio for merge
     double log_prior_ratio = NGGP::prior_ratio_merge(size_old_ci, size_old_cj);
 
-    // Add module-based similarity contributions
-    const int old_ci = old_allocations[idx_i];
-    const int old_cj = old_allocations[idx_j];
-
-    for (auto &mod : modules) {
-        log_prior_ratio += mod->compute_similarity_cls(old_ci, false);
-        log_prior_ratio += mod->compute_similarity_cls(old_cj, false);
-    }
-
+    // Module-based similarity ratio: sim(new merged ci) - sim(old ci) - sim(old cj)
     const int new_ci = NGGP::data.get_allocations()[idx_i];
     for (auto &mod : modules) {
-        log_prior_ratio -= mod->compute_similarity_cls(new_ci, true);
+        log_prior_ratio += mod->compute_similarity_cls(new_ci, false);
+    }
+
+    const int old_ci = old_allocations[idx_i];
+    const int old_cj = old_allocations[idx_j];
+    for (auto &mod : modules) {
+        log_prior_ratio -= mod->compute_similarity_cls(old_ci, true);
+        log_prior_ratio -= mod->compute_similarity_cls(old_cj, true);
     }
 
     return log_prior_ratio;
@@ -87,20 +86,19 @@ double NGGPx::prior_ratio_shuffle(int size_old_ci, int size_old_cj, int ci, int 
     // NGGP prior ratio for shuffle
     double log_prior_ratio = NGGP::prior_ratio_shuffle(size_old_ci, size_old_cj, ci, cj);
 
-    // Add module-based similarity contributions
-    const int old_ci = old_allocations[idx_i];
-    const int old_cj = old_allocations[idx_j];
-
-    for (auto &mod : modules) {
-        log_prior_ratio += mod->compute_similarity_cls(old_ci, false);
-        log_prior_ratio += mod->compute_similarity_cls(old_cj, false);
-    }
-
+    // Module-based similarity ratio: sim(new ci) + sim(new cj) - sim(old ci) - sim(old cj)
     const int new_ci = NGGP::data.get_allocations()[idx_i];
     const int new_cj = NGGP::data.get_allocations()[idx_j];
     for (auto &mod : modules) {
-        log_prior_ratio -= mod->compute_similarity_cls(new_ci, true);
-        log_prior_ratio -= mod->compute_similarity_cls(new_cj, true);
+        log_prior_ratio += mod->compute_similarity_cls(new_ci, false);
+        log_prior_ratio += mod->compute_similarity_cls(new_cj, false);
+    }
+
+    const int old_ci = old_allocations[idx_i];
+    const int old_cj = old_allocations[idx_j];
+    for (auto &mod : modules) {
+        log_prior_ratio -= mod->compute_similarity_cls(old_ci, true);
+        log_prior_ratio -= mod->compute_similarity_cls(old_cj, true);
     }
 
     return log_prior_ratio;
