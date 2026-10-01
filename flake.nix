@@ -3,7 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
+    mcclustExt.url = "github:Filippo-Galli/mcclust.ext";
+    mcclustExt.inputs.nixpkgs.follows = "nixpkgs";
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -13,6 +14,7 @@
       self,
       nixpkgs,
       devenv,
+      mcclustExt,
       ...
     }:
     let
@@ -48,12 +50,8 @@
           };
         in
         {
-          default = devenv.lib.mkShell {
-            inherit inputs pkgs;
-
-            modules = [
-              ./devenv.nix
-            ];
+          default = pkgs.callPackage ./shell.nix {
+            mcclustExt = inputs.mcclustExt.packages.${system}.default;
           };
         }
       );

@@ -158,6 +158,26 @@
         "type": "github"
       }
     },
+    "mcclustExt": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790864804,
+        "narHash": "sha256-aDqZQ+vExx9bFDE+1YNFXAu3H0VRMclKsxKImcL42Co=",
+        "owner": "Filippo-Galli",
+        "repo": "mcclust.ext",
+        "rev": "23faddd8c81a98686b9d9b18f84cd0e0541d715e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Filippo-Galli",
+        "repo": "mcclust.ext",
+        "type": "github"
+      }
+    },
     "nix": {
       "inputs": {
         "flake-compat": [
@@ -243,6 +263,7 @@
     "root": {
       "inputs": {
         "devenv": "devenv",
+        "mcclustExt": "mcclustExt",
         "nixpkgs": "nixpkgs"
       }
     },
