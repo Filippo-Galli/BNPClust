@@ -33,8 +33,7 @@
           };
         in
         {
-          BNPClust = pkgs.callPackage ./package.nix {
-            src = self;
+          BNPClust = pkgs.callPackage ./. {
           };
 
           default = self.packages.${system}.BNPClust;

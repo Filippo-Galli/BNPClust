@@ -1,6 +1,5 @@
 {
   stdenv,
-  src,
   cmake,
   eigen,
   R,
@@ -19,7 +18,13 @@ stdenv.mkDerivation {
   pname = "BNPClust";
   version = "0.0.1-unstable-2026-09-30";
 
-  inherit src;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./src
+      ./CMakeLists.txt
+    ];
+  };
 
   nativeBuildInputs = [
     cmake
