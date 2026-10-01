@@ -389,7 +389,7 @@ public:
    * @return Ratio of accepted split moves
    */
   double get_accepted_split() const {
-    return static_cast<double>(accepted_split) / split_moves;
+    return split_moves > 0 ? static_cast<double>(accepted_split) / split_moves : 0.0;
   };
 
   /**
@@ -397,7 +397,7 @@ public:
    * @return Ratio of accepted merge moves
    */
   double get_accepted_merge() const {
-    return static_cast<double>(accepted_merge) / merge_moves;
+    return merge_moves > 0 ? static_cast<double>(accepted_merge) / merge_moves : 0.0;
   };
 
   /**
@@ -405,6 +405,6 @@ public:
    * @return Ratio of accepted shuffle moves
    */
   double get_accepted_shuffle() const {
-    return static_cast<double>(accepted_shuffle) / shuffle_moves;
+    return shuffle_moves > 0 ? static_cast<double>(accepted_shuffle) / shuffle_moves : 0.0;
   };
 };
