@@ -94,7 +94,7 @@ public:
     // Log distance precomputation
     const double *D_ptr = utils.D.data();
     for (int i = 0; i < n; ++i) {
-      log_D_data[i] = std::log(D_ptr[i]);
+      log_D_data[i] = std::log(std::max(D_ptr[i], 1e-12));
     }
 
     // Cache lgamma values for efficiency

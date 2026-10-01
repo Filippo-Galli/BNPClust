@@ -53,7 +53,7 @@ double Natarajan_likelihood_summaryStats::cluster_loglikelihood(
 
     double emp_mean = sum / (n_t * n_k);
 
-    rep += emp_mean * (params.delta2 - 1);
+    rep += std::log(std::max(emp_mean, 1e-12)) * (params.delta2 - 1);
     rep -= lgamma_delta2;
     rep += log_gamma_zeta;
     rep += lgamma(params.delta2 + params.zeta);
@@ -170,7 +170,7 @@ double Natarajan_likelihood_summaryStats::compute_repulsion(
     double emp_mean = sum_i / n_t;
 
     loglik -= lgamma_delta2;
-    loglik += (params.delta2 - 1) * log_point_prod;
+    loglik += (params.delta2 - 1) * std::log(std::max(emp_mean, 1e-12));
     loglik += lgamma_zeta_mt_cache;
     loglik += log_gamma_zeta;
     loglik -= zeta_mt * log(gamma_mt);
@@ -207,7 +207,7 @@ double Natarajan_likelihood_summaryStats::pairwise_repulsion(int cluster_1,
   double emp_mean = sum / (n_t * n_k);
 
   double rep = 0.0;
-  rep += emp_mean * (params.delta2 - 1);
+  rep += std::log(std::max(emp_mean, 1e-12)) * (params.delta2 - 1);
   rep -= lgamma_delta2;
   rep += log_gamma_zeta;
   rep += lgamma(params.delta2 + params.zeta);
