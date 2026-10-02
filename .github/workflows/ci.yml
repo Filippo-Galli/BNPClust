@@ -31,5 +31,5 @@ jobs:
       - name: Install nix-output-monitor
         run: nix profile install --inputs-from . nixpkgs#nix-output-monitor
 
-      - name: Run nom build
-        run: nom build
+      - name: Run nix build
+        run: nix build -L
