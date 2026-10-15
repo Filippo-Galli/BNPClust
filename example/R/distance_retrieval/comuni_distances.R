@@ -1,5 +1,5 @@
-source("R/utils.R")
-source("R/utils_plot.R")
+source("example/R/utils.R")
+source("example/R/utils_plot.R")
 
 ##############################################################################
 # Load data files from 'input/' directory ====

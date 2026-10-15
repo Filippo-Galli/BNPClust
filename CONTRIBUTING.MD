@@ -116,11 +116,11 @@ When adding new features:
 
 ### Code Organization
 
-- **`src/processes/`**: Place new stochastic process implementations here
-- **`src/likelihoods/`**: Add new likelihood models here
-- **`src/samplers/`**: Implement new MCMC samplers here
-- **`src/utils/`**: Add utility functions and base classes for shared infrastructure
-- **`R/`**: Add R wrapper functions and examples
+- **`BNPClust/processes/`**: Place new stochastic process implementations here
+- **`BNPClust/likelihoods/`**: Add new likelihood models here
+- **`BNPClust/samplers/`**: Implement new MCMC samplers here
+- **`BNPClust/utils/`**: Add utility functions and base classes for shared infrastructure
+- **`example/R/`**: Add R wrapper functions and examples
 
 ### Documentation
 
@@ -150,7 +150,7 @@ class SplitMergeSampler : public Sampler { ... };
 
 ### R Bindings
 
-BNPClust uses **Rcpp external pointers (XPtr)** pattern for seamless C++ object management in R. When adding new C++ features, expose them via `src/bindings.cpp`:
+BNPClust uses **Rcpp external pointers (XPtr)** pattern for seamless C++ object management in R. When adding new C++ features, expose them via `BNPClust/r_bindings.cpp`:
 
 **Factory Functions:**
 Every C++ class needs a factory function to create instances from R:

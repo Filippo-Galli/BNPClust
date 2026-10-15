@@ -8,8 +8,8 @@
 # Here we scale the same construction up to I = 36 areas (6 x 6 grid).
 ##############################################################################
 
-source("R/utils.R")
-source("R/utils_plot.R")
+source("example/R/utils.R")
+source("example/R/utils_plot.R")
 
 library(Rcpp)
 library(RcppEigen)

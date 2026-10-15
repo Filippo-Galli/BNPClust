@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = lib.fileset.toSource {
     root = ./.;
     fileset = lib.fileset.unions [
-      ./BNPClust/src
+      ./BNPClust
       ./CMakeLists.txt
     ];
   };

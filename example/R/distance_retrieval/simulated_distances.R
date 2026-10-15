@@ -1,5 +1,5 @@
 # Import utils.R for additional functions
-source("R/utils.R")
+source("example/R/utils.R")
 
 # Generate data from 4 Gaussian distributions
 set.seed(44)

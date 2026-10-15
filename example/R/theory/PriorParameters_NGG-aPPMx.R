@@ -11,8 +11,8 @@
 #   6. Result saving and visualisation
 ##############################################################################
 
-source("R/utils.R")
-source("R/utils_plot.R")
+source("example/R/utils.R")
+source("example/R/utils_plot.R")
 
 library(Rcpp)
 library(RcppEigen)
@@ -26,9 +26,9 @@ set.seed(44)
 ##############################################################################
 # Data Retrieval ====
 ##############################################################################
-#source("R/data_retrieval/ACF.R")
-#source("R/distance_retrieval/kde_distances.R")
-#source("R/covariate_selection/LA.R")
+#source("example/R/data_retrieval/ACF.R")
+#source("example/R/distance_retrieval/kde_distances.R")
+#source("example/R/covariate_selection/LA.R")
 
 ##############################################################################
 # Data Loading ====
@@ -36,7 +36,8 @@ set.seed(44)
 
 ## Load real data
 files_folder <- "real_data/LA"
-file_chosen <- "distance_jeff_divergences.rds"
+files <- list.files(files_folder)
+file_chosen <- files[2]
 data_matrix <- readRDS(file = paste0(files_folder, "/", file_chosen))
 
 
@@ -118,11 +119,7 @@ data <- bnp_mod$create_Datax(
 
 print("Data instantiated")
 
-likelihood <- bnp_mod$create_Natarajan_likelihood(
-    data,
-    likelihood_param,
-    utils_param
-)
+likelihood <- bnp_mod$create_Null_likelihood(data)
 print("Likelihood instantiated")
 
 # Instantiate U_sampler (RWMH) using factory function
@@ -165,7 +162,7 @@ process <- bnp_mod$create_NGGPx(
     data,
     process_param,
     u_sampler,
-    list(mod_spatial, mod_cont, mod_binary)
+    list(mod_spatial)
 )
 
 print("Process instantiated")
@@ -256,10 +253,10 @@ file_chosen_clean <- sub("\\.rds$", "", file_chosen)
 folder_clean <- gsub("/", "_", files_folder)
 data_tag <- paste0(folder_clean, "_", sub("^distance_", "", file_chosen_clean))
 
-run_process <- "NGGPWx" # "DP" | "NGGP" | "NGGPW" | "NGGPWx"
-run_method <- "LSS_SDDS25+Gibbs1"
-run_init <- "kmeans"
-run_label <- "example"
+run_process <- "NGGPW" # "DP" | "NGGP" | "NGGPW" | "NGGPWx"
+run_method <- ""
+run_init <- ""
+run_label <- "lambdas1"
 
 output_filename <- paste(
     data_tag,
@@ -283,7 +280,8 @@ plot_post_distr(
     mcmc_result,
     BI = mcmc_result$BI,
     save = TRUE,
-    folder = plot_folder
+    folder = plot_folder,
+    ylim = c(0, 0.25)
 )
 plot_trace_cls(
     mcmc_result,
@@ -309,36 +307,4 @@ plot_cls_est(
     BI = mcmc_result$BI,
     save = TRUE,
     folder = plot_folder
-)
-
-puma_ids <- sf::st_read(
-    paste0("input/LA/counties-pumas/counties-pumas.shp"),
-    quiet = TRUE
-)[["COD_PUMA"]]
-point_estimates <- plot_cls_est(mcmc_result, BI, save = FALSE)
-plot_map_cls(
-    mcmc_result,
-    BI = mcmc_result$BI,
-    point_estimate = point_estimates,
-    unit_ids = puma_ids,
-    save = TRUE,
-    folder = plot_folder,
-    rotation_deg = 13 # 13 for LA and 5 for USA
-)
-plot_hist_cls_pumas(
-    results = mcmc_result,
-    BI = BI,
-    point_estimate = point_estimates,
-    unit_ids = puma_ids,
-    save = TRUE,
-    folder = plot_folder
-)
-
-plot_pairwise_distances(
-    results = mcmc_result,
-    BI = mcmc_result$BI,
-    point_estimate = point_estimates,
-    save = TRUE,
-    folder = plot_folder,
-    log_bool = TRUE
 )

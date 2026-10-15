@@ -1,5 +1,5 @@
-source("R/utils_plot.R")
-source("R/utils.R")
+source("example/R/utils_plot.R")
+source("example/R/utils.R")
 
 # Load required packages
 library(dplyr)

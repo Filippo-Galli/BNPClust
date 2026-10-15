@@ -210,11 +210,11 @@ Modularity</h2>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
 Code Organization</h2>
 <ul>
-<li><b><span class="tt">src/processes/</span></b>: Place new stochastic process implementations here</li>
-<li><b><span class="tt">src/likelihoods/</span></b>: Add new likelihood models here</li>
-<li><b><span class="tt">src/samplers/</span></b>: Implement new MCMC samplers here</li>
-<li><b><span class="tt">src/utils/</span></b>: Add utility functions and base classes for shared infrastructure</li>
-<li><b><span class="tt">R/</span></b>: Add R wrapper functions and examples</li>
+<li><b><span class="tt">BNPClust/processes/</span></b>: Place new stochastic process implementations here</li>
+<li><b><span class="tt">BNPClust/likelihoods/</span></b>: Add new likelihood models here</li>
+<li><b><span class="tt">BNPClust/samplers/</span></b>: Implement new MCMC samplers here</li>
+<li><b><span class="tt">BNPClust/utils/</span></b>: Add utility functions and base classes for shared infrastructure</li>
+<li><b><span class="tt">example/R/</span></b>: Add R wrapper functions and examples</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 Documentation</h2>
@@ -231,7 +231,7 @@ Documentation</h2>
 <div class="ttc" id="aclassSampler_html"><div class="ttname"><a href="classSampler.html">Sampler</a></div><div class="ttdoc">Abstract base class for MCMC sampler implementations.</div><div class="ttdef"><b>Definition</b> Sampler.hpp:47</div></div>
 </div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 R Bindings</h2>
-<p>BNPClust uses <b>Rcpp external pointers (XPtr)</b> pattern for seamless C++ object management in R. When adding new C++ features, expose them via <span class="tt">src/bindings.cpp</span>:</p>
+<p>BNPClust uses <b>Rcpp external pointers (XPtr)</b> pattern for seamless C++ object management in R. When adding new C++ features, expose them via <span class="tt"><a class="el" href="r__bindings_8cpp.html">BNPClust/r_bindings.cpp</a></span>:</p>
 <p><b>Factory Functions:</b> Every C++ class needs a factory function to create instances from R:</p>
 <div class="fragment"><div class="line"><span class="comment">// [[Rcpp::export]]</span></div>
 <div class="line">Rcpp::XPtr&lt;MyNewClass&gt; create_MyNewClass(Rcpp::XPtr&lt;Params&gt; params, </div>

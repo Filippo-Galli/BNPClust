@@ -22,7 +22,13 @@ suppressMessages(library(reshape2))
 suppressMessages(library(cluster))
 suppressMessages(library(label.switching))
 suppressMessages(library(coda))
-source("R/utils.R")
+if (file.exists("example/R/utils.R")) {
+    source("example/R/utils.R")
+} else if (file.exists("R/utils.R")) {
+    source("R/utils.R")
+} else {
+    source("utils.R")
+}
 
 ## @brief Generate consistent colors for clusters
 ## @param n_clusters Number of clusters
@@ -699,7 +705,8 @@ plot_cls_est <- function(
 
     cat("=== ESS ===\n")
     ess_value <- effectiveSize(as.mcmc(unlist(results$K)))
-    ess_seconds <- ess_value / elapsed_time
+    elapsed_time_val <- if (!is.null(results$elapsed_time)) results$elapsed_time else if (exists("elapsed_time", inherits = TRUE)) get("elapsed_time") else 1.0
+    ess_seconds <- ess_value / elapsed_time_val
     cat("Effective Sample Size (ESS):", ess_value, "\n")
     cat("ESS per second:", ess_seconds, "\n")
 

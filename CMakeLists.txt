@@ -15,11 +15,11 @@ endif()
 
 # --- Sources ---
 file(GLOB_RECURSE BNPCLUST_SOURCES CONFIGURE_DEPENDS
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+     "${CMAKE_CURRENT_SOURCE_DIR}/BNPClust/*.cpp")
 list(FILTER BNPCLUST_SOURCES EXCLUDE REGEX ".*/r_bindings\\.cpp$")
 
 add_library(bnpclust_core SHARED ${BNPCLUST_SOURCES})
-target_include_directories(bnpclust_core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(bnpclust_core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/BNPClust")
 
 # --- Eigen ---
 find_package(Eigen3 REQUIRED)
@@ -92,11 +92,11 @@ if(NOT RCPPEIGEN_INCLUDE_DIR)
 endif()
 
 add_library(bnpclust_r SHARED
-  src/r_bindings.cpp
+  BNPClust/r_bindings.cpp
 )
 
 target_include_directories(bnpclust_r PRIVATE
-  "${CMAKE_CURRENT_SOURCE_DIR}/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}/BNPClust"
   "${RCPP_INCLUDE_DIR}"
   "${RCPPEIGEN_INCLUDE_DIR}"
 )

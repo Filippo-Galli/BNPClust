@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['c_20core_20framework_0',['src: C++ Core Framework',['../index.html#autotoc_md4',1,'']]],
+  ['c_20core_20framework_0',['BNPClust: C++ Core Framework',['../index.html#autotoc_md4',1,'']]],
   ['c_20framework_20for_20bayesian_20nonparametric_20clustering_20with_20mcmc_1',['BNPClust: A C++ Framework for Bayesian Nonparametric Clustering with MCMC',['../index.html',1,'']]],
   ['cache_2',['cache',['../classBinaryCovariatesModuleCache.html#ad1046343d6345dbbcf6db21d50fea236',1,'BinaryCovariatesModuleCache::cache'],['../classSpatialModuleCache.html#afb539a76a11c34d156037bff3f0043f5',1,'SpatialModuleCache::cache']]],
   ['categorical_5fcovariate_5fdata_3',['categorical_covariate_data',['../classCategoricalCovariatesModule.html#af261e8b54d7a2c07a359c8e1f64628f0',1,'CategoricalCovariatesModule']]],
@@ -62,7 +62,7 @@ var searchData=
   ['contributing_20to_20bnpclust_59',['Contributing to BNPClust',['../md_CONTRIBUTING.html',1,'']]],
   ['contributing_2emd_60',['CONTRIBUTING.MD',['../CONTRIBUTING_8MD.html',1,'']]],
   ['contributions_61',['Types of Contributions',['../md_CONTRIBUTING.html#autotoc_md29',1,'']]],
-  ['core_20framework_62',['src: C++ Core Framework',['../index.html#autotoc_md4',1,'']]],
+  ['core_20framework_62',['BNPClust: C++ Core Framework',['../index.html#autotoc_md4',1,'']]],
   ['create_20a_20new_20branch_63',['3. Create a New Branch',['../md_CONTRIBUTING.html#autotoc_md14',1,'']]],
   ['create_20a_20pull_20request_64',['8. Create a Pull Request',['../md_CONTRIBUTING.html#autotoc_md19',1,'']]],
   ['create_5fbinary_5fcache_65',['create_Binary_cache',['../r__bindings_8cpp.html#a7eb13311621e280c382c755533d6b88f',1,'r_bindings.cpp']]],

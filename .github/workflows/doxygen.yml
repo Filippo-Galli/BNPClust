@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'R/**'
+      - 'BNPClust/**'
+      - 'example/R/**'
       - 'README.MD'
       - 'Doxyfile'
       - '.github/workflows/doxygen.yml'
@@ -14,7 +14,7 @@ on:
 jobs:
   generate-docs:
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: write
       pages: write

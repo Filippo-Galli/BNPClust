@@ -24,27 +24,27 @@ cmake --build build --parallel
 
 This will compile the C++ library and place the executable in `build/`. Once done, you can use the library in your R/Python environment.
 
-As example of how it works in R, you can take a look at the [Natarajan example](R/example/Natarajan_NGGP.R) script.
+As example of how it works in R, you can take a look at the [Natarajan example](example/R/Natarajan_NGG-aPPMx.R) script.
 
 ### API Documentation
-For R users, I suggest to take a look at the [R interface](src/r_bindings.cpp). For Python users, the API is documented in the [Python interface](src/python_bindings.cpp). For the C++ interface the docs is available at [Doxygen documentation](https://filippo-galli.github.io/BNPClust/).
+For R users, I suggest to take a look at the [R interface](BNPClust/r_bindings.cpp). For Python users, the API is documented in the [Python interface](src/python_bindings.cpp). For the C++ interface the docs is available at [Doxygen documentation](https://filippo-galli.github.io/BNPClust/).
 
 ## 📁 Directory Structure
 
-- `R/`: R interface functions and scripts for MCMC orchestration and analysis
-- `src/`: C++ source code implementing the core framework
+- `BNPClust/`: C++ source code implementing the core framework
+- `example/`: Example scripts in R (`example/R/`) and Python (`example/Python/`)
 - `docs/`: Generated documentation (Doxygen)
 - `doxygen-theme/`: Doxygen theme configuration files
 
-### src: C++ Core Framework
+### BNPClust: C++ Core Framework
 
 The C++ source code is organized into the following subdirectories:
 
-- **`src/processes/`**: Implementations of stochastic processes (e.g., Dirichlet Process, Normalized Generalized Gamma Process) and their modular covariates extensions.
-- **`src/likelihoods/`**: Likelihood model implementations, including distance-based clustering, gamma likelihood, null likelihood and a Mixture of Gaussian Likelihood.
-- **`src/samplers/`**: MCMC sampling algorithms (Neal's Algorithm 3, Split-Merge variants, SAMS, etc.)
-- **`src/utils/`**: Utility functions, base classes, and shared infrastructure
-- **`src/r_bindings.cpp`**: Rcpp bindings exposing C++ classes and functions to R
+- **`BNPClust/processes/`**: Implementations of stochastic processes (e.g., Dirichlet Process, Normalized Generalized Gamma Process) and their modular covariates extensions.
+- **`BNPClust/likelihoods/`**: Likelihood model implementations, including distance-based clustering, gamma likelihood, null likelihood and a Mixture of Gaussian Likelihood.
+- **`BNPClust/samplers/`**: MCMC sampling algorithms (Neal's Algorithm 3, Split-Merge variants, SAMS, etc.)
+- **`BNPClust/utils/`**: Utility functions, base classes, and shared infrastructure
+- **`BNPClust/r_bindings.cpp`**: Rcpp bindings exposing C++ classes and functions to R
 
 ### docs and Documentation
 

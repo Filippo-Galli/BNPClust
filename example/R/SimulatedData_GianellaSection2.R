@@ -6,8 +6,8 @@
 #
 ##############################################################################
 
-source("R/utils.R")
-source("R/utils_plot.R")
+source("example/R/utils.R")
+source("example/R/utils_plot.R")
 
 library(Rcpp)
 library(RcppEigen)

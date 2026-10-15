@@ -1,4 +1,4 @@
 var files_dup =
 [
-    [ "src", "dir_68267d1309a1af8e8297ef4c3efbcdba.html", "dir_68267d1309a1af8e8297ef4c3efbcdba" ]
+    [ "BNPClust", "dir_27b6828b042d19de94fc854242ca9761.html", "dir_27b6828b042d19de94fc854242ca9761" ]
 ];

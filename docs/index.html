@@ -132,27 +132,27 @@ Quick Start</h1>
 <div class="fragment"><div class="line">cmake -S . -B build</div>
 <div class="line">cmake --build build --parallel</div>
 </div><!-- fragment --><p>This will compile the C++ library and place the executable in <span class="tt">build/</span>. Once done, you can use the library in your R/Python environment.</p>
-<p>As example of how it works in R, you can take a look at the <a href="R/example/Natarajan_NGGP.R">Natarajan example</a> script.</p>
+<p>As example of how it works in R, you can take a look at the <a href="example/R/Natarajan_NGG-aPPMx.R">Natarajan example</a> script.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
 API Documentation</h2>
-<p>For R users, I suggest to take a look at the <a href="src/r_bindings.cpp">R interface</a>. For Python users, the API is documented in the <a href="src/python_bindings.cpp">Python interface</a>. For the C++ interface the docs is available at <a href="https://filippo-galli.github.io/BNPClust/">Doxygen documentation</a>.</p>
+<p>For R users, I suggest to take a look at the <a href="BNPClust/r_bindings.cpp">R interface</a>. For Python users, the API is documented in the <a href="src/python_bindings.cpp">Python interface</a>. For the C++ interface the docs is available at <a href="https://filippo-galli.github.io/BNPClust/">Doxygen documentation</a>.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
 📁 Directory Structure</h1>
 <ul>
-<li><span class="tt">R/</span>: R interface functions and scripts for MCMC orchestration and analysis</li>
-<li><span class="tt">src/</span>: C++ source code implementing the core framework</li>
+<li><span class="tt">BNPClust/</span>: C++ source code implementing the core framework</li>
+<li><span class="tt">example/</span>: Example scripts in R (<span class="tt">example/R/</span>) and Python (<span class="tt">example/Python/</span>)</li>
 <li><span class="tt">docs/</span>: Generated documentation (Doxygen)</li>
 <li><span class="tt">doxygen-theme/</span>: Doxygen theme configuration files</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
-src: C++ Core Framework</h2>
+BNPClust: C++ Core Framework</h2>
 <p>The C++ source code is organized into the following subdirectories:</p>
 <ul>
-<li><b><span class="tt">src/processes/</span></b>: Implementations of stochastic processes (e.g., Dirichlet <a class="el" href="classProcess.html" title="Abstract base class for Bayesian nonparametric processes.">Process</a>, Normalized Generalized Gamma <a class="el" href="classProcess.html" title="Abstract base class for Bayesian nonparametric processes.">Process</a>) and their modular covariates extensions.</li>
-<li><b><span class="tt">src/likelihoods/</span></b>: <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a> model implementations, including distance-based clustering, gamma likelihood, null likelihood and a Mixture of Gaussian <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a>.</li>
-<li><b><span class="tt">src/samplers/</span></b>: MCMC sampling algorithms (Neal's Algorithm 3, Split-Merge variants, SAMS, etc.)</li>
-<li><b><span class="tt">src/utils/</span></b>: Utility functions, base classes, and shared infrastructure</li>
-<li><b><span class="tt"><a class="el" href="r__bindings_8cpp.html">src/r_bindings.cpp</a></span></b>: Rcpp bindings exposing C++ classes and functions to R</li>
+<li><b><span class="tt">BNPClust/processes/</span></b>: Implementations of stochastic processes (e.g., Dirichlet <a class="el" href="classProcess.html" title="Abstract base class for Bayesian nonparametric processes.">Process</a>, Normalized Generalized Gamma <a class="el" href="classProcess.html" title="Abstract base class for Bayesian nonparametric processes.">Process</a>) and their modular covariates extensions.</li>
+<li><b><span class="tt">BNPClust/likelihoods/</span></b>: <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a> model implementations, including distance-based clustering, gamma likelihood, null likelihood and a Mixture of Gaussian <a class="el" href="classLikelihood.html" title="Abstract base class for likelihood computation.">Likelihood</a>.</li>
+<li><b><span class="tt">BNPClust/samplers/</span></b>: MCMC sampling algorithms (Neal's Algorithm 3, Split-Merge variants, SAMS, etc.)</li>
+<li><b><span class="tt">BNPClust/utils/</span></b>: Utility functions, base classes, and shared infrastructure</li>
+<li><b><span class="tt"><a class="el" href="r__bindings_8cpp.html">BNPClust/r_bindings.cpp</a></span></b>: Rcpp bindings exposing C++ classes and functions to R</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 docs and Documentation</h2>
