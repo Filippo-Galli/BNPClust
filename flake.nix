@@ -5,15 +5,12 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     mcclustExt.url = "github:Filippo-Galli/mcclust.ext";
     mcclustExt.inputs.nixpkgs.follows = "nixpkgs";
-    devenv.url = "github:cachix/devenv";
-    devenv.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
     inputs@{
       self,
       nixpkgs,
-      devenv,
       mcclustExt,
       ...
     }:
