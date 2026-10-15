@@ -50,8 +50,3 @@ raw/
 # Formatting
 *.clang-format
 .lintr
-
-# R scripts to not publish
-R/distributionStats_retrieval
-R/theory
-R/frequentist_approach

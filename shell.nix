@@ -7,6 +7,8 @@
   mcclustExt,
   cmake,
   which,
+  eigen,
+  pkg-config,
 }:
 let
   s2-fixed = rPackages.s2.overrideAttrs (old: {
@@ -26,6 +28,9 @@ let
 in
 mkShell {
   packages = [
+    cmake
+    eigen
+    pkg-config
     doxygen
     aria2
 
