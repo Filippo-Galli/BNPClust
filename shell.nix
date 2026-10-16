@@ -2,6 +2,7 @@
   mkShell,
   rWrapper,
   rPackages,
+  python3Packages,
   doxygen,
   aria2,
   mcclustExt,
@@ -9,6 +10,7 @@
   which,
   eigen,
   pkg-config,
+
 }:
 let
   s2-fixed = rPackages.s2.overrideAttrs (old: {
@@ -33,6 +35,14 @@ mkShell {
     pkg-config
     doxygen
     aria2
+    # Install python with nanobind, numpy, scipy, scikit-learn
+    (python3Packages.python.withPackages (ps: [
+      ps.nanobind
+      ps.numpy
+      ps.scipy
+      ps.scikit-learn
+      ps.matplotlib
+    ]))
 
     # Install R with the packages
     (rWrapper.override {

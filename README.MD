@@ -8,7 +8,7 @@ Inspired by the need for flexible and efficient tools in Bayesian nonparametric 
 
 ## Quick Start
 
-To get started quickly, clone the repository and open it in your preferred R/Python (bindings in progress) environment.
+To get started quickly, clone the repository and open it in your preferred R/Python environment.
 
 ```bash
 git clone https://github.com/filippo-galli/BNPClust.git
@@ -27,7 +27,7 @@ This will compile the C++ library and place the executable in `build/`. Once don
 As example of how it works in R, you can take a look at the [Natarajan example](example/R/Natarajan_NGG-aPPMx.R) script.
 
 ### API Documentation
-For R users, I suggest to take a look at the [R interface](BNPClust/r_bindings.cpp). For Python users, the API is documented in the [Python interface](src/python_bindings.cpp). For the C++ interface the docs is available at [Doxygen documentation](https://filippo-galli.github.io/BNPClust/).
+For R users, I suggest to take a look at the [R interface](BNPClust/r_bindings.cpp). For Python users, the API is documented in the [Python interface](BNPClust/python_bindings.cpp). For the C++ interface the docs is available at [Doxygen documentation](https://filippo-galli.github.io/BNPClust/).
 
 ## 📁 Directory Structure
 
@@ -45,6 +45,7 @@ The C++ source code is organized into the following subdirectories:
 - **`BNPClust/samplers/`**: MCMC sampling algorithms (Neal's Algorithm 3, Split-Merge variants, SAMS, etc.)
 - **`BNPClust/utils/`**: Utility functions, base classes, and shared infrastructure
 - **`BNPClust/r_bindings.cpp`**: Rcpp bindings exposing C++ classes and functions to R
+- **`BNPClust/python_bindings.cpp`**: Nanobind bindings exposing C++ classes and functions to Python
 
 ### docs and Documentation
 

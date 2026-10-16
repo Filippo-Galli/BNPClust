@@ -17,6 +17,7 @@ endif()
 file(GLOB_RECURSE BNPCLUST_SOURCES CONFIGURE_DEPENDS
      "${CMAKE_CURRENT_SOURCE_DIR}/BNPClust/*.cpp")
 list(FILTER BNPCLUST_SOURCES EXCLUDE REGEX ".*/r_bindings\\.cpp$")
+list(FILTER BNPCLUST_SOURCES EXCLUDE REGEX ".*/python_bindings\\.cpp$")
 
 add_library(bnpclust_core SHARED ${BNPCLUST_SOURCES})
 target_include_directories(bnpclust_core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/BNPClust")
@@ -140,3 +141,63 @@ set_target_properties(bnpclust_r PROPERTIES
   BUILD_RPATH "$ORIGIN"
   INSTALL_RPATH "$ORIGIN"
 )
+
+##################################
+# Python / nanobind
+##################################
+option(BNPCLUST_BUILD_PYTHON "Build Python bindings" OFF)
+
+if(BNPCLUST_BUILD_PYTHON)
+  find_package(Python 3.10 REQUIRED
+    COMPONENTS Interpreter Development.Module
+  )
+
+  # Nix can provide nanobind_DIR directly.
+  # Otherwise, discover it through the selected Python interpreter.
+  if(NOT nanobind_DIR)
+    execute_process(
+      COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+      OUTPUT_VARIABLE nanobind_DIR
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      RESULT_VARIABLE NANOBIND_DISCOVERY_RESULT
+    )
+
+    if(NOT NANOBIND_DISCOVERY_RESULT EQUAL 0)
+      message(FATAL_ERROR
+        "Cannot locate nanobind. Install it for ${Python_EXECUTABLE} "
+        "or pass -Dnanobind_DIR=/path/to/nanobind/cmake"
+      )
+    endif()
+  endif()
+
+  find_package(nanobind CONFIG REQUIRED)
+
+  nanobind_add_module(bnpclust
+    BNPClust/python_bindings.cpp
+  )
+
+  target_link_libraries(bnpclust PRIVATE
+    bnpclust_core
+  )
+
+  set(BNPCLUST_PYTHON_INSTALL_DIR
+    "lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages"
+    CACHE STRING "Python extension installation directory"
+  )
+
+  # The extension is in lib/pythonX.Y/site-packages;
+  # the shared core library is in CMAKE_INSTALL_LIBDIR.
+  file(RELATIVE_PATH BNPCLUST_PYTHON_TO_LIB
+    "${CMAKE_INSTALL_PREFIX}/${BNPCLUST_PYTHON_INSTALL_DIR}"
+    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}"
+  )
+
+  set_target_properties(bnpclust PROPERTIES
+    INSTALL_RPATH "$ORIGIN/${BNPCLUST_PYTHON_TO_LIB}"
+  )
+
+  install(
+    TARGETS bnpclust
+    LIBRARY DESTINATION "${BNPCLUST_PYTHON_INSTALL_DIR}"
+  )
+endif()
