@@ -1,5 +1,5 @@
 /**
- * @file bindings.cpp
+ * @file r_bindings.cpp
  * @brief R language bindings for Bayesian nonparametric clustering models
  *
  * This file contains the R/C++ interface code that exposes the clustering
