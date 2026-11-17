@@ -62,10 +62,9 @@ double Natarajan_likelihood_summaryStats::cluster_loglikelihood(
   double log_prod = 0;
   double sum = 0;
 
-  for (int i = 0; i < n_k; ++i) {
+  for (size_t i = 0; i < cls_ass_k.size(); ++i) {
     const int idx_i = cls_ass_k[i];
-    for (int j = i + 1; j < n_k; ++j) {
-      const int idx_j = cls_ass_k[j];
+    for (int idx_j : cls_ass_k.subspan(i + 1)) {
       sum += D_view[idx_i, idx_j];
       log_prod += logD_view[idx_i, idx_j];
     }
