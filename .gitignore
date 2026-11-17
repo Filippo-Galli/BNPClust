@@ -1,7 +1,3 @@
-# Devenv
-.devenv*
-devenv.local.nix
-
 # Doxygen
 html/
 latex/
@@ -50,3 +46,9 @@ raw/
 # Formatting
 *.clang-format
 .lintr
+
+# nix
+result/
+
+# Python
+__pycache__/
