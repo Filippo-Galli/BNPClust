@@ -222,18 +222,24 @@ cat("Starting MCMC with", NI, "iterations after", BI, "burn-in...\n")
 start_time <- Sys.time()
 print_interval <- max(1, floor(total_iters / 20))
 
+f_update <- bnp_mod$process_update_params
+f_step <- bnp_mod$sampler_step
+f_get_alloc <- bnp_mod$data_get_allocations
+f_get_K <- bnp_mod$data_get_K
+f_get_U <- bnp_mod$u_sampler_get_U
+
 for (i in 1:total_iters) {
     # Update process parameters (U)
-    bnp_mod$process_update_params(process)
+    f_update(process)
 
     # MCMC Step (Neal-3 collapsed Gibbs scan)
-    bnp_mod$sampler_step(neal3)
+    f_step(neal3)
 
     # Store results
-    allocations_out[[i]] <- bnp_mod$data_get_allocations(data)
-    K_out[i] <- bnp_mod$data_get_K(data)
+    allocations_out[[i]] <- f_get_alloc(data)
+    K_out[i] <- f_get_K(data)
     if (!is.null(u_sampler)) {
-        U_out[i] <- bnp_mod$u_sampler_get_U(u_sampler)
+        U_out[i] <- f_get_U(u_sampler)
     }
 
     # Progress
@@ -249,7 +255,7 @@ for (i in 1:total_iters) {
             "Iteration %d/%d: Clusters: %d - iter/s: %.2f eta: %.2fs\n",
             i,
             total_iters,
-            bnp_mod$data_get_K(data),
+            K_out[i],
             iter_per_sec,
             eta
         ))

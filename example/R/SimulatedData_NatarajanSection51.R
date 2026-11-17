@@ -87,17 +87,23 @@ for (sc in scenarios) {
         K_out <- integer(total_iters)
         U_out <- rep(NA_real_, total_iters)
 
+        f_update <- bnp_mod$process_update_params
+        f_step <- bnp_mod$sampler_step
+        f_get_alloc <- bnp_mod$data_get_allocations
+        f_get_K <- bnp_mod$data_get_K
+        f_get_U <- bnp_mod$u_sampler_get_U
+
         cat("Sampling 20,000 iterations...\n")
         t0 <- Sys.time()
         for (i in 1:total_iters) {
-            bnp_mod$process_update_params(proc_obj)
-            bnp_mod$sampler_step(sm)
+            f_update(proc_obj)
+            f_step(sm)
             if (i %% 25 == 0) {
-                bnp_mod$sampler_step(neal3)
+                f_step(neal3)
             }
-            allocations_out[[i]] <- bnp_mod$data_get_allocations(data_obj)
-            K_out[i] <- bnp_mod$data_get_K(data_obj)
-            U_out[i] <- bnp_mod$u_sampler_get_U(u_samp)
+            allocations_out[[i]] <- f_get_alloc(data_obj)
+            K_out[i] <- f_get_K(data_obj)
+            U_out[i] <- f_get_U(u_samp)
         }
         t1 <- Sys.time()
         elapsed_time <- as.numeric(difftime(t1, t0, units = "secs"))
