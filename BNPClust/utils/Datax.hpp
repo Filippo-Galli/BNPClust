@@ -32,11 +32,15 @@ class Datax : public Data {
 protected:
   std::vector<std::shared_ptr<ClusterInfo>> cluster_info;
 
-  void compact_cluster(int old_cluster);
+  void compact_cluster(int old_cluster) override;
 
 public:
   Datax(const utils_params &p, std::vector<std::shared_ptr<ClusterInfo>> ci,
         const Eigen::VectorXi &initial_allocations = Eigen::VectorXi())
+      : Data(p, initial_allocations), cluster_info(std::move(ci)) {}
+
+  Datax(const utils_params &p, std::vector<std::shared_ptr<ClusterInfo>> ci,
+        std::span<const int> initial_allocations)
       : Data(p, initial_allocations), cluster_info(std::move(ci)) {}
 
   /**
@@ -53,6 +57,7 @@ public:
    * @throws std::invalid_argument if vector size doesn't match number of points
    */
   void set_allocations(const Eigen::VectorXi &new_allocations) override;
+  void set_allocations(std::span<const int> new_allocations) override;
 
   /**
    * @brief Restores allocations, cluster memberships, and cluster count from a
@@ -64,6 +69,11 @@ public:
    * place)
    * @param old_K Number of clusters in the saved state
    */
+  void
+  restore_state(const std::vector<int> &old_allocations,
+                const std::unordered_map<int, std::vector<int>> &old_cluster_members,
+                int old_K) override;
+
   void
   restore_state(Eigen::VectorXi &old_allocations,
                 std::unordered_map<int, std::vector<int>> &old_cluster_members,

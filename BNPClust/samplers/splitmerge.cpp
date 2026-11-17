@@ -12,6 +12,7 @@
  */
 
 #include "splitmerge.hpp"
+#include <algorithm>
 
 void SplitMerge::choose_indeces() {
   /**
@@ -45,19 +46,19 @@ void SplitMerge::choose_indeces() {
 
   launch_state.resize(launch_state_size);
   S.resize(launch_state_size);
-  original_allocations =
-      data.get_allocations(); // Store original allocations in case of rejection
+  const auto init_alloc = data.get_allocations();
+  original_allocations.assign(init_alloc.begin(), init_alloc.end());
 
   // Properly collect all points from clusters ci and cj
-  int s_idx = 0;
+  size_t s_idx = 0;
   for (int idx = 0; idx < data.get_n(); ++idx) {
     if (idx == idx_i || idx == idx_j)
       continue; // Skip points i and j
 
     int temp_cluster = data.get_cluster_assignment(idx);
     if (temp_cluster == ci || temp_cluster == cj) {
-      S(s_idx) = idx;
-      launch_state(s_idx) = temp_cluster;
+      S[s_idx] = idx;
+      launch_state[s_idx] = temp_cluster;
       s_idx++;
     }
   }
@@ -83,8 +84,8 @@ void SplitMerge::restricted_gibbs(int iterations, bool only_probabilities) {
    */
 
   for (int i = 0; i < iterations; ++i) {
-    for (int idx = 0; idx < S.size(); ++idx) {
-      int point_idx = S(idx);
+    for (size_t idx = 0; idx < S.size(); ++idx) {
+      int point_idx = S[idx];
       int current_cluster = data.get_cluster_assignment(point_idx);
 
       // Remove point from its current cluster
@@ -137,8 +138,8 @@ double SplitMerge::compute_acceptance_ratio_merge(double likelihood_old_clusters
    */
 
   // Prior ratio
-  int size_old_ci = (original_allocations.array() == ci).count();
-  int size_old_cj = (original_allocations.array() == cj).count();
+  int size_old_ci = static_cast<int>(std::count(original_allocations.begin(), original_allocations.end(), ci));
+  int size_old_cj = static_cast<int>(std::count(original_allocations.begin(), original_allocations.end(), cj));
   double log_prior_ratio = process.prior_ratio_merge(size_old_ci, size_old_cj);
 
   // Likelihood ratio
@@ -168,9 +169,9 @@ void SplitMerge::merge_move() {
   data.set_allocation( idx_j, ci); // Temporarily assign j to ci for likelihood computation
 
   // Propose new allocations by merging clusters ci and cj
-  for (int idx = 0; idx < launch_state.size(); ++idx) {
-    if (launch_state(idx) == cj) {
-      data.set_allocation(S(idx), ci); // Merge cj into ci
+  for (size_t idx = 0; idx < launch_state.size(); ++idx) {
+    if (launch_state[idx] == cj) {
+      data.set_allocation(S[idx], ci); // Merge cj into ci
     }
   }
 
@@ -205,8 +206,8 @@ void SplitMerge::split_move() {
   cj = data.get_cluster_assignment(idx_j); // Update cj to the new cluster index
 
   std::uniform_int_distribution<> dis(0, 1);
-  for (int idx = 0; idx < launch_state.size(); ++idx) {
-      int point = S(idx);
+  for (size_t idx = 0; idx < launch_state.size(); ++idx) {
+      int point = S[idx];
       int new_cluster = (dis(gen) == 0) ? ci : cj;  // Random
       data.set_allocation(point, new_cluster);
   }
@@ -333,31 +334,32 @@ void SplitMerge::choose_clusters_shuffle() {
 
   // Choose random points from clusters ci and cj
   std::uniform_int_distribution<> dis_idx_i(0, data.get_cluster_size(ci) - 1);
-  idx_i = data.get_cluster_assignments_span(ci)[dis_idx_i(gen)];
+  idx_i = data.get_cluster_assignments(ci)[dis_idx_i(gen)];
 
   std::uniform_int_distribution<> dis_idx_j(0, data.get_cluster_size(cj) - 1);
-  idx_j = data.get_cluster_assignments_span(cj)[dis_idx_j(gen)];
+  idx_j = data.get_cluster_assignments(cj)[dis_idx_j(gen)];
 
   // Store original allocations in case of rejection
-  original_allocations = data.get_allocations();
+  const auto cur_alloc = data.get_allocations();
+  original_allocations.assign(cur_alloc.begin(), cur_alloc.end());
 
   // Pre-allocate launch_state and S
   const int size_ci = data.get_cluster_size(ci);
   const int size_cj = data.get_cluster_size(cj);
-  const int launch_state_size = size_ci + size_cj - 2; // Exclude points i and j from the launch state
+  const size_t launch_state_size = size_ci + size_cj - 2; // Exclude points i and j from the launch state
   launch_state.resize(launch_state_size);
   S.resize(launch_state_size);
 
   // Create S and launch_state
-  int s_idx = 0;
+  size_t s_idx = 0;
   for (int idx = 0; idx < data.get_n(); ++idx) {
     if (idx == idx_i || idx == idx_j)
       continue; // Skip points i and j
 
     int temp_cluster = data.get_cluster_assignment(idx);
     if (temp_cluster == ci || temp_cluster == cj) {
-      S(s_idx) = idx;
-      launch_state(s_idx) = temp_cluster;
+      S[s_idx] = idx;
+      launch_state[s_idx] = temp_cluster;
       s_idx++;
     }
   }

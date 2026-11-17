@@ -42,11 +42,11 @@ public:
      * split-merge.
      */
     SpatialModuleCache(const Data &data_, SpatialCache &spatial_cache_, double spatial_coeff,
-                       const Eigen::VectorXi *old_alloc_provider = nullptr,
+                       const std::vector<int> *old_alloc_provider = nullptr,
                        const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
         : data_module(data_), cache(spatial_cache_), spatial_weight(spatial_coeff),
           Module(old_alloc_provider, old_cluster_members_provider_) {
-        cache.set_allocation_ptr(&data_module.get_allocations());
+        cache.set_allocation_ptr(data_module.get_allocations().data());
     }
 
     /**

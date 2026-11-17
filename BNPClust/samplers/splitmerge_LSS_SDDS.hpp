@@ -100,16 +100,16 @@ private:
   // ========== State Management ==========
 
   /** @brief Launch state for sequential allocation */
-  Eigen::VectorXi launch_state;
+  std::vector<int> launch_state;
 
   /** @brief Indices of observations in clusters ci and cj */
-  Eigen::VectorXi S;
+  std::vector<int> S;
 
   /** @brief Size of the launch state and S vectors */
   int launch_state_size;
 
   /** @brief Cached reference to original allocations stored in the process */
-  const Eigen::VectorXi &original_allocations;
+  const std::vector<int> &original_allocations;
 
   // ========== Proposal Probabilities ==========
 
@@ -321,7 +321,7 @@ public:
   SplitMerge_LSS_SDDS(Data &d, utils_params &p, Likelihood &l, Process &pr,
                       bool shuffle)
       : Sampler(d, l, pr), params(p), shuffle_bool(shuffle),
-        original_allocations(pr.old_allocations_view()), gen(rd()),
+        original_allocations(pr.get_old_allocations()), gen(rd()),
         dis_real(0.0, 1.0), dis_int(0, 1) {
 
     // Precompute row max distances for efficiency

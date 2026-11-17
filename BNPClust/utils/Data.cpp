@@ -4,29 +4,69 @@
  */
 
 #include "Data.hpp"
-#include "Eigen/src/Core/Matrix.h"
+#include <algorithm>
 #include <iostream>
 
 Data::Data(const utils_params &p, const Eigen::VectorXi &initial_allocations)
-    : p(p), allocations(initial_allocations) {
-
-  // Initialize K (number of clusters) based on initial allocations
-  if (allocations.size() == 0) {
+    : p(p) {
+  if (initial_allocations.size() > 0) {
+    allocations.assign(initial_allocations.data(),
+                       initial_allocations.data() + initial_allocations.size());
+  } else {
     std::cout << "[INFO] No initial allocations provided, starting with all "
                  "points in one cluster."
               << std::endl;
-    // If no initial allocations provided, start with all points in one cluster
-    allocations = Eigen::VectorXi::Zero(p.n);
+    allocations.assign(static_cast<size_t>(p.n), 0);
   }
 
-  // Find the maximum cluster index to determine K
-  K = allocations.maxCoeff() + 1;
+  int max_c = -1;
+  for (int c : allocations) {
+    if (c > max_c) {
+      max_c = c;
+    }
+  }
+  K = (max_c >= 0) ? (max_c + 1) : 0;
 
-  // Allocate cluster mapping
-  for (int i = 0; i < p.n; ++i) {
-    int cluster_id = allocations(i);
-    if (cluster_id >= 0) {
-      cluster_members[cluster_id].push_back(i);
+  cluster_members.assign(static_cast<size_t>(K), std::vector<int>());
+  member_pos.assign(static_cast<size_t>(p.n), -1);
+
+  for (size_t i = 0; i < allocations.size(); ++i) {
+    int cluster_id = allocations[i];
+    if (cluster_id >= 0 && cluster_id < K) {
+      member_pos[i] = static_cast<int>(
+          cluster_members[static_cast<size_t>(cluster_id)].size());
+      cluster_members[static_cast<size_t>(cluster_id)].push_back(
+          static_cast<int>(i));
+    }
+  }
+}
+
+Data::Data(const utils_params &p, std::span<const int> initial_allocations)
+    : p(p) {
+  if (!initial_allocations.empty()) {
+    allocations.assign(initial_allocations.begin(), initial_allocations.end());
+  } else {
+    allocations.assign(static_cast<size_t>(p.n), 0);
+  }
+
+  int max_c = -1;
+  for (int c : allocations) {
+    if (c > max_c) {
+      max_c = c;
+    }
+  }
+  K = (max_c >= 0) ? (max_c + 1) : 0;
+
+  cluster_members.assign(static_cast<size_t>(K), std::vector<int>());
+  member_pos.assign(static_cast<size_t>(p.n), -1);
+
+  for (size_t i = 0; i < allocations.size(); ++i) {
+    int cluster_id = allocations[i];
+    if (cluster_id >= 0 && cluster_id < K) {
+      member_pos[i] = static_cast<int>(
+          cluster_members[static_cast<size_t>(cluster_id)].size());
+      cluster_members[static_cast<size_t>(cluster_id)].push_back(
+          static_cast<int>(i));
     }
   }
 }
@@ -34,68 +74,31 @@ Data::Data(const utils_params &p, const Eigen::VectorXi &initial_allocations)
 double Data::get_data(int i, int j) const {
 #if VERBOSITY_LEVEL >= 1
   if (i < 0 || i >= p.n || j < 0 || j >= p.p) {
-    throw std::out_of_range("Index out of bounds in get_distance");
+    throw std::out_of_range("Index out of bounds in get_data");
   }
 #endif
 
   return p.get_D_view()[i, j];
 }
 
-std::span<const int> Data::get_cluster_assignments_span(int cluster) const noexcept {
+std::span<const int>
+Data::get_cluster_assignments(int cluster) const noexcept {
   if (cluster >= K || cluster < 0) {
     return {};
   }
-  const auto it = cluster_members.find(cluster);
-  if (it == cluster_members.end()) {
-    return {};
-  }
-  return std::span<const int>(it->second.data(), it->second.size());
+  const auto &members = cluster_members[static_cast<size_t>(cluster)];
+  return std::span<const int>(members.data(), members.size());
 }
 
-Eigen::VectorXi Data::get_cluster_assignments(int cluster) const {
-#if VERBOSITY_LEVEL >= 1
-  if (cluster > K || cluster < 0) {
-    throw std::out_of_range("Index out of bounds in get_cluster_assignments");
+std::unordered_map<int, std::vector<int>> Data::get_cluster_map_copy() const {
+  std::unordered_map<int, std::vector<int>> map;
+  map.reserve(static_cast<size_t>(K));
+  for (int k = 0; k < K; ++k) {
+    if (!cluster_members[static_cast<size_t>(k)].empty()) {
+      map[k] = cluster_members[static_cast<size_t>(k)];
+    }
   }
-#endif
-
-  // Check if the cluster exists in the map before accessing it
-  if (cluster >= K || cluster < 0) {
-    return Eigen::VectorXi::Zero(
-        0); // Return empty vector for non-existent clusters
-  }
-
-  const auto it = cluster_members.find(cluster);
-  if (it == cluster_members.end()) {
-    return Eigen::VectorXi::Zero(0);
-  }
-
-  return Eigen::Map<const Eigen::VectorXi>(
-      it->second.data(), static_cast<Eigen::Index>(it->second.size()));
-}
-
-Eigen::Map<const Eigen::VectorXi>
-Data::get_cluster_assignments_ref(int cluster) const {
-#if VERBOSITY_LEVEL >= 1
-  if (cluster > K || cluster < 0) {
-    throw std::out_of_range(
-        "Index out of bounds in get_cluster_assignments_ref");
-  }
-#endif
-
-  // Check if the cluster exists in the map before accessing it
-  if (cluster >= K || cluster < 0) {
-    static const int dummy_value = 0;
-    return Eigen::Map<const Eigen::VectorXi>(&dummy_value, 0);
-  }
-  const auto it = cluster_members.find(cluster);
-  if (it == cluster_members.end()) {
-    static const int dummy_value = 0;
-    return Eigen::Map<const Eigen::VectorXi>(&dummy_value, 0);
-  }
-
-  return Eigen::Map<const Eigen::VectorXi>(
-      it->second.data(), static_cast<Eigen::Index>(it->second.size()));
+  return map;
 }
 
 void Data::compact_cluster(int old_cluster) {
@@ -111,29 +114,28 @@ void Data::compact_cluster(int old_cluster) {
   // If compacting the last cluster (or the only cluster), this is a pure
   // deletion.
   if (K <= 1 || old_cluster == last_cluster) {
-    cluster_members.erase(old_cluster);
+    cluster_members.pop_back();
     K--;
     return;
   }
 
-  auto last_cluster_it = cluster_members.find(last_cluster);
-  bool last_cluster_exists = (last_cluster_it != cluster_members.end());
-
-  // Shift allocations of the last cluster to the old cluster
-  if (last_cluster_exists && !last_cluster_it->second.empty()) {
-    for (int point_index : last_cluster_it->second) {
-      allocations(point_index) = old_cluster;
+  // Shift allocations and member positions of the last cluster to the old
+  // cluster
+  auto &last_members = cluster_members[static_cast<size_t>(last_cluster)];
+  if (!last_members.empty()) {
+    cluster_members[static_cast<size_t>(old_cluster)] = std::move(last_members);
+    auto &moved_members = cluster_members[static_cast<size_t>(old_cluster)];
+    for (size_t pos = 0; pos < moved_members.size(); ++pos) {
+      int point_index = moved_members[pos];
+      allocations[static_cast<size_t>(point_index)] = old_cluster;
+      member_pos[static_cast<size_t>(point_index)] = static_cast<int>(pos);
     }
-
-    // Move members of the last cluster to the old cluster using move semantics
-    cluster_members[old_cluster] = std::move(last_cluster_it->second);
   } else {
-    // Last cluster is empty or doesn't exist, just clear the old cluster
-    cluster_members[old_cluster].clear();
+    cluster_members[static_cast<size_t>(old_cluster)].clear();
   }
 
   // Remove the last cluster
-  cluster_members.erase(last_cluster);
+  cluster_members.pop_back();
   K--; // Decrease the number of clusters
 }
 
@@ -145,103 +147,109 @@ void Data::set_allocation_wo_compaction(int index, int cluster) {
   }
 #endif
 
-// Validate cluster parameter early
+  // Validate cluster parameter early
 #if VERBOSITY_LEVEL >= 1
   if (cluster < -1 || cluster > K) {
     throw std::out_of_range("Invalid cluster index in set_allocation");
   }
 #endif
 
-  int old_cluster = allocations(index);
+  int old_cluster = allocations[static_cast<size_t>(index)];
 
   // Early exit if no change needed
   if (old_cluster == cluster) {
     return;
   }
 
-  auto old_cluster_it = cluster_members.end();
-  bool old_cluster_exists = false;
-
-  // Check if old_cluster exists in the map
-  if (old_cluster != -1) {
-    old_cluster_it = cluster_members.find(old_cluster);
-    old_cluster_exists = (old_cluster_it != cluster_members.end());
+  // Remove from old cluster in O(1) using swap-and-pop
+  if (old_cluster != -1 && old_cluster < K) {
+    int pos = member_pos[static_cast<size_t>(index)];
+    auto &members = cluster_members[static_cast<size_t>(old_cluster)];
 
 #if VERBOSITY_LEVEL >= 1
-    if (!old_cluster_exists) {
+    if (pos < 0 || pos >= static_cast<int>(members.size()) ||
+        members[static_cast<size_t>(pos)] != index) {
       throw std::runtime_error(
-          "Inconsistent state: old_cluster not found in cluster_members");
+          "Inconsistent state: member_pos does not match cluster_members");
     }
 #endif
+
+    int last_point = members.back();
+    members[static_cast<size_t>(pos)] = last_point;
+    member_pos[static_cast<size_t>(last_point)] = pos;
+    members.pop_back();
+    member_pos[static_cast<size_t>(index)] = -1;
   }
 
-  // Remove from old cluster first (if applicable)
-  if (old_cluster_exists) {
-    auto &old_members = old_cluster_it->second;
-    // Use find + erase instead of remove + erase for single element (more
-    // efficient)
-    auto it = std::find(old_members.begin(), old_members.end(), index);
-    if (it != old_members.end()) {
-      old_members.erase(it);
-    }
-  }
-
-  // Update allocation
-  allocations(index) = cluster;
-
-  // Handle new cluster assignment
+  // Handle new cluster assignment in O(1)
   if (cluster == -1) {
-    // Point becomes unallocated - nothing more to do after removal above
+    allocations[static_cast<size_t>(index)] = -1;
+    member_pos[static_cast<size_t>(index)] = -1;
   } else if (cluster == K) {
     // New cluster creation
-    cluster_members[K].push_back(index);
+    allocations[static_cast<size_t>(index)] = K;
+    cluster_members.emplace_back();
+    member_pos[static_cast<size_t>(index)] = 0;
+    cluster_members[static_cast<size_t>(K)].push_back(index);
     K++;
   } else {
-    // Existing cluster assignment - cache the target cluster iterator
-    auto target_cluster_it = cluster_members.find(cluster);
-    if (target_cluster_it != cluster_members.end()) {
-      target_cluster_it->second.push_back(index);
-    } else {
-      // Create the cluster if it doesn't exist
-      cluster_members[cluster].push_back(index);
-    }
+    // Existing cluster assignment
+    allocations[static_cast<size_t>(index)] = cluster;
+    member_pos[static_cast<size_t>(index)] =
+        static_cast<int>(cluster_members[static_cast<size_t>(cluster)].size());
+    cluster_members[static_cast<size_t>(cluster)].push_back(index);
   }
 }
 
 void Data::set_allocation(int index, int cluster) {
-
-  int old_cluster = allocations(index);
+  int old_cluster = allocations[static_cast<size_t>(index)];
   set_allocation_wo_compaction(index, cluster);
 
   // Check if old cluster became empty and needs compaction
-  auto old_cluster_it = cluster_members.find(old_cluster);
-  if (old_cluster_it != cluster_members.end() && old_cluster_it->second.empty()) {
+  if (old_cluster != -1 && old_cluster < K &&
+      cluster_members[static_cast<size_t>(old_cluster)].empty()) {
     compact_cluster(old_cluster);
   }
 }
 
-void Data::set_allocations(const Eigen::VectorXi &new_allocations) {
+void Data::set_allocations(std::span<const int> new_allocations) {
 #if VERBOSITY_LEVEL >= 1
-  if (new_allocations.size() != p.n) {
+  if (static_cast<int>(new_allocations.size()) != p.n) {
     throw std::invalid_argument(
         "New allocations vector must be of size n, set_allocations failed");
   }
 #endif
 
-  allocations = new_allocations;
+  allocations.assign(new_allocations.begin(), new_allocations.end());
+  int max_c = -1;
+  for (int c : allocations) {
+    if (c > max_c) {
+      max_c = c;
+    }
+  }
+  K = (max_c >= 0) ? (max_c + 1) : 0;
 
-  // Update cluster members mapping
-  cluster_members.clear();
-  for (int i = 0; i < p.n; ++i)
-    cluster_members[allocations(i)].push_back(i);
+  cluster_members.assign(static_cast<size_t>(K), std::vector<int>());
+  member_pos.assign(static_cast<size_t>(p.n), -1);
 
-  // Update K based on the new allocations
-  K = allocations.maxCoeff() + 1;
+  for (size_t i = 0; i < allocations.size(); ++i) {
+    int cid = allocations[i];
+    if (cid >= 0 && cid < K) {
+      member_pos[i] =
+          static_cast<int>(cluster_members[static_cast<size_t>(cid)].size());
+      cluster_members[static_cast<size_t>(cid)].push_back(static_cast<int>(i));
+    }
+  }
+}
+
+void Data::set_allocations(const Eigen::VectorXi &new_allocations) {
+  set_allocations(std::span<const int>(
+      new_allocations.data(), static_cast<size_t>(new_allocations.size())));
 }
 
 void Data::restore_state(
-    Eigen::VectorXi &old_allocations,
-    std::unordered_map<int, std::vector<int>> &old_cluster_members, int old_K) {
+    const std::vector<int> &old_allocations,
+    const std::unordered_map<int, std::vector<int>> &old_cluster_members, int old_K) {
 #if VERBOSITY_LEVEL >= 1
   if (old_allocations.size() != allocations.size()) {
     throw std::invalid_argument(
@@ -249,7 +257,28 @@ void Data::restore_state(
   }
 #endif
 
-  allocations.swap(old_allocations);
-  cluster_members.swap(old_cluster_members);
+  allocations = old_allocations;
   K = old_K;
+
+  cluster_members.assign(static_cast<size_t>(K), std::vector<int>());
+  member_pos.assign(static_cast<size_t>(p.n), -1);
+
+  for (const auto &[k, members] : old_cluster_members) {
+    if (k >= 0 && k < K) {
+      cluster_members[static_cast<size_t>(k)] = members;
+      for (size_t pos = 0; pos < members.size(); ++pos) {
+        int pt = members[pos];
+        if (pt >= 0 && pt < p.n) {
+          member_pos[static_cast<size_t>(pt)] = static_cast<int>(pos);
+        }
+      }
+    }
+  }
+}
+
+void Data::restore_state(
+    Eigen::VectorXi &old_allocations,
+    std::unordered_map<int, std::vector<int>> &old_cluster_members, int old_K) {
+  std::vector<int> std_old_alloc(old_allocations.data(), old_allocations.data() + old_allocations.size());
+  restore_state(std_old_alloc, old_cluster_members, old_K);
 }

@@ -17,6 +17,7 @@
  */
 
 #include "splitmerge_LSS_SDDS.hpp"
+#include <algorithm>
 #include <random>
 
 void SplitMerge_LSS_SDDS::choose_indeces(bool similarity) {
@@ -84,20 +85,22 @@ void SplitMerge_LSS_SDDS::choose_indeces(bool similarity) {
 
     int temp_cluster = data.get_cluster_assignment(idx);
     if (temp_cluster == ci || temp_cluster == cj) {
-      S(s_idx) = idx;
-      launch_state(s_idx) = temp_cluster;
+      S[s_idx] = idx;
+      launch_state[s_idx] = temp_cluster;
       s_idx++;
     }
   }
 
   // Shuffle launch_state and S in unison using Fisher-Yates algorithm
   // This maintains alignment between the two vectors while shuffling in-place
-  for (int i = launch_state_size - 1; i > 0; --i) {
-    std::uniform_int_distribution<> dis_shuffle(0, i);
-    int j = dis_shuffle(gen);
-    if (i != j) {
-      std::swap(launch_state(i), launch_state(j));
-      std::swap(S(i), S(j));
+  if (launch_state_size > 1) {
+    for (int i = launch_state_size - 1; i > 0; --i) {
+      std::uniform_int_distribution<> dis_shuffle(0, i);
+      int j = dis_shuffle(gen);
+      if (i != j) {
+        std::swap(launch_state[i], launch_state[j]);
+        std::swap(S[i], S[j]);
+      }
     }
   }
 
@@ -120,13 +123,13 @@ void SplitMerge_LSS_SDDS::sequential_allocation(int iterations,
 
     // Unallocate all points in S
     for (int idx = 0; idx < launch_state_size && sequential; ++idx) {
-      data.set_allocation(S(idx), -1); // Unallocate point
+      data.set_allocation(S[idx], -1); // Unallocate point
     }
 
     // Allocate each point in S using RGSM or sequential allocation
     for (int idx = 0; idx < launch_state_size; ++idx) {
-      int point_idx = S(idx);
-      int current_cluster = launch_state(idx);
+      int point_idx = S[idx];
+      int current_cluster = launch_state[idx];
 
       if (!sequential) {
         current_cluster = data.get_cluster_assignment(point_idx);
@@ -178,8 +181,8 @@ double SplitMerge_LSS_SDDS::compute_acceptance_ratio_merge(
     double likelihood_old_clusters) {
 
   // Prior ratio
-  int size_old_ci = (original_allocations.array() == ci).count();
-  int size_old_cj = (original_allocations.array() == cj).count();
+  int size_old_ci = static_cast<int>(std::count(original_allocations.begin(), original_allocations.end(), ci));
+  int size_old_cj = static_cast<int>(std::count(original_allocations.begin(), original_allocations.end(), cj));
   double log_acceptance_ratio =
       process.prior_ratio_merge(size_old_ci, size_old_cj);
 
@@ -229,8 +232,8 @@ void SplitMerge_LSS_SDDS::dumb_merge_move() {
   // Direct merge: assign all points to ci
   data.set_allocation(idx_j, ci);
   for (int idx = 0; idx < launch_state_size; ++idx) {
-    if (launch_state(idx) == cj) {
-      data.set_allocation(S(idx), ci); // Merge cj into ci
+    if (launch_state[idx] == cj) {
+      data.set_allocation(S[idx], ci); // Merge cj into ci
     }
   }
 
@@ -375,10 +378,10 @@ void SplitMerge_LSS_SDDS::choose_clusters_shuffle() {
 
   // Choose random points from clusters ci and cj
   std::uniform_int_distribution<> dis_idx_i(0, data.get_cluster_size(ci) - 1);
-  idx_i = data.get_cluster_assignments_span(ci)[dis_idx_i(gen)];
+  idx_i = data.get_cluster_assignments(ci)[dis_idx_i(gen)];
 
   std::uniform_int_distribution<> dis_idx_j(0, data.get_cluster_size(cj) - 1);
-  idx_j = data.get_cluster_assignments_span(cj)[dis_idx_j(gen)];
+  idx_j = data.get_cluster_assignments(cj)[dis_idx_j(gen)];
 
   // Pre-allocate launch_state and S
   const int size_ci = data.get_cluster_size(ci);
@@ -396,8 +399,8 @@ void SplitMerge_LSS_SDDS::choose_clusters_shuffle() {
 
     int temp_cluster = data.get_cluster_assignment(idx);
     if (temp_cluster == ci || temp_cluster == cj) {
-      S(s_idx) = idx;
-      launch_state(s_idx) = temp_cluster;
+      S[s_idx] = idx;
+      launch_state[s_idx] = temp_cluster;
       s_idx++;
     }
   }

@@ -478,7 +478,9 @@ void sampler_step(Rcpp::XPtr<Sampler> sampler) { sampler->step(); }
 // [[Rcpp::export]]
 Eigen::VectorXi data_get_allocations(SEXP data_sexp) {
   Data *data = get_data_ptr(data_sexp);
-  return data->get_allocations();
+  auto span = data->get_allocations();
+  return Eigen::Map<const Eigen::VectorXi>(
+      span.data(), static_cast<Eigen::Index>(span.size()));
 }
 
 // [[Rcpp::export]]

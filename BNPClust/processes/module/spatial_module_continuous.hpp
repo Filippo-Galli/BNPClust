@@ -65,7 +65,7 @@ public:
    */
   SpatialModuleContinuous(const Data &data_, const Eigen::MatrixXd W_,
                           double spatial_coeff,
-                          const Eigen::VectorXi *old_alloc_provider = nullptr,
+                          const std::vector<int> *old_alloc_provider = nullptr,
                           const std::unordered_map<int, std::vector<int>>
                               *old_cluster_members_provider_ = nullptr)
       : W(W_), data_module(data_), spatial_weight(spatial_coeff),

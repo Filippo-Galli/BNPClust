@@ -14,6 +14,7 @@
  */
 
 #include "splitmerge_LSS.hpp"
+#include <algorithm>
 #include <random>
 
 void SplitMerge_LSS::choose_indeces(bool similarity) {
@@ -80,31 +81,33 @@ void SplitMerge_LSS::choose_indeces(bool similarity) {
 
   launch_state.resize(launch_state_size);
   S.resize(launch_state_size);
-  original_allocations =
-      data.get_allocations(); // Store original allocations in case of rejection
+  const auto init_alloc = data.get_allocations();
+  original_allocations.assign(init_alloc.begin(), init_alloc.end());
 
   // Properly collect all points from clusters ci and cj
-  int s_idx = 0;
+  size_t s_idx = 0;
   for (int idx = 0; idx < data.get_n(); ++idx) {
     if (idx == idx_i || idx == idx_j)
       continue; // Skip points i and j
 
     int temp_cluster = data.get_cluster_assignment(idx);
     if (temp_cluster == ci || temp_cluster == cj) {
-      S(s_idx) = idx;
-      launch_state(s_idx) = temp_cluster;
+      S[s_idx] = idx;
+      launch_state[s_idx] = temp_cluster;
       s_idx++;
     }
   }
-  
+
   // Shuffle launch_state and S in unison using Fisher-Yates algorithm
   // This maintains alignment between the two vectors while shuffling in-place
-  for (int i = launch_state_size - 1; i > 0; --i) {
-    std::uniform_int_distribution<> dis_shuffle(0, i);
-    int j = dis_shuffle(gen);
-    if (i != j) {
-      std::swap(launch_state(i), launch_state(j));
-      std::swap(S(i), S(j));
+  if (launch_state_size > 1) {
+    for (size_t i = launch_state_size - 1; i > 0; --i) {
+      std::uniform_int_distribution<size_t> dis_shuffle(0, i);
+      size_t j = dis_shuffle(gen);
+      if (i != j) {
+        std::swap(launch_state[i], launch_state[j]);
+        std::swap(S[i], S[j]);
+      }
     }
   }
 
@@ -131,18 +134,18 @@ void SplitMerge_LSS::sequential_allocation(int iterations,
    * changing allocations (used in merge move).
    */
 
-  const int S_size = S.size();
+  const size_t S_size = S.size();
 
   for (int i = 0; i < iterations; ++i) {
 
     // Unallocate all points in S
-    for (int idx = 0; idx < S_size && sequential; ++idx) {
-      data.set_allocation(S(idx), -1); // Unallocate point
+    for (size_t idx = 0; idx < S_size && sequential; ++idx) {
+      data.set_allocation(S[idx], -1); // Unallocate point
     }
 
-    for (int idx = 0; idx < S_size; ++idx) {
-      int point_idx = S(idx);
-      int current_cluster = launch_state(idx);
+    for (size_t idx = 0; idx < S_size; ++idx) {
+      int point_idx = S[idx];
+      int current_cluster = launch_state[idx];
 
       if (!sequential) {
         current_cluster = data.get_cluster_assignment(point_idx);
@@ -200,8 +203,8 @@ SplitMerge_LSS::compute_acceptance_ratio_merge(double likelihood_old_clusters) {
    */
 
   // Prior ratio
-  int size_old_ci = (original_allocations.array() == ci).count();
-  int size_old_cj = (original_allocations.array() == cj).count();
+  int size_old_ci = static_cast<int>(std::count(original_allocations.begin(), original_allocations.end(), ci));
+  int size_old_cj = static_cast<int>(std::count(original_allocations.begin(), original_allocations.end(), cj));
   double log_acceptance_ratio = process.prior_ratio_merge(size_old_ci, size_old_cj);
 
   // Likelihood ratio
@@ -231,9 +234,9 @@ void SplitMerge_LSS::merge_move() {
       idx_j, ci); // Temporarily assign j to ci for likelihood computation
 
   // Propose new allocations by merging clusters ci and cj
-  for (int idx = 0; idx < launch_state.size(); ++idx) {
-    if (launch_state(idx) == cj) {
-      data.set_allocation(S(idx), ci); // Merge cj into ci
+  for (size_t idx = 0; idx < launch_state.size(); ++idx) {
+    if (launch_state[idx] == cj) {
+      data.set_allocation(S[idx], ci); // Merge cj into ci
     }
   }
 
@@ -267,9 +270,9 @@ void SplitMerge_LSS::split_move() {
 
   // Allocate randomly points in S to either ci or cj
   std::uniform_int_distribution<> dis(0, 1);
-  for (int idx = 0; idx < launch_state.size(); ++idx) {
+  for (size_t idx = 0; idx < launch_state.size(); ++idx) {
     int new_cluster = (dis(gen) == 0) ? ci : cj;
-    data.set_allocation(S(idx), new_cluster);
+    data.set_allocation(S[idx], new_cluster);
   }
 
   // Perform restricted Gibbs sampling to refine the allocations
@@ -390,32 +393,33 @@ void SplitMerge_LSS::choose_clusters_shuffle() {
 
   // Choose random points from clusters ci and cj
   std::uniform_int_distribution<> dis_idx_i(0, data.get_cluster_size(ci) - 1);
-  idx_i = data.get_cluster_assignments_span(ci)[dis_idx_i(gen)];
+  idx_i = data.get_cluster_assignments(ci)[dis_idx_i(gen)];
 
   std::uniform_int_distribution<> dis_idx_j(0, data.get_cluster_size(cj) - 1);
-  idx_j = data.get_cluster_assignments_span(cj)[dis_idx_j(gen)];
+  idx_j = data.get_cluster_assignments(cj)[dis_idx_j(gen)];
 
   // Store original allocations in case of rejection
-  original_allocations = data.get_allocations();
+  const auto cur_alloc = data.get_allocations();
+  original_allocations.assign(cur_alloc.begin(), cur_alloc.end());
 
   // Pre-allocate launch_state and S
   const int size_ci = data.get_cluster_size(ci);
   const int size_cj = data.get_cluster_size(cj);
-  const int launch_state_size =
+  const size_t launch_state_size =
       size_ci + size_cj - 2; // Exclude points i and j from the launch state
   launch_state.resize(launch_state_size);
   S.resize(launch_state_size);
 
   // Create S and launch_state
-  int s_idx = 0;
+  size_t s_idx = 0;
   for (int idx = 0; idx < data.get_n(); ++idx) {
     if (idx == idx_i || idx == idx_j)
       continue; // Skip points i and j
 
     int temp_cluster = data.get_cluster_assignment(idx);
     if (temp_cluster == ci || temp_cluster == cj) {
-      S(s_idx) = idx;
-      launch_state(s_idx) = temp_cluster;
+      S[s_idx] = idx;
+      launch_state[s_idx] = temp_cluster;
       s_idx++;
     }
   }

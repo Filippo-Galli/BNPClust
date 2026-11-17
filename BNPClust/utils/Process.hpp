@@ -45,7 +45,7 @@ protected:
 
   /** @brief Storage for previous allocations to enable rollback in case of
    * rejection or for computation requiring it*/
-  Eigen::VectorXi old_allocations;
+  std::vector<int> old_allocations;
 
   /** @brief Storage for previous cluster members to enable rollback in case of
    * rejection or for computation requiring it*/
@@ -81,7 +81,8 @@ public:
    * for potential rollback operations during split-merge moves.
    */
   Process(Data &d) : data(d) {
-    old_allocations = data.get_allocations();
+    const auto alloc_span = data.get_allocations();
+    old_allocations.assign(alloc_span.begin(), alloc_span.end());
     old_cluster_members = data.get_cluster_map();
     old_K = data.get_K();
   };
@@ -197,8 +198,13 @@ public:
    * @details Saves the current state of cluster allocations before attempting
    * a split-merge move, enabling rollback if the move is rejected.
    */
+  void set_old_allocations(std::span<const int> new_allocations) {
+    old_allocations.assign(new_allocations.begin(), new_allocations.end());
+  }
+
   void set_old_allocations(const Eigen::VectorXi &new_allocations) {
-    old_allocations = new_allocations;
+    set_old_allocations(std::span<const int>(
+        new_allocations.data(), static_cast<size_t>(new_allocations.size())));
   };
 
   /**
@@ -231,9 +237,13 @@ public:
   /**
    * @brief Provides read-only access to the stored previous allocations.
    *
-   * @return Const reference to the vector of previous allocations.
+   * @return View of previous allocations.
    */
-  [[nodiscard]] const Eigen::VectorXi &old_allocations_view() const {
+  [[nodiscard]] std::span<const int> old_allocations_view() const noexcept {
+    return old_allocations;
+  }
+
+  [[nodiscard]] const std::vector<int> &get_old_allocations() const noexcept {
     return old_allocations;
   }
 

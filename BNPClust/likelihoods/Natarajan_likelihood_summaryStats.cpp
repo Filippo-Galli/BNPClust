@@ -8,7 +8,7 @@
 
 double Natarajan_likelihood_summaryStats::cluster_loglikelihood(
     int cluster_index) const {
-  auto cls_ass_k = data.get_cluster_assignments_span(cluster_index);
+  auto cls_ass_k = data.get_cluster_assignments(cluster_index);
   return cluster_loglikelihood(cluster_index, cls_ass_k);
 }
 
@@ -30,7 +30,7 @@ double Natarajan_likelihood_summaryStats::cluster_loglikelihood(
     if (t == cluster_index)
       continue;
 
-    auto cls_ass_t = data.get_cluster_assignments_span(t);
+    auto cls_ass_t = data.get_cluster_assignments(t);
     const int n_t = static_cast<int>(cls_ass_t.size());
 
     if (n_t == 0)
@@ -82,7 +82,7 @@ double Natarajan_likelihood_summaryStats::cluster_loglikelihood(
 
 double Natarajan_likelihood_summaryStats::point_loglikelihood_cond(
     int point_index, int cluster_index) const {
-  auto cls_ass_k = data.get_cluster_assignments_span(cluster_index);
+  auto cls_ass_k = data.get_cluster_assignments(cluster_index);
   const int n_k = static_cast<int>(cls_ass_k.size());
 
   double coeh = compute_cohesion(point_index, cluster_index, cls_ass_k, n_k);
@@ -137,7 +137,7 @@ double Natarajan_likelihood_summaryStats::compute_repulsion(
     if (t == cluster_index)
       continue;
 
-    const auto cls_ass_t = data.get_cluster_assignments_span(t);
+    const auto cls_ass_t = data.get_cluster_assignments(t);
     const int n_t = static_cast<int>(cls_ass_t.size());
 
     if (n_t == 0)
@@ -168,8 +168,8 @@ double Natarajan_likelihood_summaryStats::pairwise_repulsion(int cluster_1,
   if (cluster_1 == cluster_2)
     return 0.0;
 
-  auto cls_ass_k = data.get_cluster_assignments_span(cluster_1);
-  auto cls_ass_t = data.get_cluster_assignments_span(cluster_2);
+  auto cls_ass_k = data.get_cluster_assignments(cluster_1);
+  auto cls_ass_t = data.get_cluster_assignments(cluster_2);
   const int n_k = static_cast<int>(cls_ass_k.size());
   const int n_t = static_cast<int>(cls_ass_t.size());
 

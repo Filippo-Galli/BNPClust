@@ -29,17 +29,22 @@ class Data {
 protected:
   const utils_params &p; ///< Reference to model parameters
 
-  Eigen::VectorXi allocations; ///< Cluster allocation for each point
-  int K;                       ///< Current number of clusters
+  std::vector<int> allocations; ///< Cluster allocation for each point (size n)
+  int K;                        ///< Current number of clusters
 
-  /// Maps cluster indices to vectors of point indices in that cluster
-  std::unordered_map<int, std::vector<int>> cluster_members;
+  /// Position of each point in its cluster's member vector: member_pos[i] =
+  /// index in cluster_members[allocations[i]]
+  std::vector<int> member_pos;
+
+  /// Contiguous cluster member vectors: cluster_members[k] = list of points in
+  /// cluster k
+  std::vector<std::vector<int>> cluster_members;
 
   /**
    * @brief Removes an empty cluster and compacts cluster indices
    * @param old_cluster Index of the cluster to remove
    */
-  void compact_cluster(int old_cluster);
+  virtual void compact_cluster(int old_cluster);
 
   /**
    * @brief Assigns a point to a cluster without compaction
@@ -59,6 +64,13 @@ public:
    */
   Data(const utils_params &p,
        const Eigen::VectorXi &initial_allocations = Eigen::VectorXi());
+
+  /**
+   * @brief Constructs a Data object with a span of initial allocations
+   * @param p Reference to model parameters
+   * @param initial_allocations Initial cluster assignments as std::span
+   */
+  Data(const utils_params &p, std::span<const int> initial_allocations);
 
   /**
    * @brief Getters
@@ -92,10 +104,12 @@ public:
   int get_p() const { return p.p; }
 
   /**
-   * @brief Gets the cluster allocations vector
-   * @return Reference to the allocations vector
+   * @brief Gets the cluster allocations vector as a std::span
+   * @return Non-owning view of the allocations vector
    */
-  const Eigen::VectorXi &get_allocations() const { return allocations; }
+  [[nodiscard]] std::span<const int> get_allocations() const noexcept {
+    return allocations;
+  }
 
   /**
    * @brief Gets the size of a specific cluster
@@ -106,10 +120,7 @@ public:
     if (cluster_index >= static_cast<unsigned>(K)) {
       return 0;
     }
-
-    const auto it = cluster_members.find(static_cast<int>(cluster_index));
-    return (it != cluster_members.end()) ? static_cast<int>(it->second.size())
-                                         : 0;
+    return static_cast<int>(cluster_members[cluster_index].size());
   }
 
   /**
@@ -122,47 +133,42 @@ public:
     if (index < 0 || index >= p.n) {
       throw std::out_of_range("Index out of bounds in get_cluster_assignment");
     }
-    return allocations(index);
+    return allocations[static_cast<size_t>(index)];
   }
-
-  /**
-   * @brief Gets all point indices assigned to a specific cluster
-   * @param cluster Index of the cluster
-   * @return Vector of point indices in the cluster
-   * @throws std::out_of_range if cluster index is invalid
-   */
-  Eigen::VectorXi get_cluster_assignments(int cluster) const;
-
-  /**
-   * @brief Gets all point indices assigned to a specific cluster (map form)
-   * @param cluster Index of the cluster
-   * @return Map to vector of point indices in the cluster
-   * @throws std::out_of_range if cluster index is invalid
-   */
-  Eigen::Map<const Eigen::VectorXi>
-  get_cluster_assignments_ref(int cluster) const;
 
   /**
    * @brief Gets all point indices assigned to a specific cluster as a zero-overhead std::span
    * @param cluster Index of the cluster
    * @return Non-owning view of point indices in the cluster
    */
-  std::span<const int> get_cluster_assignments_span(int cluster) const noexcept;
+  [[nodiscard]] std::span<const int> get_cluster_assignments(int cluster) const noexcept;
 
   /**
-   * @brief Gets the cluster allocations vector as a std::span
-   * @return Non-owning view of the allocations vector
+   * @brief Direct access to contiguous cluster member lists
+   * @return Const reference to vector of cluster member vectors
    */
-  std::span<const int> get_allocations_span() const noexcept {
-    return std::span<const int>(allocations.data(), static_cast<size_t>(allocations.size()));
+  const std::vector<std::vector<int>> &get_cluster_members() const noexcept {
+    return cluster_members;
   }
+
+  /**
+   * @brief Direct access to member position lookup array
+   * @return Const reference to position lookup vector
+   */
+  const std::vector<int> &get_member_pos() const noexcept { return member_pos; }
 
   /**
    * @brief Gets the full mapping of clusters to their member points
    * @return Unordered map of cluster indices to vectors of point indices
    */
-  std::unordered_map<int, std::vector<int>> get_cluster_map_copy() const {
-    return cluster_members;
+  std::unordered_map<int, std::vector<int>> get_cluster_map_copy() const;
+
+  /**
+   * @brief Gets the full mapping of clusters to their member points
+   * @return Unordered map of cluster indices to vectors of point indices
+   */
+  std::unordered_map<int, std::vector<int>> get_cluster_map() const {
+    return get_cluster_map_copy();
   }
 
   /** @} */
@@ -186,6 +192,7 @@ public:
    * @throws std::invalid_argument if vector size doesn't match number of points
    */
   virtual void set_allocations(const Eigen::VectorXi &new_allocations);
+  virtual void set_allocations(std::span<const int> new_allocations);
 
   /**
    * @brief Restores allocations, cluster memberships, and cluster count from a
@@ -198,17 +205,14 @@ public:
    * @param old_K Number of clusters in the saved state
    */
   virtual void
+  restore_state(const std::vector<int> &old_allocations,
+                const std::unordered_map<int, std::vector<int>> &old_cluster_members,
+                int old_K);
+
+  virtual void
   restore_state(Eigen::VectorXi &old_allocations,
                 std::unordered_map<int, std::vector<int>> &old_cluster_members,
                 int old_K);
-
-  /**
-   * @brief Gets the full mapping of clusters to their member points
-   * @return Reference to the vector of cluster members
-   */
-  const std::unordered_map<int, std::vector<int>> &get_cluster_map() const {
-    return cluster_members;
-  }
 
   /** @} */
 

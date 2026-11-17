@@ -22,19 +22,19 @@ void SpatialCache::neighbor_cache_compute() {
     }
 }
 
-void SpatialCache::recompute(int K, const Eigen::VectorXi &allocations) {
+void SpatialCache::recompute(int K, std::span<const int> allocations) {
     cluster_stats.clear();
     cluster_stats.resize(K);
 
-    const int N = allocations.size();
+    const int N = static_cast<int>(allocations.size());
     for (int i = 0; i < N; ++i) {
-        int cls_idx = allocations(i);
+        int cls_idx = allocations[i];
         if (cls_idx != -1) {
             // Sum spatial covariates from neighbors
             const std::vector<int> &row = neighbor_cache[i];
             for (size_t j = 0; j < row.size(); ++j) {
                 cluster_stats[cls_idx].spatial_sum +=
-                    (allocations(row[j]) == cls_idx
+                    (allocations[row[j]] == cls_idx
                          ? 1
                          : 0); // Assuming each neighbor contributes '1' if in the same cluster
             }
@@ -48,7 +48,7 @@ void SpatialCache::set_allocation(int index, int cluster, int old_cluster) {
     if (old_cluster != -1) {
         ClusterStats &stats = cluster_stats[old_cluster];
         for (const auto &neighbor_idx : neighbor_cache[index]) {
-            stats.spatial_sum -= (allocations_ptr->operator()(neighbor_idx) == old_cluster ? 2 : 0);
+            stats.spatial_sum -= (allocations_ptr[neighbor_idx] == old_cluster ? 2 : 0);
         }
     }
 
@@ -61,7 +61,7 @@ void SpatialCache::set_allocation(int index, int cluster, int old_cluster) {
 
         ClusterStats &stats = cluster_stats[cluster];
         for (const auto &neighbor_idx : neighbor_cache[index]) {
-            stats.spatial_sum += (allocations_ptr->operator()(neighbor_idx) == cluster ? 2 : 0);
+            stats.spatial_sum += (allocations_ptr[neighbor_idx] == cluster ? 2 : 0);
         }
     }
 }

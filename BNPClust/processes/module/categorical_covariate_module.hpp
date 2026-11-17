@@ -58,7 +58,7 @@ public:
      */
     CategoricalCovariatesModule(
         const Data &data_, const Eigen::VectorXi categorical_covariate, std::vector<double> prior_alpha_,
-        const Eigen::VectorXi *old_alloc_provider = nullptr,
+        const std::vector<int> *old_alloc_provider = nullptr,
         const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
         : prior_alpha(prior_alpha_), data(data_), categorical_covariate_data(categorical_covariate),
           Module(old_alloc_provider, old_cluster_members_provider_) {

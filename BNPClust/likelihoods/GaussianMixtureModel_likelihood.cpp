@@ -87,7 +87,7 @@ double GaussianMixtureModel_likelihood::log_predictive_from_stats(
 
 double GaussianMixtureModel_likelihood::cluster_loglikelihood(
     int cluster_index) const {
-  auto cluster_areas = data.get_cluster_assignments_span(cluster_index);
+  auto cluster_areas = data.get_cluster_assignments(cluster_index);
   return cluster_loglikelihood(cluster_index, cluster_areas);
 }
 
@@ -108,7 +108,7 @@ double GaussianMixtureModel_likelihood::point_loglikelihood_cond(
     return log_marginal_likelihood(area_stats) - log_marginal_likelihood(empty);
   }
 
-  auto cluster_areas = data.get_cluster_assignments_span(cluster_index);
+  auto cluster_areas = data.get_cluster_assignments(cluster_index);
   const ClusterStats cluster_stats = compute_stats(cluster_areas);
   return log_predictive_from_stats(cluster_stats, area_stats);
 }

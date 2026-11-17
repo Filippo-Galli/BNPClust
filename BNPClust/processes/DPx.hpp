@@ -45,7 +45,7 @@ public:
   DPx(Data &d, DP_params &p, const std::vector<std::shared_ptr<Module>> &mods)
       : DP(d, p), modules(mods) {
     for (auto &mod : modules) {
-      mod->set_old_allocations_provider(&this->old_allocations_view());
+      mod->set_old_allocations_provider(&this->old_allocations);
       mod->set_old_cluster_members_provider(&this->old_cluster_members_view());
     }
   }

@@ -6,11 +6,10 @@
 #include "continuos_covariate_module_cache.hpp"
 
 ContinuosCache::ClusterStats
-ContinuosCovariatesModuleCache::compute_cluster_statistics(const Eigen::Ref<const Eigen::VectorXi> obs) const {
+ContinuosCovariatesModuleCache::compute_cluster_statistics(std::span<const int> obs) const {
     ContinuosCache::ClusterStats stats;
 
-    for (int idx = 0; idx < obs.size(); ++idx) {
-        const int obs_idx = obs(idx);
+    for (int obs_idx : obs) {
         const double value = continuos_cache.continuos_covariates(obs_idx);
         stats.n += 1;
         stats.sum += value;
@@ -30,11 +29,10 @@ double ContinuosCovariatesModuleCache::compute_similarity_cls(int cls_idx, bool 
         }
 
         const auto &old_cls_allo = old_cls_it->second;
-        stats = compute_cluster_statistics(Eigen::Map<const Eigen::VectorXi>(old_cls_allo.data(), old_cls_allo.size()));
+        stats = compute_cluster_statistics(old_cls_allo);
         return compute_log_marginal_likelihood(stats);
 
     } else {
-        const Eigen::VectorXi &obs = data.get_cluster_assignments_ref(cls_idx);
         const auto &stats = continuos_cache.get_cluster_stats_ref(cls_idx);
         return compute_log_marginal_likelihood(stats);
     }

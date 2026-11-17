@@ -202,8 +202,12 @@ NB_MODULE(bnpclust, m) {
                           "Abstract base interface for cluster statistics caches.")
       .def("set_allocation", &ClusterInfo::set_allocation, nb::arg("index"),
            nb::arg("cluster"), nb::arg("old_cluster"))
-      .def("recompute", &ClusterInfo::recompute, nb::arg("K"),
-           nb::arg("allocations"))
+      .def(
+          "recompute",
+          [](ClusterInfo &self, int K, const Eigen::VectorXi &allocations) {
+            self.recompute(K, allocations);
+          },
+          nb::arg("K"), nb::arg("allocations"))
       .def("move_cluster_info", &ClusterInfo::move_cluster_info,
            nb::arg("from_cluster"), nb::arg("to_cluster"))
       .def("remove_info", &ClusterInfo::remove_info, nb::arg("cluster"));
@@ -247,20 +251,28 @@ NB_MODULE(bnpclust, m) {
       .def("get_p", &Data::get_p, "Data dimension.")
       .def("get_allocations",
            [](const Data &self) -> Eigen::VectorXi {
-             return self.get_allocations();
+             auto span = self.get_allocations();
+             return Eigen::Map<const Eigen::VectorXi>(
+                 span.data(), static_cast<Eigen::Index>(span.size()));
            },
            "Get vector of cluster assignments.")
       .def("get_cluster_size", &Data::get_cluster_size,
            nb::arg("cluster_index"), "Size of cluster.")
       .def("get_cluster_assignment", &Data::get_cluster_assignment,
            nb::arg("index"), "Cluster assigned to observation.")
-      .def("get_cluster_assignments", &Data::get_cluster_assignments,
+      .def("get_cluster_assignments",
+           [](const Data &self, int cluster) -> Eigen::VectorXi {
+             auto span = self.get_cluster_assignments(cluster);
+             return Eigen::Map<const Eigen::VectorXi>(
+                 span.data(), static_cast<Eigen::Index>(span.size()));
+           },
            nb::arg("cluster"), "Observation indices in cluster.")
       .def("get_cluster_map", &Data::get_cluster_map_copy,
            "Copy of cluster-to-indices membership map.")
       .def("set_allocation", &Data::set_allocation, nb::arg("index"),
            nb::arg("cluster"), "Reassign observation to cluster.")
-      .def("set_allocations", &Data::set_allocations,
+      .def("set_allocations",
+           nb::overload_cast<const Eigen::VectorXi &>(&Data::set_allocations),
            nb::arg("new_allocations"), "Set all cluster allocations.")
       .def("__repr__", [](const Data &d) {
         return "<Data: n=" + std::to_string(d.get_n()) +
@@ -277,7 +289,8 @@ NB_MODULE(bnpclust, m) {
            nb::keep_alive<1, 2>())
       .def("set_allocation", &Datax::set_allocation, nb::arg("index"),
            nb::arg("cluster"))
-      .def("set_allocations", &Datax::set_allocations,
+      .def("set_allocations",
+           nb::overload_cast<const Eigen::VectorXi &>(&Datax::set_allocations),
            nb::arg("new_allocations"))
       .def("__repr__", [](const Datax &d) {
         return "<Datax: n=" + std::to_string(d.get_n()) +

@@ -73,13 +73,13 @@ private:
   // ========== State Management ==========
 
   /** @brief Launch state for sequential allocation */
-  Eigen::VectorXi launch_state;
+  std::vector<int> launch_state;
 
   /** @brief Indices of observations in clusters ci and cj */
-  Eigen::VectorXi S;
+  std::vector<int> S;
 
   /** @brief Original cluster assignments before move proposal */
-  Eigen::VectorXi original_allocations;
+  std::vector<int> original_allocations;
 
   // ========== Proposal Probabilities ==========
 

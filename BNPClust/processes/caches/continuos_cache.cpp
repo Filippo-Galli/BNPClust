@@ -31,7 +31,7 @@ void ContinuosCache::set_allocation(int index, int cluster, int old_cluster) {
     }
 }
 
-void ContinuosCache::recompute(const int K, const Eigen::VectorXi &allocations) {
+void ContinuosCache::recompute(const int K, std::span<const int> allocations) {
     // Clear existing stats
     cluster_stats.clear();
 
@@ -39,8 +39,8 @@ void ContinuosCache::recompute(const int K, const Eigen::VectorXi &allocations) 
     cluster_stats.resize(K);
 
     // Recompute stats from scratch
-    for (int i = 0; i < allocations.size(); ++i) {
-        int cluster = allocations(i);
+    for (size_t i = 0; i < allocations.size(); ++i) {
+        int cluster = allocations[i];
         if (cluster < 0)
             continue; // Skip unallocated points
 

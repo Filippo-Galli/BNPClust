@@ -11,18 +11,17 @@ double BinaryCovariatesModuleCache::compute_similarity_cls(int cls_idx, bool old
     int num_covariates = 0;
 
     // Retrieve cluster members based on allocation type
-    Eigen::VectorXi cluster_members;
+    std::span<const int> cluster_members;
     if (old_allo && old_cluster_members_provider) {
         auto it = old_cluster_members_provider->find(cls_idx);
         if (it != old_cluster_members_provider->end()) {
-            cluster_members = Eigen::Map<const Eigen::VectorXi>(it->second.data(), it->second.size());
+            cluster_members = it->second;
         }
         // Initialize counts for binary covariates
-        num_covariates = cluster_members.size();
+        num_covariates = static_cast<int>(cluster_members.size());
 
         // Count occurrences of '1' in the binary covariates for the cluster members
-        for (int i = 0; i < num_covariates; ++i) {
-            int obs_idx = cluster_members(i);
+        for (int obs_idx : cluster_members) {
             counts += cache.binary_covariates(obs_idx);
         }
     } else {
@@ -59,7 +58,7 @@ double BinaryCovariatesModuleCache::compute_similarity_obs(int obs_idx, int cls_
         counts = cache.get_cluster_stats_ref(cls_idx).binary_sum;
 
         // Check if this cluster currently contains obs_idx
-        if (data.get_allocations()(obs_idx) == cls_idx) {
+        if (data.get_allocations()[obs_idx] == cls_idx) {
             num_covariates--;
             counts -= cache.binary_covariates(obs_idx);
         }
@@ -73,13 +72,13 @@ double BinaryCovariatesModuleCache::compute_similarity_obs(int obs_idx, int cls_
 
 Eigen::VectorXd BinaryCovariatesModuleCache::compute_similarity_obs(int obs_idx) const {
     const int K = data.get_K();
-    const Eigen::VectorXi &allocations = data.get_allocations();
+    const auto allocations = data.get_allocations();
 
     Eigen::VectorXd similarities(K);
     bool is_success = (cache.binary_covariates(obs_idx) == 1);
     double alpha = beta_prior_alpha;
     double beta = beta_prior_beta;
-    int obs_cluster = allocations(obs_idx);
+    int obs_cluster = allocations[obs_idx];
 
     // Compute similarities using gathered stats
     for (int k = 0; k < K; ++k) {

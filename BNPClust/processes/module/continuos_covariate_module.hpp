@@ -9,6 +9,7 @@
 #include "../../utils/Module.hpp"
 #include "Eigen/Dense"
 #include <cmath>
+#include <span>
 #include <vector>
 
 /**
@@ -67,7 +68,7 @@ protected:
      * @brief Compute cluster statistics for covariate similarity
      * @param obs Vector of observation indices in the cluster
      */
-    ClusterStats compute_cluster_statistics(const Eigen::Ref<const Eigen::VectorXi> obs) const;
+    ClusterStats compute_cluster_statistics(std::span<const int> obs) const;
 
     /**
      * @brief Compute log marginal likelihood for cluster given covariates
@@ -234,7 +235,7 @@ public:
      */
     ContinuosCovariatesModule(const Data &data_, const Eigen::VectorXd covariates_data_, bool fixed_v_, double m_ = 0,
                               double B_ = 1.0, double v_ = 1.0, double nu_ = 1.0, double S0_ = 1.0,
-                              const Eigen::VectorXi *old_alloc_provider = nullptr,
+                              const std::vector<int> *old_alloc_provider = nullptr,
                               const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
         : continuos_covariate_data(covariates_data_), fixed_v(fixed_v_), m(m_), B(B_), v(v_), nu(nu_), S0(S0_),
           data(data_), Module(old_alloc_provider, old_cluster_members_provider_), Bv(B * v), log_B(std::log(B)),

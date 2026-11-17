@@ -34,26 +34,33 @@ private:
 public:
     const Eigen::VectorXd continuos_covariates;
 
-    ContinuosCache(Eigen::VectorXi &initial_allocations, const Eigen::VectorXd &continuos_covariates)
+    ContinuosCache(std::span<const int> initial_allocations, const Eigen::VectorXd &continuos_covariates)
         : continuos_covariates(continuos_covariates) {
         cluster_stats.clear();
 
-        const int K = initial_allocations.maxCoeff() + 1;
-        cluster_stats.resize(K);
+        int max_val = -1;
+        for (int a : initial_allocations) {
+            if (a > max_val) max_val = a;
+        }
+        const int K = max_val + 1;
+        cluster_stats.resize(K > 0 ? K : 0);
 
         // Initialize cluster statistics based on initial allocations
-        for (int i = 0; i < initial_allocations.size(); ++i) {
-            int cluster = initial_allocations(i);
+        for (size_t i = 0; i < initial_allocations.size(); ++i) {
+            int cluster = initial_allocations[i];
             if (cluster < 0)
                 continue;
 
-            double value = continuos_covariates(i);
+            double value = continuos_covariates(static_cast<Eigen::Index>(i));
             ClusterStats &stats = cluster_stats[cluster];
             stats.n++;
             stats.sum += value;
             stats.sumsq += value * value;
         }
     }
+
+    ContinuosCache(const Eigen::VectorXi &initial_allocations, const Eigen::VectorXd &continuos_covariates)
+        : ContinuosCache(std::span<const int>(initial_allocations.data(), initial_allocations.size()), continuos_covariates) {}
 
     /**
      * @brief Assigns a point to a cluster
@@ -83,7 +90,8 @@ public:
      * @param K Current number of clusters
      * @param allocations Current allocations vector
      */
-    void recompute(const int K, const Eigen::VectorXi &allocations) override;
+    using ClusterInfo::recompute;
+    void recompute(const int K, std::span<const int> allocations) override;
 
     /**
      * @brief Moves cluster information from one cluster to another

@@ -9,6 +9,7 @@
 #include "../caches/continuos_cache.hpp"
 #include "../../utils/Module.hpp"
 #include <cmath>
+#include <span>
 #include <vector>
 
 /**
@@ -59,7 +60,7 @@ protected:
      * @param obs Vector of observation indices in the cluster
      * @return Sufficient statistics (n, sum, sum of squares)
      */
-    ContinuosCache::ClusterStats compute_cluster_statistics(const Eigen::Ref<const Eigen::VectorXi> obs) const;
+    ContinuosCache::ClusterStats compute_cluster_statistics(std::span<const int> obs) const;
 
     /**
      * @brief Compute log marginal likelihood for cluster given covariates
@@ -225,7 +226,7 @@ public:
      */
     ContinuosCovariatesModuleCache(const Data &data_, const ContinuosCache &continuos_cache_, bool fixed_v_,
                                    double m_ = 0, double B_ = 1.0, double v_ = 1.0, double nu_ = 1.0, double S0_ = 1.0,
-                                   const Eigen::VectorXi *old_alloc_provider = {},
+                                   const std::vector<int> *old_alloc_provider = {},
                                    const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = {})
         : data(data_), continuos_cache(continuos_cache_), fixed_v(fixed_v_), m(m_), B(B_), v(v_), nu(nu_), S0(S0_),
           Module(old_alloc_provider, old_cluster_members_provider_),

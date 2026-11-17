@@ -14,7 +14,7 @@ double CategoricalCovariatesModule::compute_similarity_cls(int cls_idx, bool old
             cluster_members = it->second;
         }
     } else {
-        cluster_members = data.get_cluster_assignments_span(cls_idx);
+        cluster_members = data.get_cluster_assignments(cls_idx);
     }
 
     if (cluster_members.empty())
@@ -49,7 +49,7 @@ double CategoricalCovariatesModule::compute_similarity_obs(int obs_idx, int cls_
     int l = categorical_covariate_data(obs_idx); // The category of the current observation
 
     if (cls_idx >= 0) {
-        std::span<const int> cluster_members = data.get_cluster_assignments_span(cls_idx);
+        std::span<const int> cluster_members = data.get_cluster_assignments(cls_idx);
         n_j = static_cast<int>(cluster_members.size());
         for (int member_idx : cluster_members) {
             if (categorical_covariate_data(member_idx) == l) {
@@ -64,7 +64,7 @@ double CategoricalCovariatesModule::compute_similarity_obs(int obs_idx, int cls_
 
 Eigen::VectorXd CategoricalCovariatesModule::compute_similarity_obs(int obs_idx) const {
     const int K = data.get_K();                                  // Number of clusters
-    const Eigen::VectorXi &allocations = data.get_allocations(); // Current cluster assignments
+    const auto allocations = data.get_allocations(); // Current cluster assignments
     int l = categorical_covariate_data(obs_idx);                 // The category of the current observation
 
     std::vector<int> cluster_sizes(K, 0);

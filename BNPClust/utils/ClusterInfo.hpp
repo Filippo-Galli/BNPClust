@@ -12,6 +12,7 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <span>
 #include <unordered_map>
 #include <vector>
 
@@ -40,9 +41,18 @@ public:
     /**
      * @brief Recomputes all cluster information from current allocations
      * @param K Current number of clusters
+     * @param allocations View of current cluster assignments for all points
+     */
+    virtual void recompute(const int K, std::span<const int> allocations) = 0;
+
+    /**
+     * @brief Convenience overload for Eigen vector of allocations
+     * @param K Current number of clusters
      * @param allocations Vector of current cluster assignments for all points
      */
-    virtual void recompute(const int K, const Eigen::VectorXi &allocations) = 0;
+    void recompute(const int K, const Eigen::VectorXi &allocations) {
+        recompute(K, std::span<const int>(allocations.data(), static_cast<size_t>(allocations.size())));
+    }
 
     /**
      * @brief Moves cluster information from one cluster to another

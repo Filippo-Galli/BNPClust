@@ -24,18 +24,18 @@ protected:
      * Used when computing similarity based on previous cluster assignments
      * (e.g., in split-merge algorithms).
      */
-    const Eigen::VectorXi *old_allocations_provider;
+    const std::vector<int> *old_allocations_provider = nullptr;
 
     /** @brief Provider function for accessing old cluster members map */
-    const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider;
+    const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider = nullptr;
 
 public:
-    Module(const Eigen::VectorXi *old_allocations_provider_ = nullptr,
+    Module(const std::vector<int> *old_allocations_provider_ = nullptr,
            const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
         : old_allocations_provider(old_allocations_provider_),
           old_cluster_members_provider(old_cluster_members_provider_) {}
 
-    void set_old_allocations_provider(const Eigen::VectorXi *provider) { old_allocations_provider = provider; }
+    void set_old_allocations_provider(const std::vector<int> *provider) { old_allocations_provider = provider; }
 
     void set_old_cluster_members_provider(const std::unordered_map<int, std::vector<int>> *provider) {
         old_cluster_members_provider = provider;

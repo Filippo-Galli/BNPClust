@@ -6,11 +6,10 @@
 #include "continuos_covariate_module.hpp"
 
 ContinuosCovariatesModule::ClusterStats
-ContinuosCovariatesModule::compute_cluster_statistics(const Eigen::Ref<const Eigen::VectorXi> obs) const {
+ContinuosCovariatesModule::compute_cluster_statistics(std::span<const int> obs) const {
     ClusterStats stats;
 
-    for (int idx = 0; idx < obs.size(); ++idx) {
-        const int obs_idx = obs(idx);
+    for (int obs_idx : obs) {
         const double age = continuos_covariate_data(obs_idx);
         stats.n += 1;
         stats.sum += age;
@@ -30,11 +29,10 @@ double ContinuosCovariatesModule::compute_similarity_cls(int cls_idx, bool old_a
         }
 
         const auto &old_cls_allo = old_cls_it->second;
-        stats = compute_cluster_statistics(Eigen::Map<const Eigen::VectorXi>(old_cls_allo.data(), old_cls_allo.size()));
+        stats = compute_cluster_statistics(old_cls_allo);
 
     } else {
-        const Eigen::VectorXi &obs = data.get_cluster_assignments_ref(cls_idx);
-        stats = compute_cluster_statistics(obs);
+        stats = compute_cluster_statistics(data.get_cluster_assignments(cls_idx));
     }
 
     return compute_log_marginal_likelihood(stats);
@@ -48,19 +46,19 @@ double ContinuosCovariatesModule::compute_similarity_obs(int obs_idx, int cls_id
 
     // Handle new cluster case
     if (cls_idx > -1)
-        base_stats = compute_cluster_statistics(data.get_cluster_assignments_ref(cls_idx));
+        base_stats = compute_cluster_statistics(data.get_cluster_assignments(cls_idx));
 
     return compute_log_predictive_likelihood(base_stats, covariate_val);
 }
 
 Eigen::VectorXd ContinuosCovariatesModule::compute_similarity_obs(int obs_idx) const {
-    const Eigen::VectorXi &allocations = data.get_allocations();
+    const auto allocations = data.get_allocations();
     const int num_clusters = data.get_K();
 
     // Compute all cluster statistics once
     std::vector<ClusterStats> all_stats(num_clusters);
-    for (int i = 0; i < allocations.size(); ++i) {
-        int k = allocations(i);
+    for (size_t i = 0; i < allocations.size(); ++i) {
+        int k = allocations[i];
         if (k < 0)
             continue;
         double val = continuos_covariate_data(i);

@@ -56,7 +56,7 @@ public:
      * @param old_cluster_members_provider_ Optional pointer to old cluster members for split-merge moves
      */
     BinaryCovariatesModule(const Data &data_, const Eigen::VectorXi binary_covariate, double beta_prior_alpha_,
-                           double beta_prior_beta_, const Eigen::VectorXi *old_alloc_provider = nullptr,
+                           double beta_prior_beta_, const std::vector<int> *old_alloc_provider = nullptr,
                            const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
         : beta_prior_alpha(beta_prior_alpha_), beta_prior_beta(beta_prior_beta_), data(data_),
           binary_covariate_data(binary_covariate), Module(old_alloc_provider, old_cluster_members_provider_) {}

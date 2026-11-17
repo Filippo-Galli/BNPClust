@@ -5,7 +5,7 @@
 
 #include "binary_cache.hpp"
 
-void BinaryCache::recompute(const int K, const Eigen::VectorXi &allocations_in) {
+void BinaryCache::recompute(const int K, std::span<const int> allocations_in) {
     // Clear existing stats
     cluster_stats.clear();
 
@@ -13,8 +13,8 @@ void BinaryCache::recompute(const int K, const Eigen::VectorXi &allocations_in) 
     cluster_stats.resize(K);
 
     // Compute stats
-    for (int i = 0; i < allocations_in.size(); ++i) {
-        int cluster = allocations_in(i);
+    for (size_t i = 0; i < allocations_in.size(); ++i) {
+        int cluster = allocations_in[i];
         if (cluster < 0)
             continue;
 

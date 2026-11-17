@@ -67,7 +67,7 @@ double SpatialModuleContinuous::compute_similarity_cls(int cls_idx,
     }
   } else {
     std::span<const int> cls_idx_allocations =
-        data_module.get_cluster_assignments_span(cls_idx);
+        data_module.get_cluster_assignments(cls_idx);
     for (int i : cls_idx_allocations) {
       // Use cached neighbor indices instead of iterating over full adjacency
       // matrix

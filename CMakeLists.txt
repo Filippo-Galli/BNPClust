@@ -25,7 +25,7 @@ target_include_directories(bnpclust_core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/BNP
 # --- Eigen ---
 find_package(Eigen3 REQUIRED)
 target_link_libraries(bnpclust_core PUBLIC Eigen3::Eigen)
-target_compile_definitions(bnpclust_core PRIVATE
+target_compile_definitions(bnpclust_core PUBLIC
     EIGEN_NO_DEBUG
     EIGEN_DONT_PARALLELIZE   # let OpenMP handle parallelism instead
 )
@@ -36,11 +36,11 @@ target_link_libraries(bnpclust_core PUBLIC OpenMP::OpenMP_CXX)
 
 # --- Machine-specific flags (only when building natively, not cross-compiling) ---
 if(NOT CMAKE_CROSSCOMPILING)
-  target_compile_options(bnpclust_core PRIVATE
+  target_compile_options(bnpclust_core PUBLIC
     $<$<CONFIG:Release>:-march=native -mtune=native -O3 -funroll-loops -ftree-vectorize>
     $<$<CONFIG:Debug>:-fsanitize=address -fno-omit-frame-pointer>
   )
-  target_link_options(bnpclust_core PRIVATE
+  target_link_options(bnpclust_core PUBLIC
     $<$<CONFIG:Debug>:-fsanitize=address>
   )
 endif()

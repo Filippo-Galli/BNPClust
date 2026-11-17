@@ -14,7 +14,7 @@ double BinaryCovariatesModule::compute_similarity_cls(int cls_idx, bool old_allo
             cluster_members = it->second;
         }
     } else {
-        cluster_members = data.get_cluster_assignments_span(cls_idx);
+        cluster_members = data.get_cluster_assignments(cls_idx);
     }
 
     // If the cluster is empty, return 0 similarity
@@ -49,7 +49,7 @@ double BinaryCovariatesModule::compute_similarity_obs(int obs_idx, int cls_idx) 
 
     // Check if checking against an existing cluster
     if (cls_idx >= 0) {
-        std::span<const int> cluster_members = data.get_cluster_assignments_span(cls_idx);
+        std::span<const int> cluster_members = data.get_cluster_assignments(cls_idx);
 
         // Initialize counts for binary covariates
         num_covariates = static_cast<int>(cluster_members.size());
@@ -66,9 +66,9 @@ double BinaryCovariatesModule::compute_similarity_obs(int obs_idx, int cls_idx) 
     return std::log(numerator / denominator);
 }
 
-Eigen::VectorXd BinaryCovariatesModule::compute_similarity_obs(int obs_idx) const{
+Eigen::VectorXd BinaryCovariatesModule::compute_similarity_obs(int obs_idx) const {
     const int K = data.get_K();
-    const Eigen::VectorXi &allocations = data.get_allocations();
+    const auto allocations = data.get_allocations();
     
     // Pre-allocate temporary storage for cluster statistics
     // You could make these member variables (mutable) to avoid re-allocating memory every step

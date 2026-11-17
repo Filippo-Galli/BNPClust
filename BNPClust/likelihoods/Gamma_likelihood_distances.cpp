@@ -8,7 +8,7 @@
 
 double
 Gamma_likelihood_distances::cluster_loglikelihood(int cluster_index) const {
-  auto cls_ass_k = data.get_cluster_assignments_span(cluster_index);
+  auto cls_ass_k = data.get_cluster_assignments(cluster_index);
   return cluster_loglikelihood(cluster_index, cls_ass_k);
 }
 
@@ -52,7 +52,7 @@ double Gamma_likelihood_distances::cluster_loglikelihood(
 double
 Gamma_likelihood_distances::point_loglikelihood_cond(int point_index,
                                                      int cluster_index) const {
-  auto cls_ass_k = data.get_cluster_assignments_span(cluster_index);
+  auto cls_ass_k = data.get_cluster_assignments(cluster_index);
   const int n_k = static_cast<int>(cls_ass_k.size());
 
   double coeh = compute_cohesion(point_index, cluster_index, cls_ass_k, n_k);

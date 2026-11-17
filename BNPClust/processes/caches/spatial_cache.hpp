@@ -32,7 +32,7 @@ public:
 
 private:
     std::vector<ClusterStats> cluster_stats;
-    Eigen::VectorXi* allocations_ptr;
+    const int* allocations_ptr = nullptr;
 
     /**
      * @brief Precomputes and stores neighbor indices for all observations.
@@ -46,13 +46,19 @@ private:
 public:
     const Eigen::MatrixXi W;
 
-    SpatialCache(const Eigen::VectorXi &allocations_ref, const Eigen::MatrixXi &W)
+    SpatialCache(std::span<const int> allocations_ref, const Eigen::MatrixXi &W)
         : W(W) {
-
-        const int K = allocations_ref.maxCoeff() + 1;
+        int max_val = -1;
+        for (int a : allocations_ref) {
+            if (a > max_val) max_val = a;
+        }
+        const int K = max_val + 1;
         neighbor_cache_compute();
         recompute(K > 0 ? K : 0, allocations_ref);
     }
+
+    SpatialCache(const Eigen::VectorXi &allocations_ref, const Eigen::MatrixXi &W)
+        : SpatialCache(std::span<const int>(allocations_ref.data(), allocations_ref.size()), W) {}
 
     /**
      * @brief Assigns a point to a cluster
@@ -63,8 +69,16 @@ public:
      */
     void set_allocation(int index, int cluster, int old_cluster) override;
 
+    void set_allocation_ptr(const int *new_allocations) {
+        allocations_ptr = new_allocations;
+    }
+
     void set_allocation_ptr(const Eigen::VectorXi *new_allocations) {
-        allocations_ptr = const_cast<Eigen::VectorXi *>(new_allocations);
+        allocations_ptr = new_allocations ? new_allocations->data() : nullptr;
+    }
+
+    void set_allocation_ptr(const std::vector<int> *new_allocations) {
+        allocations_ptr = new_allocations ? new_allocations->data() : nullptr;
     }
 
     /**
@@ -86,7 +100,8 @@ public:
      * @param K Current number of clusters
      * @param allocations_in Current allocations vector
      */
-    void recompute(const int K, const Eigen::VectorXi &allocations_in) override;
+    using ClusterInfo::recompute;
+    void recompute(const int K, std::span<const int> allocations_in) override;
 
     /**
      * @brief Moves cluster information from one cluster to another
