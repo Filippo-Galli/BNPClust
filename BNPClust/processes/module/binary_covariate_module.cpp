@@ -7,28 +7,27 @@
 
 double BinaryCovariatesModule::compute_similarity_cls(int cls_idx, bool old_allo) const {
     // Retrieve cluster members based on allocation type
-    Eigen::VectorXi cluster_members;
+    std::span<const int> cluster_members;
     if (old_allo && old_cluster_members_provider) {
         auto it = old_cluster_members_provider->find(cls_idx);
         if (it != old_cluster_members_provider->end()) {
-            cluster_members = Eigen::Map<const Eigen::VectorXi>(it->second.data(), it->second.size());
+            cluster_members = it->second;
         }
     } else {
-        cluster_members = data.get_cluster_assignments(cls_idx);
+        cluster_members = data.get_cluster_assignments_span(cls_idx);
     }
 
     // If the cluster is empty, return 0 similarity
-    if (cluster_members.size() == 0) {
+    if (cluster_members.empty()) {
         return 0.0;
     }
 
     // Initialize counts for binary covariates
-    int num_covariates = cluster_members.size();
+    int num_covariates = static_cast<int>(cluster_members.size());
     int counts = 0;
 
     // Count occurrences of '1' in the binary covariates for the cluster members
-    for (int i = 0; i < num_covariates; ++i) {
-        int obs_idx = cluster_members(i);
+    for (int obs_idx : cluster_members) {
         counts += binary_covariate_data(obs_idx);
     }
 
@@ -50,14 +49,13 @@ double BinaryCovariatesModule::compute_similarity_obs(int obs_idx, int cls_idx) 
 
     // Check if checking against an existing cluster
     if (cls_idx >= 0) {
-        const auto & cluster_members = data.get_cluster_assignments(cls_idx);
+        std::span<const int> cluster_members = data.get_cluster_assignments_span(cls_idx);
 
         // Initialize counts for binary covariates
-        num_covariates = cluster_members.size();
+        num_covariates = static_cast<int>(cluster_members.size());
 
         // Count occurrences of '1' in the binary covariates for the cluster members
-        for (int i = 0; i < num_covariates; ++i) {
-            int member_idx = cluster_members(i);
+        for (int member_idx : cluster_members) {
             counts += binary_covariate_data(member_idx);
         }
     }

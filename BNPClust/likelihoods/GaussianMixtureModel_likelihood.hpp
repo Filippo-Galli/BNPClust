@@ -17,7 +17,7 @@ private:
   };
 
   ClusterStats
-  compute_stats(const Eigen::Ref<const Eigen::VectorXi> &cluster_areas) const;
+  compute_stats(std::span<const int> cluster_areas) const;
   ClusterStats compute_area_stats(int area_index) const;
   double log_marginal_likelihood(const ClusterStats &stats) const;
   double log_predictive_from_stats(const ClusterStats &stats,
@@ -28,10 +28,12 @@ public:
                                   const GaussianMixtureModel_params &params);
   ~GaussianMixtureModel_likelihood() = default;
 
+  using Likelihood::cluster_loglikelihood;
+
   double cluster_loglikelihood(int cluster_index) const override;
   double cluster_loglikelihood(
       int cluster_index,
-      const Eigen::Ref<const Eigen::VectorXi> &cluster_areas) const override;
+      std::span<const int> cluster_areas) const override;
   double point_loglikelihood_cond(int point_index,
                                   int cluster_index) const override;
 };

@@ -29,11 +29,13 @@ public:
     return 0.0;
   };
 
+  using Likelihood::cluster_loglikelihood;
+
   /**
    * @brief Computes the full log-likelihood for a cluster with given
    * assignments
    * @param cluster_index Index of the cluster to evaluate
-   * @param cls_ass_k Vector of point indices in the cluster
+   * @param cls_ass_k Span of point indices in the cluster
    * @return Total log-likelihood (cohesion + repulsion)
    *
    * This overload allows computing the likelihood with a custom set of
@@ -41,7 +43,7 @@ public:
    */
   double cluster_loglikelihood(
       int cluster_index,
-      const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const override final
+      std::span<const int> cls_ass_k) const override final
       __attribute__((hot)) {
     return 0.0;
   };

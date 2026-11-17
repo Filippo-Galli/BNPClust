@@ -49,7 +49,15 @@ public:
 
   virtual double cluster_loglikelihood(
       int cluster_index,
-      const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const = 0;
+      std::span<const int> cls_ass_k) const = 0;
+
+  virtual double cluster_loglikelihood(
+      int cluster_index,
+      const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const {
+    return cluster_loglikelihood(
+        cluster_index,
+        std::span<const int>(cls_ass_k.data(), static_cast<size_t>(cls_ass_k.size())));
+  }
 
   /**
    * @brief Computes the joint log-likelihood for two clusters

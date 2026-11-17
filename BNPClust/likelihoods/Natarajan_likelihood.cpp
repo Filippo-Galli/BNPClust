@@ -7,14 +7,14 @@
 #include <cmath>
 
 double Natarajan_likelihood::cluster_loglikelihood(int cluster_index) const {
-  auto cls_ass_k = data.get_cluster_assignments_ref(cluster_index);
+  auto cls_ass_k = data.get_cluster_assignments_span(cluster_index);
   return cluster_loglikelihood(cluster_index, cls_ass_k);
 }
 
 double Natarajan_likelihood::cluster_loglikelihood(
     int cluster_index,
-    const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const {
-  const int n_k = cls_ass_k.size();
+    std::span<const int> cls_ass_k) const {
+  const int n_k = static_cast<int>(cls_ass_k.size());
 
   if (n_k == 0) {
     return 0;
@@ -22,18 +22,15 @@ double Natarajan_likelihood::cluster_loglikelihood(
 
   double rep = 0;
   const int K = data.get_K();
-
-  // Get raw pointer to distance matrices for fastest access
-  const double *__restrict__ D_data = utils.D.data();
-  const double *__restrict__ logD_data = log_D_data.data();
+  const auto D_view = utils.get_D_view();
 
   /* -------------------- Repulsion part -------------------------- */
   for (int t = 0; t < K; ++t) {
     if (t == cluster_index)
       continue;
 
-    auto cls_ass_t = data.get_cluster_assignments_ref(t);
-    const int n_t = cls_ass_t.size();
+    auto cls_ass_t = data.get_cluster_assignments_span(t);
+    const int n_t = static_cast<int>(cls_ass_t.size());
 
     if (n_t == 0)
       continue;
@@ -41,13 +38,10 @@ double Natarajan_likelihood::cluster_loglikelihood(
     double log_prod = 0;
     double sum = 0;
 
-    for (const auto &idx_i : cls_ass_k) {
-      const double *D_row = D_data + idx_i * D_cols;
-      const double *logD_row = logD_data + idx_i * D_cols;
-
-      for (const auto &idx_j : cls_ass_t) {
-        sum += D_row[idx_j];
-        log_prod += logD_row[idx_j];
+    for (int idx_i : cls_ass_k) {
+      for (int idx_j : cls_ass_t) {
+        sum += D_view[idx_i, idx_j];
+        log_prod += logD_view[idx_i, idx_j];
       }
     }
 
@@ -68,16 +62,12 @@ double Natarajan_likelihood::cluster_loglikelihood(
   double log_prod = 0;
   double sum = 0;
 
-  // Direct pointer access for cohesion
   for (int i = 0; i < n_k; ++i) {
-    const int idx_i = cls_ass_k(i);
-    const double *D_row = D_data + idx_i * D_cols;
-    const double *logD_row = logD_data + idx_i * D_cols;
-
+    const int idx_i = cls_ass_k[i];
     for (int j = i + 1; j < n_k; ++j) {
-      const int idx_j = cls_ass_k(j);
-      sum += D_row[idx_j];
-      log_prod += logD_row[idx_j];
+      const int idx_j = cls_ass_k[j];
+      sum += D_view[idx_i, idx_j];
+      log_prod += logD_view[idx_i, idx_j];
     }
   }
 
@@ -93,8 +83,8 @@ double Natarajan_likelihood::cluster_loglikelihood(
 
 double Natarajan_likelihood::point_loglikelihood_cond(int point_index,
                                                       int cluster_index) const {
-  auto cls_ass_k = data.get_cluster_assignments_ref(cluster_index);
-  const int n_k = cls_ass_k.size();
+  auto cls_ass_k = data.get_cluster_assignments_span(cluster_index);
+  const int n_k = static_cast<int>(cls_ass_k.size());
 
   double coeh = compute_cohesion(point_index, cluster_index, cls_ass_k, n_k);
   double rep = compute_repulsion(point_index, cluster_index, cls_ass_k, n_k);
@@ -104,21 +94,19 @@ double Natarajan_likelihood::point_loglikelihood_cond(int point_index,
 
 double Natarajan_likelihood::compute_cohesion(
     int point_index, int cluster_index,
-    const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k, int n_k) const {
+    std::span<const int> cls_ass_k, int n_k) const {
   if (n_k == 0) {
     return 0.0;
   }
 
-  const double *__restrict__ D_row = utils.D.data() + point_index * D_cols;
-  const double *__restrict__ logD_row =
-      log_D_data.data() + point_index * D_cols;
+  const auto D_view = utils.get_D_view();
 
   double sum_i = 0;
   double log_prod_i = 0;
 
-  for (const auto &idx : cls_ass_k) {
-    sum_i += D_row[idx];
-    log_prod_i += logD_row[idx];
+  for (int idx : cls_ass_k) {
+    sum_i += D_view[point_index, idx];
+    log_prod_i += logD_view[point_index, idx];
   }
 
   const double alpha_mh = params.alpha + params.delta1 * n_k;
@@ -136,7 +124,7 @@ double Natarajan_likelihood::compute_cohesion(
 
 double Natarajan_likelihood::compute_repulsion(
     int point_index, int cluster_index,
-    const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k, int n_k) const {
+    std::span<const int> cls_ass_k, int n_k) const {
   const int num_cluster = data.get_K();
 
   if (num_cluster <= 1) {
@@ -144,17 +132,14 @@ double Natarajan_likelihood::compute_repulsion(
   }
 
   double loglik = 0;
-
-  const double *__restrict__ D_row = utils.D.data() + point_index * D_cols;
-  const double *__restrict__ logD_row =
-      log_D_data.data() + point_index * D_cols;
+  const auto D_view = utils.get_D_view();
 
   for (int t = 0; t < num_cluster; ++t) {
     if (t == cluster_index)
       continue;
 
-    const auto &cls_ass_t = data.get_cluster_assignments_ref(t);
-    const int n_t = cls_ass_t.size();
+    const auto cls_ass_t = data.get_cluster_assignments_span(t);
+    const int n_t = static_cast<int>(cls_ass_t.size());
 
     if (n_t == 0)
       continue;
@@ -162,9 +147,9 @@ double Natarajan_likelihood::compute_repulsion(
     double sum_i = 0;
     double log_point_prod = 0;
 
-    for (const auto &idx : cls_ass_t) {
-      sum_i += D_row[idx];
-      log_point_prod += logD_row[idx];
+    for (int idx : cls_ass_t) {
+      sum_i += D_view[point_index, idx];
+      log_point_prod += logD_view[point_index, idx];
     }
 
     const double zeta_mt = params.zeta + params.delta2 * n_t;
@@ -185,27 +170,23 @@ double Natarajan_likelihood::pairwise_repulsion(int cluster_1,
   if (cluster_1 == cluster_2)
     return 0.0;
 
-  auto cls_ass_k = data.get_cluster_assignments_ref(cluster_1);
-  auto cls_ass_t = data.get_cluster_assignments_ref(cluster_2);
-  const int n_k = cls_ass_k.size();
-  const int n_t = cls_ass_t.size();
+  auto cls_ass_k = data.get_cluster_assignments_span(cluster_1);
+  auto cls_ass_t = data.get_cluster_assignments_span(cluster_2);
+  const int n_k = static_cast<int>(cls_ass_k.size());
+  const int n_t = static_cast<int>(cls_ass_t.size());
 
   if (n_k == 0 || n_t == 0)
     return 0.0;
 
-  const double *__restrict__ D_data = utils.D.data();
-  const double *__restrict__ logD_data = log_D_data.data();
+  const auto D_view = utils.get_D_view();
 
   double log_prod = 0;
   double sum = 0;
 
-  for (const auto &idx_i : cls_ass_k) {
-    const double *D_row = D_data + idx_i * D_cols;
-    const double *logD_row = logD_data + idx_i * D_cols;
-
-    for (const auto &idx_j : cls_ass_t) {
-      sum += D_row[idx_j];
-      log_prod += logD_row[idx_j];
+  for (int idx_i : cls_ass_k) {
+    for (int idx_j : cls_ass_t) {
+      sum += D_view[idx_i, idx_j];
+      log_prod += logD_view[idx_i, idx_j];
     }
   }
 

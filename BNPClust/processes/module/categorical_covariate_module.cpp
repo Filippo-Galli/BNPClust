@@ -7,24 +7,24 @@
 
 double CategoricalCovariatesModule::compute_similarity_cls(int cls_idx, bool old_allo) const {
     // 1. Retrieve cluster members
-    Eigen::VectorXi cluster_members;
+    std::span<const int> cluster_members;
     if (old_allo && old_cluster_members_provider) {
         auto it = old_cluster_members_provider->find(cls_idx);
         if (it != old_cluster_members_provider->end()) {
-            cluster_members = Eigen::Map<const Eigen::VectorXi>(it->second.data(), it->second.size());
+            cluster_members = it->second;
         }
     } else {
-        cluster_members = data.get_cluster_assignments(cls_idx);
+        cluster_members = data.get_cluster_assignments_span(cls_idx);
     }
 
-    if (cluster_members.size() == 0)
+    if (cluster_members.empty())
         return 0.0;
 
     // 2. Count occurrences for each category (0 to C)
-    int num_categories = prior_alpha.size();
+    int num_categories = static_cast<int>(prior_alpha.size());
     std::vector<int> n_ji(num_categories, 0);
-    for (int i = 0; i < cluster_members.size(); ++i) {
-        int val = categorical_covariate_data(cluster_members(i));
+    for (int obs_idx : cluster_members) {
+        int val = categorical_covariate_data(obs_idx);
         if (val >= 0 && val < num_categories) {
             n_ji[val]++;
         }
@@ -49,9 +49,9 @@ double CategoricalCovariatesModule::compute_similarity_obs(int obs_idx, int cls_
     int l = categorical_covariate_data(obs_idx); // The category of the current observation
 
     if (cls_idx >= 0) {
-        const auto &cluster_members = data.get_cluster_assignments(cls_idx);
-        n_j = cluster_members.size();
-        for (const int &member_idx : cluster_members) {
+        std::span<const int> cluster_members = data.get_cluster_assignments_span(cls_idx);
+        n_j = static_cast<int>(cluster_members.size());
+        for (int member_idx : cluster_members) {
             if (categorical_covariate_data(member_idx) == l) {
                 n_jl++;
             }

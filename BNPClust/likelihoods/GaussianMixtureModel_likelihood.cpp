@@ -39,10 +39,9 @@ GaussianMixtureModel_likelihood::compute_area_stats(int area_index) const {
 
 GaussianMixtureModel_likelihood::ClusterStats
 GaussianMixtureModel_likelihood::compute_stats(
-    const Eigen::Ref<const Eigen::VectorXi> &cluster_areas) const {
+    std::span<const int> cluster_areas) const {
   ClusterStats stats;
-  for (int r = 0; r < cluster_areas.size(); ++r) {
-    const int area_idx = cluster_areas(r);
+  for (int area_idx : cluster_areas) {
     ClusterStats a = compute_area_stats(area_idx);
     stats.n += a.n;
     stats.sum += a.sum;
@@ -88,13 +87,13 @@ double GaussianMixtureModel_likelihood::log_predictive_from_stats(
 
 double GaussianMixtureModel_likelihood::cluster_loglikelihood(
     int cluster_index) const {
-  auto cluster_areas = data.get_cluster_assignments_ref(cluster_index);
+  auto cluster_areas = data.get_cluster_assignments_span(cluster_index);
   return cluster_loglikelihood(cluster_index, cluster_areas);
 }
 
 double GaussianMixtureModel_likelihood::cluster_loglikelihood(
     int cluster_index,
-    const Eigen::Ref<const Eigen::VectorXi> &cluster_areas) const {
+    std::span<const int> cluster_areas) const {
   (void)cluster_index;
   const ClusterStats stats = compute_stats(cluster_areas);
   return log_marginal_likelihood(stats);
@@ -109,7 +108,7 @@ double GaussianMixtureModel_likelihood::point_loglikelihood_cond(
     return log_marginal_likelihood(area_stats) - log_marginal_likelihood(empty);
   }
 
-  auto cluster_areas = data.get_cluster_assignments_ref(cluster_index);
+  auto cluster_areas = data.get_cluster_assignments_span(cluster_index);
   const ClusterStats cluster_stats = compute_stats(cluster_areas);
   return log_predictive_from_stats(cluster_stats, area_stats);
 }

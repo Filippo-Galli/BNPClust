@@ -61,15 +61,14 @@ double SpatialModule::compute_similarity_cls(int cls_idx, bool old_allo) const {
             }
         }
     } else {
-        const Eigen::VectorXi &cls_idx_allocations =
-            data_module.get_cluster_assignments(cls_idx);
-        for(auto && i : cls_idx_allocations){
+        std::span<const int> cls_idx_allocations =
+            data_module.get_cluster_assignments_span(cls_idx);
+        for(int i : cls_idx_allocations){
             // Use cached neighbor indices instead of iterating over full adjacency matrix
-            const std::vector<int> &row = neighbor_cache[i];
+            std::span<const int> row = neighbor_cache[i];
 
             // Count neighbors in each cluster
-            for (size_t j = 0; j < row.size(); ++j) {
-                int neighbor_idx = row[j];
+            for (int neighbor_idx : row) {
                 int cluster_i = data_module.get_cluster_assignment(neighbor_idx);
 
                 if (cluster_i != -1 && cluster_i == cls_idx) {

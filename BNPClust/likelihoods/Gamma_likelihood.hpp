@@ -36,20 +36,23 @@ private:
   std::vector<double>
       log_D_data;   ///< Precomputed log distance matrix (flattened)
   const int D_cols; ///< Number of columns in distance matrix
+  utils_params::MatrixConstView logD_view;
 
   /**
    * @brief Computes the cohesion component of the log-likelihood
    * @param point_index Index of the point being evaluated
    * @param cluster_index Index of the cluster
-   * @param cls_ass_k Vector of point indices in the cluster
+   * @param cls_ass_k Span of point indices in the cluster
    * @param n_k Number of points in the cluster
    * @return Cohesion log-likelihood contribution
    */
   double compute_cohesion(int point_index, int cluster_index,
-                          const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k,
+                          std::span<const int> cls_ass_k,
                           int n_k) const;
 
 public:
+  using Likelihood::cluster_loglikelihood;
+
   /**
    * @brief Constructs a Likelihood object with precomputation
    * @param data Reference to Data object with distances and allocations
@@ -66,7 +69,8 @@ public:
       : Likelihood(data), params(params), utils(utils),
         lgamma_delta1(lgamma(params.delta1)),
         log_beta_alpha(log(params.beta) * params.alpha - lgamma(params.alpha)),
-        D_cols(utils.D.cols()) {
+        D_cols(utils.D.cols()),
+        logD_view(nullptr, 0, 0) {
     // Precompute log distances manually
     const int n = utils.D.rows() * utils.D.cols();
     log_D_data.resize(n);
@@ -76,6 +80,8 @@ public:
     for (int i = 0; i < n; ++i) {
       log_D_data[i] = std::log(D_ptr[i]);
     }
+
+    logD_view = utils_params::MatrixConstView(log_D_data.data(), static_cast<size_t>(utils.D.rows()), static_cast<size_t>(utils.D.cols()));
 
     // Cache lgamma values for efficiency
     lgamma_alpha_mh_cache.resize(data.get_n() + 1, 0.0);
@@ -99,7 +105,7 @@ public:
    * @brief Computes the full log-likelihood for a cluster with given
    * assignments
    * @param cluster_index Index of the cluster to evaluate
-   * @param cls_ass_k Vector of point indices in the cluster
+   * @param cls_ass_k Span of point indices in the cluster
    * @return Total log-likelihood (cohesion + repulsion)
    *
    * This overload allows computing the likelihood with a custom set of
@@ -107,7 +113,7 @@ public:
    */
   double cluster_loglikelihood(
       int cluster_index,
-      const Eigen::Ref<const Eigen::VectorXi> &cls_ass_k) const override final
+      std::span<const int> cls_ass_k) const override final
       __attribute__((hot));
 
   /**

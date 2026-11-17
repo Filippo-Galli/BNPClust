@@ -333,10 +333,10 @@ void SplitMerge::choose_clusters_shuffle() {
 
   // Choose random points from clusters ci and cj
   std::uniform_int_distribution<> dis_idx_i(0, data.get_cluster_size(ci) - 1);
-  idx_i = data.get_cluster_assignments(ci)[dis_idx_i(gen)];
+  idx_i = data.get_cluster_assignments_span(ci)[dis_idx_i(gen)];
 
   std::uniform_int_distribution<> dis_idx_j(0, data.get_cluster_size(cj) - 1);
-  idx_j = data.get_cluster_assignments(cj)[dis_idx_j(gen)];
+  idx_j = data.get_cluster_assignments_span(cj)[dis_idx_j(gen)];
 
   // Store original allocations in case of rejection
   original_allocations = data.get_allocations();

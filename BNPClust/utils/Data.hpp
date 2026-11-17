@@ -7,6 +7,8 @@
 
 #include "../params/utils-params.hpp"
 #include <Eigen/Dense>
+#include <mdspan>
+#include <span>
 #include <unordered_map>
 #include <vector>
 
@@ -139,6 +141,21 @@ public:
    */
   Eigen::Map<const Eigen::VectorXi>
   get_cluster_assignments_ref(int cluster) const;
+
+  /**
+   * @brief Gets all point indices assigned to a specific cluster as a zero-overhead std::span
+   * @param cluster Index of the cluster
+   * @return Non-owning view of point indices in the cluster
+   */
+  std::span<const int> get_cluster_assignments_span(int cluster) const noexcept;
+
+  /**
+   * @brief Gets the cluster allocations vector as a std::span
+   * @return Non-owning view of the allocations vector
+   */
+  std::span<const int> get_allocations_span() const noexcept {
+    return std::span<const int>(allocations.data(), static_cast<size_t>(allocations.size()));
+  }
 
   /**
    * @brief Gets the full mapping of clusters to their member points

@@ -38,7 +38,18 @@ double Data::get_data(int i, int j) const {
   }
 #endif
 
-  return p.D(i, j);
+  return p.get_D_view()[i, j];
+}
+
+std::span<const int> Data::get_cluster_assignments_span(int cluster) const noexcept {
+  if (cluster >= K || cluster < 0) {
+    return {};
+  }
+  const auto it = cluster_members.find(cluster);
+  if (it == cluster_members.end()) {
+    return {};
+  }
+  return std::span<const int>(it->second.data(), it->second.size());
 }
 
 Eigen::VectorXi Data::get_cluster_assignments(int cluster) const {
