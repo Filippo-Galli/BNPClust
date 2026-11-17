@@ -89,11 +89,6 @@ void SplitMerge_LSS_SDDS::smart_split_move() {
   data.set_allocation(idx_j, data.get_K());
   cj = data.get_cluster_assignment(idx_j);
 
-  for (size_t idx = 0; idx < launch_state.size(); ++idx) {
-    const int new_cluster = (dis_real(gen) < 0.5) ? ci : cj;
-    data.set_allocation(S[idx], new_cluster);
-  }
-
   sequential_allocation(1);
 
   double acceptance_ratio = compute_acceptance_ratio_split(likelihood_old_cluster);

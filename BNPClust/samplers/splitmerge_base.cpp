@@ -144,9 +144,7 @@ void SplitMergeBase::choose_clusters_shuffle() {
 
 double
 SplitMergeBase::compute_acceptance_ratio_split(double likelihood_old_cluster) {
-  int size_ci = data.get_cluster_size(ci);
-  int size_cj = data.get_cluster_size(cj);
-  double log_acceptance_ratio = process.prior_ratio_split(size_ci, size_cj);
+  double log_acceptance_ratio = process.prior_ratio_split(ci, cj);
 
   log_acceptance_ratio +=
       likelihood.clusters_loglikelihood(ci, cj) - likelihood_old_cluster;
@@ -164,8 +162,9 @@ SplitMergeBase::compute_acceptance_ratio_merge(double likelihood_old_clusters) {
   double log_acceptance_ratio =
       process.prior_ratio_merge(size_old_ci, size_old_cj);
 
+  const int merged_ci = data.get_cluster_assignment(idx_i);
   log_acceptance_ratio +=
-      likelihood.cluster_loglikelihood(ci) - likelihood_old_clusters;
+      likelihood.cluster_loglikelihood(merged_ci) - likelihood_old_clusters;
   log_acceptance_ratio += log_merge_gibbs_prob;
 
   return log_acceptance_ratio;
