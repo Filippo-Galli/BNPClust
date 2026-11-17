@@ -404,13 +404,13 @@ NB_MODULE(bnpclust, m) {
 
   nb::class_<SpatialModule, Module>(m, "SpatialModule",
                                     "Binary adjacency spatial module.")
-      .def(nb::init<const Data &, const Eigen::MatrixXi, double>(),
+      .def(nb::init<const Data &, const Eigen::MatrixXi &, double>(),
            nb::arg("data"), nb::arg("W"), nb::arg("spatial_coefficient") = 1.0,
            nb::keep_alive<1, 2>());
 
   nb::class_<SpatialModuleContinuous, Module>(
       m, "SpatialModuleContinuous", "Continuous distance spatial module.")
-      .def(nb::init<const Data &, const Eigen::MatrixXd, double>(),
+      .def(nb::init<const Data &, const Eigen::MatrixXd &, double>(),
            nb::arg("data"), nb::arg("W"), nb::arg("spatial_coefficient") = 1.0,
            nb::keep_alive<1, 2>());
 

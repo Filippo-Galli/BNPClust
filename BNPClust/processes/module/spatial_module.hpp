@@ -36,10 +36,9 @@ protected:
      * from each row of the adjacency matrix W. Called once during construction
      * to enable O(neighbors) instead of O(N) lookup time.
      */
-    void neighbor_cache_compute();
+    void neighbor_cache_compute(const Eigen::MatrixXi &W);
 
     const Data &data_module;           ///< Reference to data object with cluster assignments
-    const Eigen::MatrixXi W;           ///< Reference to adjacency matrix W from covariates
     const double spatial_weight = 1.0; ///< Weighting factor for spatial similarity
 
 public:
@@ -50,20 +49,19 @@ public:
      *
      * @param data_ Reference to the Data object with cluster assignments.
      * @param W_ Reference to the adjacency matrix W.
-     * matrix.
      * @param spatial_coeff Weighting factor for spatial similarity.
      * @param old_alloc_provider function to access old allocations for
      * split-merge.
      * @param old_cluster_members_provider_ function to access old cluster members for
      * split-merge.
      */
-    SpatialModule(const Data &data_, const Eigen::MatrixXi W_, double spatial_coeff,
+    SpatialModule(const Data &data_, const Eigen::MatrixXi &W_, double spatial_coeff,
                   const std::vector<int> *old_alloc_provider = nullptr,
                   const std::unordered_map<int, std::vector<int>> *old_cluster_members_provider_ = nullptr)
-        : W(W_), data_module(data_), spatial_weight(spatial_coeff),
+        : data_module(data_), spatial_weight(spatial_coeff),
           Module(old_alloc_provider, old_cluster_members_provider_) {
 
-        neighbor_cache_compute();
+        neighbor_cache_compute(W_);
     }
 
     /**

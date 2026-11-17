@@ -20,7 +20,7 @@ double SpatialModule::compute_similarity_obs(int obs_idx, int cls_idx) const {
     return spatial_weight * neighbors;
 }
 
-void SpatialModule::neighbor_cache_compute() {
+void SpatialModule::neighbor_cache_compute(const Eigen::MatrixXi &W) {
     const int N = data_module.get_n();
     neighbor_cache.resize(N);
 
